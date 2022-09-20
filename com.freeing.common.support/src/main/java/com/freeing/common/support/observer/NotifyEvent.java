@@ -14,7 +14,34 @@ public class NotifyEvent {
     private String event;
 
     /**
-     * 其他参数
+     * 额外参数
      */
     private Map<String, Object> extra;
+
+    public NotifyEvent() {
+
+    }
+
+    public NotifyEvent(String event, Map<String, Object> extra) {
+        this.event = event;
+        this.extra = extra;
+    }
+
+    /****************************  Getter and Setter *******************************/
+
+    public String getEvent() {
+        return event;
+    }
+
+    public void setEvent(String event) {
+        this.event = event;
+    }
+
+    public Map<String, Object> getExtra() {
+        return extra;
+    }
+
+    public void setExtra(Map<String, Object> extra) {
+        this.extra = extra;
+    }
 }

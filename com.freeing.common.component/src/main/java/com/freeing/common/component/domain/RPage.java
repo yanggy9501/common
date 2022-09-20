@@ -48,10 +48,6 @@ public class RPage implements Serializable {
         this.rows = rows;
     }
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
     public long getCurrentPage() {
         return currentPage;
     }

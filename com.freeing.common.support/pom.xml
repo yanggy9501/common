@@ -7,4 +7,20 @@
     <groupId>com.freeing</groupId>
     <artifactId>com.freeing.common.support</artifactId>
     <version>1.0</version>
+
+    <description>通用工具支持模块</description>
+
+    <properties>
+        <vavr.version>0.10.3</vavr.version>
+    </properties>
+
+    <dependencies>
+
+        <!-- vavr 函数式编程工具包 -->
+        <dependency>
+            <groupId>io.vavr</groupId>
+            <artifactId>vavr</artifactId>
+            <version>${vavr.version}</version>
+        </dependency>
+    </dependencies>
 </project>

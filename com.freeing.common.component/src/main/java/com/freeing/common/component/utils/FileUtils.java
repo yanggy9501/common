@@ -29,4 +29,8 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
         copyFileToDirectory(srcDir, destDir);
         forceDelete(srcDir);
     }
+
+    public static void compress(String sourcePath, String targetPath, String zipName) {
+
+    }
 }

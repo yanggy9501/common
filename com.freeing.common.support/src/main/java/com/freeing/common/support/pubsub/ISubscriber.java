@@ -22,7 +22,7 @@ public interface ISubscriber {
     /**
      * 取消订阅
      */
-    default void unSubcribe(){
+    default  void unSubcribe(){
         SubscribePublish.getSubscribePublish().unSubscribe(this);
     }
 

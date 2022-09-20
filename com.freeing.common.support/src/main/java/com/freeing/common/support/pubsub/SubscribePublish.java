@@ -114,8 +114,10 @@ public class SubscribePublish {
          * 此处把 for 循环写在threadPool.submit方法外面代表每个订阅者对消息的处理都是由一个线程执行
          * 如果把 for 循环写在threadPool.submit方法里面则代表一组相同类型的订阅者对同一个消息的处理是由一个线程处理
          */
-        subscriberMap.get(messageType).forEach(subscriber -> this.threadPool.submit(() ->
-            subscriber.receiveMessage(message))
+        subscriberMap.get(messageType).forEach(subscriber ->
+            this.threadPool.submit(() ->
+                subscriber.receiveMessage(message)
+            )
         );
     }
 
@@ -134,10 +136,6 @@ public class SubscribePublish {
             }
         }
         return SUBSCRIBE_PUBLISH;
-    }
-
-    public static void main(String[] args) {
-        getSubscribePublish();
     }
 }
 

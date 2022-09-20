@@ -6,7 +6,7 @@
 
     <groupId>com.freeing</groupId>
     <artifactId>com.freeing.common</artifactId>
+    <packaging>pom</packaging>
     <version>1.0</version>
-
 
 </project>

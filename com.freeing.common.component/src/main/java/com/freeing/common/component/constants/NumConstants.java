@@ -7,6 +7,13 @@ package com.freeing.common.component.constants;
  */
 public interface NumConstants {
     /**
+     * 整数
+     */
+    int NUM_4 = 4;
+    int NUM_8 = 8;
+    int NUM_32 = 32;
+
+    /**
      * 集合默认长度
      */
     int MAP_DEFAULT_SIZE = 16;

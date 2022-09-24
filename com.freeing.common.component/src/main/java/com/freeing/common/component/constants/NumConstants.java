@@ -19,6 +19,10 @@ public interface NumConstants {
     int MAP_DEFAULT_SIZE = 16;
     int SET_DEFAULT_SIZE = 16;
 
+    /**
+     * buffer 默认大小
+     */
+    int BUFFER_DEFAULT_SIZE = 8192;
 
     /**
      * N 进制基数

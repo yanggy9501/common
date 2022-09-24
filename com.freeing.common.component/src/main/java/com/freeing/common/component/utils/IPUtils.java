@@ -22,6 +22,12 @@ public class IPUtils {
         return IPAddressUtil.isIPv4LiteralAddress(ipStr) || IPAddressUtil.isIPv6LiteralAddress(ipStr);
     }
 
+    /**
+     * 获取 IP 版本
+     *
+     * @param ipStr IP地址
+     * @return  Ip Version
+     */
     public static IpVersion getIpVersion(String ipStr) {
         if (IPAddressUtil.isIPv4LiteralAddress(ipStr)) {
             return IpVersion.IPV4;
@@ -53,6 +59,72 @@ public class IPUtils {
         BigInteger bigInteger = ipAddressToBigInteger(ipStr);
         BigInteger next = bigInteger.add(BigInteger.valueOf(step));
         return bigIntegerToIpAddress(next, getIpVersion(ipStr));
+    }
+
+    /**
+     * 检查两个 IP 地址是否冲突。
+     * 输入格式；ipStr=127.0.0.0/20 或者 a::/120
+     *
+     * @param ipStrA IP 字符串
+     * @param ipStrB IP 字符串
+     * @return true: 则两个 IP 地址冲突
+     */
+    public static boolean checkIpConflict(String ipStrA, String ipStrB) {
+        // arr[0]是IP地址，arr[1]是IP掩码位
+        checkIpWithMarkIsLegal(ipStrA);
+        checkIpWithMarkIsLegal(ipStrB);
+        String[] ipWithMarkArrA = ipStrA.split(StrPool.SLASH);
+        String[] ipWithMarkArrB = ipStrB.split(StrPool.SLASH);
+
+        IpVersion ipVersionA = getIpVersion(ipWithMarkArrA[0]);
+        String ipAddrA = ipWithMarkArrA[0];
+        int markbitA = NumberUtils.parseInt(ipWithMarkArrA[1]);
+
+        IpVersion ipVersionB = getIpVersion(ipWithMarkArrB[0]);
+        String ipAddrB = ipWithMarkArrB[0];
+        int markbitB = NumberUtils.parseInt(ipWithMarkArrB[1]);
+
+        // IP 版本不一样一定不冲突
+        if (!ipVersionA.equals(ipVersionB)) {
+            return false;
+        }
+        int bitLength = ipVersionA.equals(IpVersion.IPV4) ? 32 : 128;
+        BigInteger bigIntA = ipAddressToBigInteger(ipAddrA);
+        BigInteger bigIntB = ipAddressToBigInteger(ipAddrB);
+        return StringUtils.leftPad(bigIntA.toString(NumConstants.RADIX_2), bitLength, StrPool.ZERO)
+            .startsWith(
+                StringUtils.leftPad(bigIntB.toString(NumConstants.RADIX_2), bitLength, StrPool.ZERO)
+                .substring(0, Math.min(markbitA, markbitB))
+            );
+    }
+
+    /**
+     * 检查 IP 地址合法性
+     *
+     * @param ipStrWithMark IP 地址段，如：127.0.0.0/20
+     */
+    public static void checkIpWithMarkIsLegal(String ipStrWithMark ) {
+        String[] ipWithMarkArr = ipStrWithMark.split(StrPool.SLASH);
+        if (ipWithMarkArr.length != 2) {
+            throw new IllegalArgumentException(ipStrWithMark + " is illegal IP/mark format.");
+        }
+        int markBit = NumberUtils.parseInt(ipWithMarkArr[1], -1);
+        IpVersion ipVersion = getIpVersion(ipWithMarkArr[0]);
+        if (ipVersion.equals(IpVersion.IPV4)) {
+            if (markBit >= NumConstants.IPV4_BIT_LENGTH || markBit <= 0) {
+                throw new IllegalArgumentException(ipStrWithMark + " is illegal IP/mark format.");
+            }
+            return;
+        }
+        if (ipVersion.equals(IpVersion.IPV6)) {
+            if (markBit >= NumConstants.IPV6_BIT_LENGTH || markBit <= 0) {
+                throw new IllegalArgumentException(ipStrWithMark + " is illegal IP/mark format.");
+            }
+            return;
+        }
+        if (ipVersion.equals(IpVersion.NULL)) {
+            throw new IllegalArgumentException(ipStrWithMark + " is illegal IP/mark format.");
+        }
     }
 
     /**

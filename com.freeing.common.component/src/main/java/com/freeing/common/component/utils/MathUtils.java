@@ -106,8 +106,8 @@ public class MathUtils {
      * @return 两个参数的积
      */
     public static double multi(double v1, double v2) {
-        BigDecimal b1 = new BigDecimal(Double.toString(v1));
-        BigDecimal b2 = new BigDecimal(Double.toString(v2));
+        BigDecimal b1 = BigDecimal.valueOf(v1);
+        BigDecimal b2 = BigDecimal.valueOf(v2);
         return b1.multiply(b2).doubleValue();
     }
 
@@ -133,8 +133,8 @@ public class MathUtils {
      * @return 两个参数的积
      */
     public static double multi(double v1, double v2, int scale) {
-        BigDecimal b1 = new BigDecimal(Double.toString(v1));
-        BigDecimal b2 = new BigDecimal(Double.toString(v2));
+        BigDecimal b1 = BigDecimal.valueOf(v1);
+        BigDecimal b2 = BigDecimal.valueOf(v2);
         return round(b1.multiply(b2).doubleValue(), scale);
     }
 
@@ -179,8 +179,8 @@ public class MathUtils {
         if (scale < 0) {
             throw new IllegalArgumentException("The scale must be a positive integer or zero");
         }
-        BigDecimal b1 = new BigDecimal(Double.toString(v1));
-        BigDecimal b2 = new BigDecimal(Double.toString(v2));
+        BigDecimal b1 = BigDecimal.valueOf(v1);
+        BigDecimal b2 = BigDecimal.valueOf(v2);
         return b1.divide(b2, scale, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 
@@ -212,7 +212,7 @@ public class MathUtils {
         if (scale < 0) {
             throw new IllegalArgumentException("The scale must be a positive integer or zero");
         }
-        BigDecimal b = new BigDecimal(Double.toString(v));
+        BigDecimal b = BigDecimal.valueOf(v);
         return b.setScale(scale, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 
@@ -264,16 +264,35 @@ public class MathUtils {
     }
 
     /**
-     * Number类型字符串比较大小
+     * 判断两个数大小是否相等
      *
-     * @param numStr1 被比较数
-     * @param numStr2 比较数
-     * @return 如果v1 大于v2 则 返回true 否则false
+     * @param v1 v1
+     * @param v2 v2
+     * @return boolean
      */
-    public static boolean compare(String numStr1, String numStr2) {
-        BigDecimal b1 = new BigDecimal(numStr1);
-        BigDecimal b2 = new BigDecimal(numStr2);
-        int bj = b1.compareTo(b2);
-        return bj > 0;
+    public static boolean eq(BigDecimal v1, BigDecimal v2) {
+        return v1.compareTo(v2) == 0;
+    }
+
+    /**
+     * 小于
+     *
+     * @param v1 v1
+     * @param v2 v2
+     * @return boolean
+     */
+    public static boolean lt(BigDecimal v1, BigDecimal v2) {
+        return v1.compareTo(v2) < 0;
+    }
+
+    /**
+     * 大于
+     *
+     * @param v1 v1
+     * @param v2 v2
+     * @return boolean
+     */
+    public static boolean gt(BigDecimal v1, BigDecimal v2) {
+        return v1.compareTo(v2) > 0;
     }
 }

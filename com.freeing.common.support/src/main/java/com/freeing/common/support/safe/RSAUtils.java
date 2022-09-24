@@ -5,5 +5,5 @@ package com.freeing.common.support.safe;
  *
  * @author yanggy
  */
-public class RSA {
+public class RSAUtils {
 }

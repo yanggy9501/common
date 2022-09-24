@@ -101,4 +101,29 @@ public class RangeUtils {
         }
         return segment(numbers);
     }
+
+    /**
+     * 判断 number 是否在 range 范围内
+     * 
+     * @param number int > 0
+     * @param range 范围，如：1-4;6
+     * @return boolean
+     */
+    public static boolean inRange(int number, String range) {
+        if (StringUtils.isEmpty(range) || number < 0) {
+            return false;
+        }
+        String[] splitArr = range.split(StrPool.SEMICOLON);
+        for (String split : splitArr) {
+            String[] itemArr = split.split(StrPool.HYPHEN);
+            if (itemArr.length == 1 && itemArr[0].equals(String.valueOf(number))) {
+                return true;
+            }
+            if (number >= NumberUtils.parseInt(itemArr[0], -1)
+                && number <= NumberUtils.parseInt(itemArr[1], -1)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

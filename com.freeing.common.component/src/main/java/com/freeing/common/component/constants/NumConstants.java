@@ -9,8 +9,12 @@ public interface NumConstants {
     /**
      * 整数
      */
+    int NUM_0 = 0;
+    int NUM_1 = 1;
+    int NUM_2 = 2;
     int NUM_4 = 4;
     int NUM_8 = 8;
+    int NUM_10 = 10;
     int NUM_32 = 32;
 
     /**

@@ -79,8 +79,7 @@ public class DateUtils {
         if (format == null) {
             format = DEFAULT_DATE_TIME_FORMAT;
         }
-        SimpleDateFormat df = new SimpleDateFormat(format);
-        return df.format(dt);
+        return new SimpleDateFormat(format).format(dt);
     }
 
     /**
@@ -127,8 +126,7 @@ public class DateUtils {
      * @return String
      */
     public static String formatAsYearMonth(Date date) {
-        SimpleDateFormat df = new SimpleDateFormat(DEFAULT_MONTH_FORMAT);
-        return df.format(date);
+        return new SimpleDateFormat(DEFAULT_MONTH_FORMAT).format(date);
     }
 
     /**
@@ -138,8 +136,7 @@ public class DateUtils {
      * @return String
      */
     public static String formatAsYearWeek(Date date) {
-        SimpleDateFormat df = new SimpleDateFormat(DEFAULT_WEEK_FORMAT);
-        return df.format(date);
+        return new SimpleDateFormat(DEFAULT_WEEK_FORMAT).format(date);
     }
 
     /**
@@ -149,8 +146,7 @@ public class DateUtils {
      * @return String
      */
     public static String formatAsTime(Date date) {
-        SimpleDateFormat df = new SimpleDateFormat(DEFAULT_TIME_FORMAT);
-        return df.format(date);
+        return new SimpleDateFormat(DEFAULT_TIME_FORMAT).format(date);
     }
 
     /**
@@ -160,8 +156,7 @@ public class DateUtils {
      * @return String
      */
     public static String formatAsDate(Date date) {
-        SimpleDateFormat df = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
-        return df.format(date);
+        return new SimpleDateFormat(DEFAULT_DATE_FORMAT).format(date);
     }
 
     /**
@@ -171,8 +166,7 @@ public class DateUtils {
      * @return String
      */
     public static String formatAsDateTime(Date date) {
-        SimpleDateFormat df = new SimpleDateFormat(DEFAULT_DATE_TIME_FORMAT);
-        return df.format(date);
+        return new SimpleDateFormat(DEFAULT_DATE_TIME_FORMAT).format(date);
     }
 
     /**
@@ -182,8 +176,7 @@ public class DateUtils {
      * @return String
      */
     public static String formatAsDay(Date date) {
-        SimpleDateFormat df = new SimpleDateFormat("dd");
-        return df.format(date);
+        return new SimpleDateFormat("dd").format(date);
     }
 
     /**

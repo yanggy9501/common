@@ -9,6 +9,18 @@
     <version>1.0</version>
 
     <description>通用基础组件</description>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <properties>
         <apach.commons.lang.version>3.12.0</apach.commons.lang.version>
@@ -16,6 +28,8 @@
         <apach.commons.io.version>1.3.2</apach.commons.io.version>
         <apach.commons.commons-compress.version>1.21</apach.commons.commons-compress.version>
         <reflections.io.version>0.10.2</reflections.io.version>
+        <gauva.version>20.0</gauva.version>
+        <vavr.version>0.10.3</vavr.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -43,6 +57,19 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-compress</artifactId>
             <version>${apach.commons.commons-compress.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${gauva.version}</version>
+        </dependency>
+
+        <!-- vavr 函数式编程工具包 -->
+        <dependency>
+            <groupId>io.vavr</groupId>
+            <artifactId>vavr</artifactId>
+            <version>${vavr.version}</version>
         </dependency>
 
         <!-- 反射工具类 -->

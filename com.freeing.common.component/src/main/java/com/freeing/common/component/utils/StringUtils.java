@@ -79,7 +79,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         if (matcher.find()) {
             return matcher.group();
         }
-        return "";
+        return EMPTY_STR;
     }
 
     /**

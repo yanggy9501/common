@@ -48,7 +48,7 @@ public class NumberUtils extends org.apache.commons.lang3.math.NumberUtils {
     }
 
     /**
-     * 解析字符串
+     * 解析字符串，忽略异常默认值为 0
      *
      * @param number int类型字符串
      * @param defaultValue 默认字符串
@@ -63,7 +63,7 @@ public class NumberUtils extends org.apache.commons.lang3.math.NumberUtils {
     }
 
     /**
-     * 解析字符串，默认值为 0L
+     * 解析字符串，忽略异常默认值为 0L
      *
      * @param number int类型字符串
      * @return long

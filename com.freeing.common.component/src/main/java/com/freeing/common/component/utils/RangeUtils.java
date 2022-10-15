@@ -25,8 +25,8 @@ public class RangeUtils {
         // 剔除 null + 去重
         List<Integer> collect = numbers.stream()
             .filter(Objects::nonNull)
-            .distinct()
             .sorted(Integer::compareTo)
+            .distinct()
             .collect(Collectors.toList());
 
         // 全null

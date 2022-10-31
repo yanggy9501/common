@@ -29,7 +29,7 @@ public class ClassUtils extends org.apache.commons.lang3.ClassUtils {
      * @param fileName 文件全名
      * @return 输入流
      */
-    public static String readAsStringFromClassPath(ClassLoader classLoader, String fileName) {
+    public static String readAsString(ClassLoader classLoader, String fileName) {
         InputStream resource = classLoader.getResourceAsStream("/" + fileName);
         if (resource == null) {
             return StrPool.EMPTY;
@@ -52,7 +52,7 @@ public class ClassUtils extends org.apache.commons.lang3.ClassUtils {
      * @param fileName 文件全名
      * @return 输入流
      */
-    public static Properties readAsPropertiesFromClassPath(ClassLoader classLoader, String fileName) {
+    public static Properties readAsProperties(ClassLoader classLoader, String fileName) {
         Properties properties = new Properties();
         InputStream resource = classLoader.getResourceAsStream(File.separator + fileName);
         try {

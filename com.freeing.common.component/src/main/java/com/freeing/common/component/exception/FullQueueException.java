@@ -5,6 +5,7 @@ package com.freeing.common.component.exception;
  */
 public class FullQueueException extends RuntimeException {
     public FullQueueException() {
+
     }
 
     public FullQueueException(String message) {

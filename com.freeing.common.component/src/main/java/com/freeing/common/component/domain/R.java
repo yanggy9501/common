@@ -1,6 +1,6 @@
 package com.freeing.common.component.domain;
 
-import com.freeing.common.component.constants.ResponseCode;
+import com.freeing.common.component.constants.ResultCode;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -43,9 +43,9 @@ public class R extends HashMap<String, Object> implements Serializable {
      */
     public static R success(String msg, Object data) {
         R r = new R();
-        r.put(CODE, ResponseCode.SUCCESS.getCode());
+        r.put(CODE, ResultCode.SUCCESS.getCode());
         if (msg == null || msg.trim().isEmpty()) {
-            r.put(MSG, ResponseCode.SUCCESS.getMsg());
+            r.put(MSG, ResultCode.SUCCESS.getMsg());
         } else {
             r.put(MSG, msg);
         }
@@ -96,7 +96,7 @@ public class R extends HashMap<String, Object> implements Serializable {
         R r = new R();
         r.put(CODE, code);
         if (msg == null || msg.trim().isEmpty()) {
-            r.put(MSG, ResponseCode.ERROR.getCode());
+            r.put(MSG, ResultCode.ERROR.getCode());
         } else {
             r.put(MSG, msg);
         }
@@ -114,7 +114,7 @@ public class R extends HashMap<String, Object> implements Serializable {
      * @return R
      */
     public static R error(String msg, Object data) {
-        return error(ResponseCode.ERROR.getCode(), msg, data);
+        return error(ResultCode.ERROR.getCode(), msg, data);
     }
 
     /**
@@ -166,9 +166,9 @@ public class R extends HashMap<String, Object> implements Serializable {
      */
     public static R fail(String msg, Object data) {
         R r = new R();
-        r.put(CODE, ResponseCode.FAIL.getCode());
+        r.put(CODE, ResultCode.FAIL.getCode());
         if (msg == null || msg.trim().isEmpty()) {
-            r.put(MSG, ResponseCode.FAIL.getCode());
+            r.put(MSG, ResultCode.FAIL.getCode());
         } else {
             r.put(MSG, msg);
         }

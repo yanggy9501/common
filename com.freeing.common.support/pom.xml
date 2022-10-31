@@ -11,10 +11,15 @@
     <description>通用工具支持模块</description>
 
     <properties>
-
+        <reflections.io.version>0.10.2</reflections.io.version>
     </properties>
 
     <dependencies>
-
+        <!-- 反射工具类 -->
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>${reflections.io.version}</version>
+        </dependency>
     </dependencies>
 </project>

@@ -33,8 +33,6 @@ class Compressor {
      */
     private final String fileName;
 
-
-
     public Compressor(File srcFile, File destFile, String fileName) {
         this.srcFile = srcFile;
         this.destFile = destFile;

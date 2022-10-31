@@ -146,10 +146,12 @@ public class IpUtils {
         BigInteger bigIntB = ipB.getIpBigInteger();
 
         // 根据二进制比较是否冲突
-        return StringUtils.leftPad(bigIntA.toString(NumConstants.RADIX_2), bitLength, StrPool.ZERO).startsWith(
-                StringUtils.leftPad(
-                    bigIntB.toString(NumConstants.RADIX_2), bitLength, StrPool.ZERO)
-                    .substring(0, Math.min(markbitA, markbitB)));
+        return StringUtils
+            .leftPad(bigIntA.toString(NumConstants.RADIX_2), bitLength, StrPool.ZERO)
+            .startsWith(StringUtils
+                .leftPad(bigIntB.toString(NumConstants.RADIX_2), bitLength, StrPool.ZERO)
+                .substring(0, Math.min(markbitA, markbitB))
+            );
     }
 
     /**

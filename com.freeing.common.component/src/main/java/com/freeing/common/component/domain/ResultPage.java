@@ -8,7 +8,7 @@ import java.util.List;
  *
  * @author yanggy
  */
-public class RPage implements Serializable {
+public class ResultPage implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -36,11 +36,11 @@ public class RPage implements Serializable {
      */
     private List<?> rows;
 
-    public RPage() {
+    public ResultPage() {
 
     }
 
-    public RPage(long currentPage, long pageSize, long pageCount, long totalCount, List<?> rows) {
+    public ResultPage(long currentPage, long pageSize, long pageCount, long totalCount, List<?> rows) {
         this.currentPage = currentPage;
         this.pageSize = pageSize;
         this.pageCount = pageCount;

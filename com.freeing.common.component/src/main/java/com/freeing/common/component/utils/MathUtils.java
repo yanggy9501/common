@@ -1,6 +1,7 @@
 package com.freeing.common.component.utils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * 高精度数学运算工具类
@@ -95,7 +96,7 @@ public class MathUtils {
         }
         BigDecimal b1 = new BigDecimal(v1);
         BigDecimal b2 = new BigDecimal(v2);
-        return b1.subtract(b2).setScale(scale, BigDecimal.ROUND_HALF_UP).toString();
+        return b1.subtract(b2).setScale(scale, RoundingMode.HALF_UP).toString();
     }
 
     /**

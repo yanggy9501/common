@@ -22,7 +22,7 @@ public class BooleanUtils extends org.apache.commons.lang3.BooleanUtils {
     }
 
     /**
-     * 无返回值的条件处理
+     * 条件处理
      *
      * @param conditions 条件
      * @return if-else 处理对象

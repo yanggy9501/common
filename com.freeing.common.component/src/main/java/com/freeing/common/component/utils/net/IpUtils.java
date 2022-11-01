@@ -49,6 +49,9 @@ public class IpUtils {
             if (segment.length() > 3 || segment.length() == 0) {
                 return false;
             }
+            if (segment.length() > 1 && segment.charAt(0) == '0') {
+                return false;
+            }
             for (int j = 0; j < segment.length(); j++) {
                 char ch = segment.charAt(j);
                 if (!(ch >= '0' && ch <= '9')) {
@@ -73,8 +76,10 @@ public class IpUtils {
                 return false;
             }
             for (String segment : peerSegment) {
-                // :a:1::1:
                 if (segment.length() > 4 || segment.length() == 0) {
+                    return false;
+                }
+                if (segment.length() > 1 && segment.charAt(0) == '0') {
                     return false;
                 }
                 for (int j = 0; j < segment.length(); j++) {

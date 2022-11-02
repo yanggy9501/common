@@ -2,6 +2,7 @@ package com.freeing.common.support.factory;
 
 import org.reflections.Reflections;
 
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
@@ -42,6 +43,15 @@ public class Factory {
      */
     private ClassLoader classLoader;
 
+    /**
+     * 其他额外的绝对路径的配置文件
+     */
+    private List<String> extraFiles;
+
+    public Factory(List<String> extraFiles) {
+        this.extraFiles = extraFiles;
+    }
+
     public Factory(List<String> propertiesFiles, ClassLoader classLoader) {
         this.propertiesFiles = propertiesFiles;
         this.classLoader = classLoader;
@@ -52,18 +62,25 @@ public class Factory {
         this.factoryClassOf = factoryClassOf;
     }
 
-    public Factory(List<String> packages, Class<?> factoryClassOf, List<String> propertiesFiles, ClassLoader classLoader) {
+    public Factory(List<String> packages,
+            Class<?> factoryClassOf,
+            List<String> propertiesFiles,
+            ClassLoader classLoader,
+            List<String> extraFiles) {
         this.packages = packages;
         this.factoryClassOf = factoryClassOf;
         this.propertiesFiles = propertiesFiles;
         this.classLoader = classLoader;
+        this.extraFiles = extraFiles;
     }
 
     /**
      * 初始化
      */
     public void init() {
-        refresh();
+        scanClassPath();
+        scanAbsolutePath();
+        scanPackages();
     }
 
     public Object get(String key) {
@@ -84,9 +101,7 @@ public class Factory {
      * 刷新方法
      */
     public void refresh() {
-        // TODO 刷新没生效，任然是旧数据
-        scanClassPath();
-        scanPackages();
+        scanAbsolutePath();
     }
 
     private void scanClassPath() {
@@ -95,6 +110,21 @@ public class Factory {
         }
         for (String propertiesFile : propertiesFiles) {
             try (InputStream in = classLoader.getResourceAsStream(propertiesFile)) {
+                Properties properties = new Properties();
+                properties.load(in);
+                properties.forEach((key, className) -> registry((String) key, (String) className));
+            } catch (IOException ignored) {
+
+            }
+        }
+    }
+
+    private void scanAbsolutePath() {
+        if (extraFiles == null) {
+            return;
+        }
+        for (String extraFile : extraFiles) {
+            try (FileReader in = new FileReader(extraFile)) {
                 Properties properties = new Properties();
                 properties.load(in);
                 properties.forEach((key, className) -> registry((String) key, (String) className));

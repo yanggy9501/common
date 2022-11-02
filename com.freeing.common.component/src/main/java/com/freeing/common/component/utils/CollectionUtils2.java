@@ -18,7 +18,7 @@ public class CollectionUtils2 {
      * @return boolean
      */
     public static <K, V> boolean isEmpty(Map<K, V> map) {
-        return map == null || map.size() <= 0;
+        return map == null || map.size() == 0;
     }
 
     /**

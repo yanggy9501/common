@@ -24,11 +24,11 @@ public class BooleanUtils extends org.apache.commons.lang3.BooleanUtils {
     /**
      * 条件处理
      *
-     * @param conditions 条件
+     * @param condition 条件
      * @return if-else 处理对象
      */
-    public static IfTrueHandler of(boolean ...conditions) {
-        return new IfTrueHandler(and(conditions));
+    public static IfTrueHandler of(boolean condition) {
+        return new IfTrueHandler(condition);
     }
 
     /**

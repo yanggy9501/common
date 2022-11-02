@@ -6,7 +6,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Properties;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author yanggy
@@ -14,8 +18,9 @@ import java.util.*;
 public class Factory {
     /**
      * 单例池
+     * 使用 ConcurrentHashMap 解决同时存在又注册对象，又获取对象的情况
      */
-    private final Map<Object, Object> SINGLETON_OBJECTS = new HashMap<>();
+    private final ConcurrentHashMap<Object, Object> SINGLETON_OBJECTS = new ConcurrentHashMap<>();
 
     /**
      * 扫描的包路径
@@ -23,12 +28,12 @@ public class Factory {
     private List<String> packages;
 
     /**
-     * 具体工厂的类型
+     * 所属的具体工厂的类型
      */
-    private Class<?> factoryClass;
+    private Class<?> factoryClassOf;
 
     /**
-     * 配置文件的 classpath 路径
+     * 配置文件的 classpath 路径（保存class类路径）
      */
     private List<String> propertiesFiles;
 
@@ -37,9 +42,19 @@ public class Factory {
      */
     private ClassLoader classLoader;
 
-    public Factory(List<String> packages, Class<?> factoryClass, List<String> propertiesFiles, ClassLoader classLoader) {
+    public Factory(List<String> propertiesFiles, ClassLoader classLoader) {
+        this.propertiesFiles = propertiesFiles;
+        this.classLoader = classLoader;
+    }
+
+    public Factory(List<String> packages, Class<?> factoryClassOf) {
         this.packages = packages;
-        this.factoryClass = factoryClass;
+        this.factoryClassOf = factoryClassOf;
+    }
+
+    public Factory(List<String> packages, Class<?> factoryClassOf, List<String> propertiesFiles, ClassLoader classLoader) {
+        this.packages = packages;
+        this.factoryClassOf = factoryClassOf;
         this.propertiesFiles = propertiesFiles;
         this.classLoader = classLoader;
     }
@@ -58,39 +73,50 @@ public class Factory {
     }
 
     public <T> T get(Class<T> type) {
-        return get(type);
+        Object bean = SINGLETON_OBJECTS.get(type);
+        if (bean != null && bean.getClass().isAssignableFrom(type)) {
+            return (T) bean;
+        }
+        return null;
     }
 
     /**
      * 刷新方法
      */
     public void refresh() {
+        // TODO 刷新没生效，任然是旧数据
         scanClassPath();
         scanPackages();
     }
 
     private void scanClassPath() {
+        if (propertiesFiles == null) {
+            return;
+        }
         for (String propertiesFile : propertiesFiles) {
-            InputStream in = classLoader.getResourceAsStream(propertiesFile);
-            Properties properties = new Properties();
-            try {
+            try (InputStream in = classLoader.getResourceAsStream(propertiesFile)) {
+                Properties properties = new Properties();
                 properties.load(in);
                 properties.forEach((key, className) -> registry((String) key, (String) className));
-            } catch (IOException e) {
+            } catch (IOException ignored) {
 
             }
         }
     }
 
     private void scanPackages() {
+        if (packages == null || packages.size() == 0) {
+            return;
+        }
         for (String aPackage : packages) {
             Reflections reflections = new Reflections(aPackage);
             Set<Class<?>> classes = reflections.getTypesAnnotatedWith(FactoryType.class);
             for (Class<?> clazz : classes) {
                 FactoryType factoryType = clazz.getAnnotation(FactoryType.class);
-                String key = factoryType.value() == null ? clazz.getCanonicalName() : factoryType.value();
+                String key = factoryType.value() == null || factoryType.value().equals("") ?
+                    clazz.getCanonicalName() : factoryType.value();
                 Class<?> ofFactory = factoryType.of() == null ? Factory.class : factoryType.of();
-                if (ofFactory != factoryClass) {
+                if (ofFactory != factoryClassOf) {
                     continue;
                 }
                 registry(key, clazz);
@@ -99,29 +125,27 @@ public class Factory {
     }
 
     public void registry(String key, String className) {
-        if (SINGLETON_OBJECTS.containsKey(key)) {
-            // key 已经存在
-        }
         try {
             Class<?> clazz = Class.forName(className);
             registry(key, clazz);
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException ignored) {
 
         }
     }
 
     public void registry(String key, Class<?> clazz) {
+        if (SINGLETON_OBJECTS.containsKey(key)) {
+            // TODO key 已经存在，默认覆盖
+        }
         try {
             Constructor<?> constructor = clazz.getConstructor();
             Object bean = constructor.newInstance();
             SINGLETON_OBJECTS.put(key, bean);
-        }  catch (NoSuchMethodException e) {
-
-        } catch (InvocationTargetException e) {
-
-        } catch (InstantiationException e) {
-
-        } catch (IllegalAccessException e) {
+            SINGLETON_OBJECTS.put(clazz, bean);
+        }  catch (NoSuchMethodException
+                  | InstantiationException
+                  | InvocationTargetException
+                  | IllegalAccessException ignored) {
 
         }
     }

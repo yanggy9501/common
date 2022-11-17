@@ -15,7 +15,7 @@ public abstract class AbstractXMLParseBuilder<T> {
     /**
      * xml 对应的实体
      */
-    private T xmlEntity;
+    private T data;
 
     /**
      * 是否已经解析标识

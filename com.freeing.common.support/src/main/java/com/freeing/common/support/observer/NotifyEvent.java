@@ -14,6 +14,11 @@ public class NotifyEvent {
     private String event;
 
     /**
+     * data
+     */
+    private Object data;
+
+    /**
      * 额外参数
      */
     private Map<String, Object> extra;
@@ -33,12 +38,20 @@ public class NotifyEvent {
         return event;
     }
 
-    public void setEvent(String event) {
-        this.event = event;
-    }
-
     public Map<String, Object> getExtra() {
         return extra;
+    }
+
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
+    }
+
+    public void setEvent(String event) {
+        this.event = event;
     }
 
     public void setExtra(Map<String, Object> extra) {

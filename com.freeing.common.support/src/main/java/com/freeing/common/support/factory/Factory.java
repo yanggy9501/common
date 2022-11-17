@@ -78,9 +78,7 @@ public class Factory {
      * 初始化
      */
     public void init() {
-        scanClassPath();
-        scanAbsolutePath();
-        scanPackages();
+        refresh();
     }
 
     public Object get(String key) {
@@ -99,9 +97,12 @@ public class Factory {
 
     /**
      * 刷新方法
+     * TODO 注册新增的对象，同时剔除已经删掉的对象, copy-and-write
      */
     public void refresh() {
         scanAbsolutePath();
+        scanClassPath();
+        scanPackages();
     }
 
     private void scanClassPath() {

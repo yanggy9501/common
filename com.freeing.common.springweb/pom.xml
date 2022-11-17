@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>com.freeing.common</artifactId>
+        <groupId>com.freeing</groupId>
+        <version>1.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>com.freeing.common.springweb</artifactId>
+
+    <properties>
+        <tomcat-api.version>10.1.0</tomcat-api.version>
+        <apach.commons.lang.version>3.12.0</apach.commons.lang.version>
+
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <!-- tomcat api 支持 -->
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-api</artifactId>
+            <version>${tomcat-api.version}</version>
+            <!--
+                provided适合在编译和测试的环境，他和compile很接近，但是provide仅仅需要在编译和测试阶段，
+                同样provide将不会被打包到lib目录下，也不具备依赖传递
+            -->
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- apache common 工具包 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${apach.commons.lang.version}</version>
+        </dependency>
+    </dependencies>
+</project>

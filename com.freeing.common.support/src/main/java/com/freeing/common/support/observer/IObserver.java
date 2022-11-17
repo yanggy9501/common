@@ -7,9 +7,9 @@ package com.freeing.common.support.observer;
  */
 public interface IObserver {
     /**
-     * 更新方法，当被观察者有更新时，调用通知方法从而调用观察者的update方法
+     * 监听方法
      *
      * @param event 通知事件
      */
-    void update(NotifyEvent event);
+    void listen(NotifyEvent event);
 }

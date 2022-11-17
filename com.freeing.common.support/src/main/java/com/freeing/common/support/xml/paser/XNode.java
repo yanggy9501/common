@@ -147,6 +147,7 @@ public class XNode {
     }
 
     /**************************************** getter **************************************/
+
     public String getName() {
         return name;
     }

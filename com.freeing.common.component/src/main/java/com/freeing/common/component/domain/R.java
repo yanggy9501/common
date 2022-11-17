@@ -44,7 +44,7 @@ public class R extends HashMap<String, Object> implements Serializable {
     public static R success(String msg, Object data) {
         R r = new R();
         r.put(CODE, ResultCode.SUCCESS.getCode());
-        if (msg == null || msg.trim().isEmpty()) {
+        if (msg == null || msg.isEmpty()) {
             r.put(MSG, ResultCode.SUCCESS.getMsg());
         } else {
             r.put(MSG, msg);
@@ -95,7 +95,7 @@ public class R extends HashMap<String, Object> implements Serializable {
     public static R error(int code, String msg, Object data) {
         R r = new R();
         r.put(CODE, code);
-        if (msg == null || msg.trim().isEmpty()) {
+        if (msg == null || msg.isEmpty()) {
             r.put(MSG, ResultCode.ERROR.getCode());
         } else {
             r.put(MSG, msg);
@@ -167,7 +167,7 @@ public class R extends HashMap<String, Object> implements Serializable {
     public static R fail(String msg, Object data) {
         R r = new R();
         r.put(CODE, ResultCode.FAIL.getCode());
-        if (msg == null || msg.trim().isEmpty()) {
+        if (msg == null || msg.isEmpty()) {
             r.put(MSG, ResultCode.FAIL.getCode());
         } else {
             r.put(MSG, msg);

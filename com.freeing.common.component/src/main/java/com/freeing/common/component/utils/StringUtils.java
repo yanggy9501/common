@@ -132,7 +132,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         // 当前字符是否大写
         boolean curreCharIsUpperCase;
         // 下一字符是否大写
-        boolean nexteCharIsUpperCase = true;
+        boolean nextCharIsUpperCase = true;
         for (int i = 0; i < str.length(); i++) {
             char c = str.charAt(i);
             if (i > 0) {
@@ -144,10 +144,10 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
             curreCharIsUpperCase = Character.isUpperCase(c);
 
             if (i < (str.length() - 1)) {
-                nexteCharIsUpperCase = Character.isUpperCase(str.charAt(i + 1));
+                nextCharIsUpperCase = Character.isUpperCase(str.charAt(i + 1));
             }
 
-            if (preCharIsUpperCase && curreCharIsUpperCase && !nexteCharIsUpperCase) {
+            if (preCharIsUpperCase && curreCharIsUpperCase && !nextCharIsUpperCase) {
                 sb.append(UNDERLINE);
             } else if ((i != 0 && !preCharIsUpperCase) && curreCharIsUpperCase) {
                 sb.append(UNDERLINE);

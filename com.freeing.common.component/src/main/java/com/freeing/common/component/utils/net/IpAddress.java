@@ -48,7 +48,7 @@ public class IpAddress {
         // IP 格式: 127.0.0.1；127.0.0.1/24
         String[] ipAndMark = ip.split(StrPool.BACK_SLASH);
         if (ipAndMark.length > NumConstants.NUM_2) {
-            return;
+            throw new IllegalArgumentException("Illegal ip: " + ip);
         }
         doParseIpAddress(ipAndMark[0]);
         if (version == IpVersion.IPV4) {
@@ -66,19 +66,17 @@ public class IpAddress {
             this.version = IpVersion.IPV6;
             standardizeIpv6Address(ipStr);
         } else {
-            throw new IllegalArgumentException("Error IP address: " + ipStr);
+            throw new IllegalArgumentException("Illegal IP: " + ipStr);
         }
-        this.ipBigInteger = ipAddressToBigInteger(ipStr);
-
+        this.ipBigInteger = ipAddressToBigInteger();
     }
 
     /**
      * 将 IP 字符串转换为 BigInteger
      *
-     * @param ipStr IP 字符串
      * @return IP 字符串的 BigInteger 表示
      */
-    private BigInteger ipAddressToBigInteger(String ipStr) {
+    private BigInteger ipAddressToBigInteger() {
         BigInteger ipBigInteger = new BigInteger(StrPool.ZERO);
         // ip 地址每小段的二进制位长度
         boolean ipv4Flag = this.version == IpVersion.IPV4;
@@ -147,9 +145,5 @@ public class IpAddress {
 
     public IpVersion getVersion() {
         return version;
-    }
-
-    public void setVersion(IpVersion version) {
-        this.version = version;
     }
 }

@@ -1,6 +1,6 @@
 package com.freeing.common.component.utils;
 
-import com.freeing.common.component.domain.ResultPage;
+import com.freeing.common.component.domain.PageResult;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public class PageUtils {
      * @param rows 列表数据
      * @return PageEntity
      */
-    public static ResultPage createPage(long current, long limit, long totalPage, long totalCount, List<?> rows) {
-        return new ResultPage(current, limit, totalPage, totalCount, rows);
+    public static PageResult createPage(long current, long limit, long totalPage, long totalCount, List<?> rows) {
+        return new PageResult(current, limit, totalPage, totalCount, rows);
     }
 }

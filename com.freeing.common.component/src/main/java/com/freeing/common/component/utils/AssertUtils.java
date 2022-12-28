@@ -5,6 +5,8 @@ package com.freeing.common.component.utils;
  *
  * @author yanggy
  */
-public class AssertUtils {
+public abstract class AssertUtils {
+
 
 }
+

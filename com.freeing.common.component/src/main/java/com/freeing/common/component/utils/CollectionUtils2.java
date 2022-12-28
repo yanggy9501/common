@@ -37,7 +37,7 @@ public class CollectionUtils2 {
      * @param collection Integer集合
      * @return int[]
      */
-    public static int[] toArray(List<Integer> collection) {
+    public static int[] toIntArray(List<Integer> collection) {
         if (CollectionUtils.isEmpty(collection)) {
             return new int[0];
         }

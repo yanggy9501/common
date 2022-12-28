@@ -8,7 +8,7 @@ import java.util.List;
  *
  * @author yanggy
  */
-public class ResultPage implements Serializable {
+public class PageResult implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -29,22 +29,22 @@ public class ResultPage implements Serializable {
     /**
      * 总记录数
      */
-    private long totalCount;
+    private long total;
 
     /**
      * 列表数据
      */
     private List<?> rows;
 
-    public ResultPage() {
+    public PageResult() {
 
     }
 
-    public ResultPage(long currentPage, long pageSize, long pageCount, long totalCount, List<?> rows) {
+    public PageResult(long currentPage, long pageSize, long pageCount, long total, List<?> rows) {
         this.currentPage = currentPage;
         this.pageSize = pageSize;
         this.pageCount = pageCount;
-        this.totalCount = totalCount;
+        this.total = total;
         this.rows = rows;
     }
 
@@ -72,12 +72,12 @@ public class ResultPage implements Serializable {
         this.pageCount = pageCount;
     }
 
-    public long getTotalCount() {
-        return totalCount;
+    public long getTotal() {
+        return total;
     }
 
-    public void setTotalCount(long totalCount) {
-        this.totalCount = totalCount;
+    public void setTotal(long totalCount) {
+        this.total = totalCount;
     }
 
     public List<?> getRows() {

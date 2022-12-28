@@ -8,6 +8,7 @@ import java.util.function.Supplier;
  * @author yanggy
  */
 public class BooleanUtils extends org.apache.commons.lang3.BooleanUtils {
+
     public static <T> T handleConditionWithReturn(Supplier<T> ifSupplier, boolean ...conditions) {
         if (and(conditions) && ifSupplier != null) {
             return ifSupplier.get();

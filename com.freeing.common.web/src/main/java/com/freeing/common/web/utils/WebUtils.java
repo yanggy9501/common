@@ -1,9 +1,9 @@
-package com.freeing.common.springweb.utils;
+package com.freeing.common.web.utils;
 
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
@@ -13,7 +13,6 @@ import java.nio.charset.StandardCharsets;
  * @author yanggy
  */
 public class WebUtils {
-
 
     /**
      * 从parameterMap获取目标值，如果找不到，将返回默认值。

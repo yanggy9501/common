@@ -1,7 +1,5 @@
 package com.freeing.common.support.pubsub;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.*;
 
 /**
@@ -13,7 +11,7 @@ public class SubscribePublish {
     /**
      * 订阅者map，key为消息类型
      */
-    private final ConcurrentHashMap<String, List<ISubscriber>> subscriberMap;
+    private final ConcurrentHashMap<String, CopyOnWriteArrayList<ISubscriber>> subscriberMap;
 
     /**
      * 创建线程池:
@@ -65,7 +63,7 @@ public class SubscribePublish {
             // synchronized 是必要的，if 代码块的代码并不是原子操作
             synchronized (this) {
                 if (subscriberMap.get(messageType) == null) {
-                    List<ISubscriber> subscribers = new ArrayList<>();
+                    CopyOnWriteArrayList<ISubscriber> subscribers = new CopyOnWriteArrayList<>();
                     subscribers.add(subscriber);
                     subscriberMap.put(messageType, subscribers);
                 }
@@ -82,7 +80,7 @@ public class SubscribePublish {
      */
     public void unSubscribe(ISubscriber subscriber) {
         if (subscriber != null && subscriber.getMessageType() != null) {
-            List<ISubscriber> subscribers = subscriberMap.get(subscriber.getMessageType());
+            CopyOnWriteArrayList<ISubscriber> subscribers = subscriberMap.get(subscriber.getMessageType());
             if (subscribers != null) {
                 subscribers.remove(subscriber);
             }
@@ -113,6 +111,9 @@ public class SubscribePublish {
      * @param message     消息
      */
     public void asyncPublishMessage(String messageType, Object message) {
+        if (!subscriberMap.containsKey(messageType)) {
+            return;
+        }
         /*
          * 此处把 for 循环写在threadPool.submit方法外面代表每个订阅者对消息的处理都是由一个线程执行
          * 如果把 for 循环写在threadPool.submit方法里面则代表一组相同类型的订阅者对同一个消息的处理是由一个线程处理

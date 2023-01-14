@@ -2,7 +2,6 @@ package com.freeing.common.support.pubsub;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.*;
 
 /**
@@ -14,7 +13,7 @@ public class SubscribePublish {
     /**
      * 订阅者map，key为消息类型
      */
-    private final Map<String, List<ISubscriber>> subscriberMap;
+    private final ConcurrentHashMap<String, List<ISubscriber>> subscriberMap;
 
     /**
      * 创建线程池:
@@ -63,9 +62,14 @@ public class SubscribePublish {
         }
         // 绑定订阅对象
         if (subscriberMap.get(messageType) == null) {
-            List<ISubscriber> subscribers = new ArrayList<>();
-            subscribers.add(subscriber);
-            subscriberMap.put(messageType, subscribers);
+            // synchronized 是必要的，if 代码块的代码并不是原子操作
+            synchronized (this) {
+                if (subscriberMap.get(messageType) == null) {
+                    List<ISubscriber> subscribers = new ArrayList<>();
+                    subscribers.add(subscriber);
+                    subscriberMap.put(messageType, subscribers);
+                }
+            }
         } else {
             subscriberMap.get(messageType).add(subscriber);
         }

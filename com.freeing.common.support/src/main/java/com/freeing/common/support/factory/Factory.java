@@ -97,9 +97,8 @@ public class Factory {
 
     /**
      * 刷新方法
-     * TODO 注册新增的对象，同时剔除已经删掉的对象, copy-and-write
      */
-    public void refresh() {
+    public synchronized void refresh() {
         scanAbsolutePath();
         scanClassPath();
         scanPackages();
@@ -166,7 +165,7 @@ public class Factory {
 
     public void registry(String key, Class<?> clazz) {
         if (SINGLETON_OBJECTS.containsKey(key)) {
-            // TODO key 已经存在，默认覆盖
+            return;
         }
         try {
             Constructor<?> constructor = clazz.getConstructor();

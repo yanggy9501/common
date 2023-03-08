@@ -1,4 +1,4 @@
-package com.freeing.common.propertycopy.utils;
+package com.freeing.common.propertycopy;
 
 import java.util.Collection;
 import java.util.List;

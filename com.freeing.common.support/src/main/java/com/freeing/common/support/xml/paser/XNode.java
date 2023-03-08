@@ -103,12 +103,12 @@ public class XNode {
      * 获取属性的值
      *
      * @param name 属性 key
-     * @param def 默认值
+     * @param defValue 默认值
      * @return 属性值
      */
-    public String getStringAttribute(String name, String def) {
+    public String getStringAttribute(String name, String defValue) {
         String value = attributes.getProperty(name);
-        return value == null ? def : value;
+        return value == null ? defValue : value;
     }
 
     /**

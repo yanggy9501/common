@@ -1,5 +1,6 @@
 package com.freeing.common.component.utils;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -176,25 +177,50 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         return false;
     }
 
+    public static boolean inString(String str, String... strs) {
+        if (str != null && strs != null) {
+            for (String s : strs) {
+                if (str.equals(trim(s))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean inStringIgnoreCase(String str, List<String> stringList) {
+        if (stringList == null) {
+            return false;
+        }
+        return inStringIgnoreCase(str, stringList.toArray(new String[0]));
+    }
+
+    public static boolean inString(String str, List<String> stringList) {
+        if (stringList == null) {
+            return false;
+        }
+        return inString(str, stringList.toArray(new String[0]));
+    }
+
     /**
      * 将下划线大写方式命名的字符串转换为驼峰式。如果转换前的下划线大写方式命名的字符串为空，则返回空字符串。
      * 例如：HELLO_WORLD->HelloWorld
      *
-     * @param name 转换前的下划线大写方式命名的字符串
+     * @param str 转换前的下划线大写方式命名的字符串
      * @return 转换后的驼峰式命名的字符串
      */
-    public static String convertToCamelCase(String name) {
+    public static String convertToCamelCase(String str) {
         StringBuilder result = new StringBuilder();
         // 快速检查
-        if (name == null || name.isEmpty()) {
+        if (str == null || str.isEmpty()) {
             // 没必要转换
             return "";
-        } else if (!name.contains(String.valueOf(UNDERLINE))) {
+        } else if (!str.contains(String.valueOf(UNDERLINE))) {
             // 不含下划线，仅将首字母大写
-            return name.substring(0, 1).toUpperCase() + name.substring(1);
+            return str.substring(0, 1).toUpperCase() + str.substring(1);
         }
         // 用下划线将原始字符串分割
-        String[] camels = name.split("_");
+        String[] camels = str.split("_");
         for (String camel : camels) {
             // 跳过原始字符串中开头、结尾的下换线或双重下划线
             if (camel.isEmpty()) {
@@ -210,15 +236,15 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     /**
      * 驼峰式命名法 例如：user_name -> userName
      */
-    public static String toCamelCase(String s) {
-        if (s == null) {
+    public static String toCamelCase(String str) {
+        if (str == null) {
             return null;
         }
-        s = s.toLowerCase();
-        StringBuilder sb = new StringBuilder(s.length());
+        str = str.toLowerCase();
+        StringBuilder sb = new StringBuilder(str.length());
         boolean upperCase = false;
-        for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
 
             if (c == UNDERLINE) {
                 upperCase = true;
@@ -230,5 +256,63 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
             }
         }
         return sb.toString();
+    }
+
+    /**
+     * 安全比较两个字符串
+     *
+     * @param cs1
+     * @param cs2
+     * @return boolean
+     */
+    public static boolean safeEquals(final CharSequence cs1, final CharSequence cs2) {
+        if (cs1 == cs2) {
+            return true;
+        }
+        if (cs1 == null || cs2 == null) {
+            return false;
+        }
+        if (cs1.length() != cs2.length()) {
+            return false;
+        }
+        boolean result = true;
+        // 遍历完在出结果，避免统计时长猜测结果
+        for (int i = 0; i < cs1.length(); i++) {
+            if (cs1.charAt(i) != cs2.charAt(i)) {
+                result = false;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 将指定字符串 text 的 start-end的子字符串替换为 replacement
+     * ps：包含结束位置
+     *
+     * @param text 字符串
+     * @param replacement replacement
+     * @param start 开始下标
+     * @param end 结束下标
+     * @param ignoreException 是否忽略异常
+     * @return String
+     */
+    public static String replace(final String text, final String replacement, int start, int end, boolean ignoreException) {
+        // 检查合法性
+        if (text == null) {
+            return null;
+        }
+        if (start > end || start < 0 || end >= text.length()) {
+            if (ignoreException) {
+                if (start < 0) {
+                    start = 0;
+                }
+                if (end >= text.length()) {
+                    end = text.length() - 1;
+                }
+            } else {
+                throw new IndexOutOfBoundsException("Illegal index of " + text + " with " + start + "-" + end);
+            }
+        }
+        return text.substring(0, start) + replacement + text.substring(end + 1);
     }
 }

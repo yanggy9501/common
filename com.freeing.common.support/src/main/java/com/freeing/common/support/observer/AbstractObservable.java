@@ -38,7 +38,7 @@ public abstract class AbstractObservable {
      */
     public final void notifyObservers(NotifyEvent event) {
         for (IObserver observer : observers) {
-            observer.update(event);
+            observer.listen(event);
         }
     }
 }

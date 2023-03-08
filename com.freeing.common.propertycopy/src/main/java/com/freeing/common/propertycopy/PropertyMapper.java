@@ -1,4 +1,4 @@
-package com.freeing.common.propertycopy.utils;
+package com.freeing.common.propertycopy;
 
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;

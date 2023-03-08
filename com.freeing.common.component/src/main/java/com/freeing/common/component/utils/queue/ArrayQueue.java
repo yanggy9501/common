@@ -61,7 +61,7 @@ public class ArrayQueue<T> implements Queue<T> {
 
     @Override
     public int length() {
-        return (rear - head + queue.length) % queue.length;
+        return rear - head >= 0 ? rear - head : rear - head + queue.length;
     }
 
     @Override
@@ -71,10 +71,13 @@ public class ArrayQueue<T> implements Queue<T> {
 
     @Override
     public boolean isFull() {
-        return (rear + 1 + queue.length) % queue.length == head;
+        return getIndex(rear + 1) == head;
     }
 
     private int getIndex(int index) {
-        return index % queue.length;
+        if (index == queue.length) {
+            return 0;
+        }
+        return index;
     }
 }

@@ -40,7 +40,7 @@ public class IpUtils {
     }
 
     public static boolean isIpv4(String ipStr) {
-        Objects.requireNonNull(ipStr, "Illegal ipv4 address.");
+        Objects.requireNonNull(ipStr, "IP address is null.");
         String[] ipSegmentArr = ipStr.split(StrPool.BACK_SLASH_DOT);
         if (ipSegmentArr.length != NumConstants.NUM_4) {
             return false;

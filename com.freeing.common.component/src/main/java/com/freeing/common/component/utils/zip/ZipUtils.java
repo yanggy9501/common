@@ -27,6 +27,7 @@ public class ZipUtils {
      * @param zipFileName 压缩后压缩文件命令
      */
     public static void compress(File srcFileOrDir, File destDir, String zipFileName) throws IOException {
-        new Compressor(srcFileOrDir, destDir, zipFileName).compress();
+        Compressor compressor = new Compressor(srcFileOrDir, destDir, zipFileName);
+        compressor.compress();
     }
 }

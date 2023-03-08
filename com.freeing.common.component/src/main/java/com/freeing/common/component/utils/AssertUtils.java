@@ -5,8 +5,11 @@ package com.freeing.common.component.utils;
  *
  * @author yanggy
  */
-public abstract class AssertUtils {
-
-
+public class AssertUtils {
+    public static <T> void checkNotNull(T t) {
+        if (t == null) {
+            throw new NullPointerException();
+        }
+    }
 }
 

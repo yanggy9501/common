@@ -2,6 +2,7 @@ package com.freeing.common.component.utils.queue;
 
 import com.freeing.common.component.exception.EmptyQueueException;
 
+import java.util.Deque;
 import java.util.LinkedList;
 
 /**
@@ -13,7 +14,7 @@ public class LinkedQueue<T> implements Queue<T> {
     /**
      * 队列
      */
-    private final LinkedList<T> queue;
+    private final Deque<T> queue;
 
     public LinkedQueue() {
         this.queue = new LinkedList<>();
@@ -21,7 +22,7 @@ public class LinkedQueue<T> implements Queue<T> {
 
     @Override
     public void enqueue(T element) {
-        queue.addLast(element);
+        queue.push(element);
     }
 
     @Override
@@ -29,7 +30,7 @@ public class LinkedQueue<T> implements Queue<T> {
         if (isEmpty()) {
             throw new EmptyQueueException("Queue is empty. Fail to dequeue element");
         }
-        return queue.removeFirst();
+        return queue.pop();
     }
 
     @Override

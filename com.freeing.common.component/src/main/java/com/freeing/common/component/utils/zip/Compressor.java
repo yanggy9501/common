@@ -16,12 +16,12 @@ class Compressor {
     /**
      * 被压缩文件或目录
      */
-    private final File srcFile;
+    private final File src;
 
     /**
      * 压缩到目标目录
      */
-    private final File destFile;
+    private final File destDir;
 
     /**
      * 目标目录存在状态，true：压缩前就存在 false：压缩前就不存在
@@ -33,31 +33,31 @@ class Compressor {
      */
     private final String fileName;
 
-    public Compressor(File srcFile, File destFile, String fileName) {
-        this.srcFile = srcFile;
-        this.destFile = destFile;
+    public Compressor(File src, File destDir, String fileName) {
+        this.src = src;
+        this.destDir = destDir;
         this.fileName = fileName;
     }
 
     void compress() throws IOException {
         checkDestFileIsLegal();
-        tryMkdirIfNeeded(destFile);
+        tryMkdirIfNeeded(destDir);
         ZipOutputStream zipOut = null;
         BufferedOutputStream bufferedOut = null;
         FileOutputStream out = null;
         try {
             // 压缩文件绝对路径
-            String destFilePath = destFile.getAbsolutePath() + File.separator + fileName;
+            String destFilePath = destDir.getAbsolutePath() + File.separator + fileName;
             out = new FileOutputStream(destFilePath);
             zipOut = new ZipOutputStream(out);
             bufferedOut = new BufferedOutputStream(zipOut);
 
             // 压缩
-            doCompress(zipOut, srcFile, srcFile.getName(), bufferedOut);
+            doCompress(zipOut, destDir, destDir.getName(), bufferedOut);
         } catch (IOException ignored) {
             // 压缩失败时删除创建的空目录
-            if (!destFileExisting && destFile.exists() && destFile.isDirectory()) {
-                boolean ignore = destFile.delete();
+            if (!destFileExisting && destDir.exists() && destDir.isDirectory()) {
+                boolean ignore = destDir.delete();
             }
         } finally {
             close(out, zipOut, bufferedOut);
@@ -79,7 +79,7 @@ class Compressor {
     }
 
     private void checkDestFileIsLegal() {
-        if (destFile.getAbsolutePath().startsWith(srcFile.getAbsolutePath())) {
+        if (destDir.getAbsolutePath().startsWith(destDir.getAbsolutePath())) {
             throw new IllegalArgumentException("Error target zip file path.");
         }
     }

@@ -8,7 +8,7 @@ import java.util.List;
  *
  * @author yanggy
  */
-public class PageResult implements Serializable {
+public class CommonPage implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -36,11 +36,11 @@ public class PageResult implements Serializable {
      */
     private List<?> rows;
 
-    public PageResult() {
+    public CommonPage() {
 
     }
 
-    public PageResult(long currentPage, long pageSize, long pageCount, long total, List<?> rows) {
+    public CommonPage(long currentPage, long pageSize, long pageCount, long total, List<?> rows) {
         this.currentPage = currentPage;
         this.pageSize = pageSize;
         this.pageCount = pageCount;

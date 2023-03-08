@@ -1,5 +1,7 @@
 package com.freeing.common.component.utils;
 
+import org.apache.commons.lang3.time.DateFormatUtils;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
@@ -13,7 +15,7 @@ import java.util.stream.Stream;
 /**
  * 日期工具类
  */
-public class DateUtils {
+public class DateUtils extends DateFormatUtils {
     public final static String DEFAULT_YEAR_FORMAT = "yyyy";
     public final static String DEFAULT_MONTH_FORMAT = "yyyy-MM";
     public final static String DEFAULT_MONTH_FORMAT_SLASH = "yyyy/MM";

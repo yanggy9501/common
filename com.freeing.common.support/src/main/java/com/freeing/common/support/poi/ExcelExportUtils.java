@@ -12,7 +12,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Getter
 @Setter
@@ -22,6 +21,7 @@ public class ExcelExportUtils {
     private String templatePath;
     private Class<?> clazz;
     private Field[] fields;
+//    private CellStyle[] styles;
 
     public ExcelExportUtils(Class<?> clazz, int rowIndex, int styleIndex) {
         this.clazz = clazz;
@@ -36,9 +36,10 @@ public class ExcelExportUtils {
 
         CellStyle[] styles = getStyles(sheet.getRow(styleIndex));
 
-        AtomicInteger datasAi = new AtomicInteger(rowIndex);
+//        AtomicInteger datasAi = new AtomicInteger(rowIndex);
+        int datasAi = rowIndex;
         for (T t : dataList) {
-            Row row = sheet.createRow(datasAi.getAndIncrement());
+            Row row = sheet.createRow(datasAi++);
             // 填充数据
             for(int i = 0; i < styles.length; i++) {
                 Cell cell = row.createCell(i);

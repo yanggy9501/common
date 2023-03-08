@@ -15,17 +15,17 @@ public abstract class AbstractXMLParseBuilder<T> {
     /**
      * xml 对应的实体
      */
-    private T data;
+    protected T data;
 
     /**
      * 是否已经解析标识
      */
-    private boolean parsed;
+    protected boolean parsed;
 
     /**
      * xml 的 XPath 解析器
      */
-    private final XPathParser parser;
+    protected final XPathParser parser;
 
     /**
      * 构造器

@@ -52,6 +52,8 @@ public class RangeUtils {
                 start = collect.get(i);
             }
             end = collect.get(i);
+
+            // 最后一个处理
             if (i == collect.size() - 1) {
                 rangeBuilder.append(start);
                 if (start != end) {
@@ -119,11 +121,51 @@ public class RangeUtils {
             if (itemArr.length == 1 && itemArr[0].equals(String.valueOf(number))) {
                 return true;
             }
-            if (number >= NumberUtils.parseInt(itemArr[0], -1)
-                && number <= NumberUtils.parseInt(itemArr[1], -1)) {
+            if (itemArr.length == 2 &&
+                number >= Integer.parseInt(itemArr[0])
+                && number <= Integer.parseInt(itemArr[1])) {
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * 删除范围中的 value 值
+     *
+     * @param range 范围
+     * @param value int value
+     * @return
+     */
+    public static String remove(String range, int value) {
+        String[] splitArr = range.split(StrPool.SEMICOLON);
+        ArrayList<String> result = new ArrayList<>();
+        for (String split : splitArr) {
+            String[] itemArr = split.split(StrPool.HYPHEN);
+            if (itemArr.length == 1 && itemArr[0].equals(String.valueOf(value))) {
+                continue;
+            }
+            if (itemArr.length == 2
+                && value >= Integer.parseInt(itemArr[0])
+                && value <= Integer.parseInt(itemArr[1])) {
+                // 判断情况，2-3 与 2或3；2-6 与2或6 ；2-6 与3; 2-4 与 3 这么多中情况
+                if (Integer.parseInt(itemArr[1]) - Integer.parseInt(itemArr[0]) == 1) {
+                    result.add(Integer.parseInt(itemArr[0]) == value ? itemArr[1] : itemArr[0]);
+                } else if (Integer.parseInt(itemArr[0]) == value) {
+                    result.add((value + 1) + "-" + itemArr[1]);
+                } else if (Integer.parseInt(itemArr[1]) == value) {
+                    result.add(itemArr[0] + "-" + (value - 1));
+                } else if (Integer.parseInt(itemArr[1]) - Integer.parseInt(itemArr[0]) == 2) {
+                    result.add(itemArr[0]);
+                    result.add(itemArr[1]);
+                } else {
+                    result.add(itemArr[0].equals(String.valueOf(value - 1)) ? itemArr[0] : itemArr[0] + "-" + (value - 1));
+                    result.add(itemArr[1].equals(String.valueOf(value + 1)) ? itemArr[1] : (value + 1) + "-" + itemArr[1]);
+                }
+                continue;
+            }
+            result.add(split);
+        }
+        return String.join(StrPool.SEMICOLON, result);
     }
 }

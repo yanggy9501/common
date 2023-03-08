@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<workbook baseName = "file_name">
+    <sheet sheetName = "sheet_name">
+        <table id = "table_id" tableName = "用户表">
+            <title>一级标题</title>
+            <table-head>
+                <column name = "姓名" field = "username" javaType = "string" comment = "用户姓名" color = "100.100.100"/>
+                <column name = "年龄" field = "age" javaType = "int" comment = "用户年龄" color = "100.100.100"/>
+                <column name = "生日" field = "birthday" javaType = "int" comment = "用户年龄" color = "100.100.100"/>
+            </table-head>
+
+            <export>
+
+            </export>
+
+            <import>
+
+            </import>
+        </table>
+    </sheet>
+</workbook>

@@ -1,7 +1,10 @@
 package com.freeing.common.component.utils;
 
+import com.freeing.common.component.constants.StrPool;
 import com.freeing.common.component.utils.stack.CharStack;
 import com.freeing.common.component.utils.stack.IntStack;
+
+import java.util.ArrayList;
 
 /**
  * Number工具类
@@ -134,5 +137,62 @@ public class NumberUtils extends org.apache.commons.lang3.math.NumberUtils {
             stack.push(res);
         }
         return stack;
+    }
+
+    /**
+     * 找出数组中均值小于等于一指定值的最大区间
+     * ps：可能存在多个
+     *
+     * @param array 数组
+     * @param value 均值
+     * @return 数组下标对
+     */
+    public static String avgRangeLenght(int[] array, int value) {
+        int len = array.length;
+        int sum;
+        ArrayList<String> result = new ArrayList<>();
+        result.add(String.valueOf(array[0]));
+        int currentMax = 1;
+        int j = 1;
+        for (int i = 0; i < len; i++) {
+            for (; j < len; j++) {
+                sum = sum(array, i, j);
+                // 均值 < value，在判断长度是否有更大的或者等于最大
+                // 1. 如果有更大的，清空之前的结果，保存新的结果，更新最大值
+                // 2. 等于之前的，保存结果
+                int subLen = j - i + 1;
+                // 这里用乘法，避免使用除法出现浮点数
+                if (sum <= value * subLen) {
+                    if (subLen == currentMax) {
+                        result.add(i == j ? String.valueOf(j) : i + "-" + j);
+                    }
+                    if (subLen > currentMax) {
+                        result.clear();
+                        result.add(i + "-" + j);
+                        currentMax++;
+                    }
+                } else {
+                    // 当超过了 break 保持 i 与 j 的距离活动（相当滑动窗口）
+                    break;
+                }
+            }
+        }
+        return String.join(StrPool.SEMICOLON, result);
+    }
+
+    /**
+     * 计算数组指定闭区间的和
+     *
+     * @param array 数组
+     * @param start 起始下标
+     * @param end 结束小标
+     * @return 和
+     */
+    public static int sum(int[] array, int start, int end) {
+        int sum = 0;
+        for (int i = start; i <= end; i++) {
+            sum += array[i];
+        }
+        return sum;
     }
 }

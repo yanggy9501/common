@@ -5,6 +5,8 @@ import com.freeing.common.component.utils.stack.CharStack;
 import com.freeing.common.component.utils.stack.IntStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Number工具类
@@ -194,5 +196,35 @@ public class NumberUtils extends org.apache.commons.lang3.math.NumberUtils {
             sum += array[i];
         }
         return sum;
+    }
+
+    /**
+     * 查找数组中的众数
+     *
+     * @param array 数组
+     * @return 众数
+     */
+    public static List<Integer> findMode(int[] array) {
+        Arrays.sort(array);
+
+        int count = 1;
+        int currentMax = 0;
+        ArrayList<Integer> result = new ArrayList<>();
+        for (int i = 1; i < array.length; i++) {
+            if (array[i] == array[i - 1]) {
+                count++;
+            } else {
+                if (count == currentMax) {
+                    result.add(array[i - 1]);
+                }
+                if (count > currentMax) {
+                    // 有新的众数
+                    result.clear();
+                    result.add(array[i - 1]);
+                    count = 1;
+                }
+            }
+        }
+        return result;
     }
 }

@@ -473,8 +473,8 @@ public class DateUtils extends DateFormatUtils {
         }
 
         Stream.iterate(startDate, d -> d.plusMonths(1))
-                .limit(distance + 1)
-                .forEach(f -> list.add(f.format(DateTimeFormatter.ofPattern(pattern))));
+            .limit(distance + 1)
+            .forEach(f -> list.add(f.format(DateTimeFormatter.ofPattern(pattern))));
         return list;
     }
 }

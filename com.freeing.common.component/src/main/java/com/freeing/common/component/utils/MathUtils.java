@@ -153,7 +153,7 @@ public class MathUtils {
         }
         BigDecimal b1 = new BigDecimal(v1);
         BigDecimal b2 = new BigDecimal(v2);
-        return b1.multiply(b2).setScale(scale, BigDecimal.ROUND_HALF_UP).toString();
+        return b1.multiply(b2).setScale(scale, RoundingMode.HALF_UP).toString();
     }
 
     /**
@@ -182,7 +182,7 @@ public class MathUtils {
         }
         BigDecimal b1 = BigDecimal.valueOf(v1);
         BigDecimal b2 = BigDecimal.valueOf(v2);
-        return b1.divide(b2, scale, BigDecimal.ROUND_HALF_UP).doubleValue();
+        return b1.divide(b2, scale, RoundingMode.HALF_UP).doubleValue();
     }
 
     /**
@@ -199,7 +199,7 @@ public class MathUtils {
         }
         BigDecimal b1 = new BigDecimal(v1);
         BigDecimal b2 = new BigDecimal(v1);
-        return b1.divide(b2, scale, BigDecimal.ROUND_HALF_UP).toString();
+        return b1.divide(b2, scale, RoundingMode.HALF_UP).toString();
     }
 
     /**
@@ -214,7 +214,7 @@ public class MathUtils {
             throw new IllegalArgumentException("The scale must be a positive integer or zero");
         }
         BigDecimal b = BigDecimal.valueOf(v);
-        return b.setScale(scale, BigDecimal.ROUND_HALF_UP).doubleValue();
+        return b.setScale(scale, RoundingMode.HALF_UP).doubleValue();
     }
 
     /**
@@ -229,7 +229,7 @@ public class MathUtils {
             throw new IllegalArgumentException("The scale must be a positive integer or zero");
         }
         BigDecimal b = new BigDecimal(v);
-        return b.setScale(scale, BigDecimal.ROUND_HALF_UP).toString();
+        return b.setScale(scale, RoundingMode.HALF_UP).toString();
     }
 
     /**
@@ -246,7 +246,7 @@ public class MathUtils {
         }
         BigDecimal b1 = new BigDecimal(v1);
         BigDecimal b2 = new BigDecimal(v2);
-        return b1.remainder(b2).setScale(scale, BigDecimal.ROUND_HALF_UP).toString();
+        return b1.remainder(b2).setScale(scale, RoundingMode.HALF_UP).toString();
     }
 
     /**
@@ -261,7 +261,7 @@ public class MathUtils {
         if (scale < 0) {
             throw new IllegalArgumentException("The scale must be a positive integer or zero");
         }
-        return v1.remainder(v2).setScale(scale, BigDecimal.ROUND_HALF_UP);
+        return v1.remainder(v2).setScale(scale, RoundingMode.HALF_UP);
     }
 
     /**

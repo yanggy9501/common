@@ -4,9 +4,8 @@ import com.freeing.common.component.constants.StrPool;
 import com.freeing.common.component.utils.stack.CharStack;
 import com.freeing.common.component.utils.stack.IntStack;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Number工具类
@@ -200,11 +199,18 @@ public class NumberUtils extends org.apache.commons.lang3.math.NumberUtils {
 
     /**
      * 查找数组中的众数
+     * todo: 有bug
+     * ps: 特殊输入
+     * 1
+     * 1 2
+     * 1 2 3
+     * 1 1 1 1
+     * 1 2 2 2
      *
      * @param array 数组
      * @return 众数
      */
-    public static List<Integer> findMode(int[] array) {
+    public static List<Integer> findModeTest(int[] array) {
         Arrays.sort(array);
 
         int count = 1;
@@ -213,18 +219,64 @@ public class NumberUtils extends org.apache.commons.lang3.math.NumberUtils {
         for (int i = 1; i < array.length; i++) {
             if (array[i] == array[i - 1]) {
                 count++;
-            } else {
-                if (count == currentMax) {
+                // 最后一个
+                if (i == array.length - 1 && count == currentMax) {
+                    // ps：1 2 3 3 3，要保存最后一个的
                     result.add(array[i - 1]);
                 }
+                // ps：1 2 2 3 3，要保存最后一个的
+                if (i == array.length - 1 && count > currentMax) {
+                    // 有新的众数
+                    result.clear();
+                    result.add(array[i - 1]);
+                }
+            } else {
+                if (count == currentMax) {
+                    // ps：注意最后一个如：输入 1 2 3，要保存最后一个的
+                    result.add(array[i - 1]);
+                    if (i == array.length - 1 ) {
+                        result.add(array[i]);
+                    }
+                }
+                // 输入： 1 2 2 2 2 2
                 if (count > currentMax) {
                     // 有新的众数
                     result.clear();
                     result.add(array[i - 1]);
+                    currentMax = count;
+
                     count = 1;
                 }
             }
         }
         return result;
+    }
+
+    public static List<Integer> findMode(int[] array) {
+        HashMap<Integer, Integer> countMap = new HashMap<>();
+        for (int number : array) {
+            Integer value = countMap.get(number);
+            if (Objects.isNull(value)) {
+                countMap.put(number, 1);
+            } else {
+                countMap.put(number, value + 1);
+            }
+        }
+
+        Optional<Integer> maxOptional = countMap.entrySet().stream()
+            .max((entry1, entry2) -> entry2.getValue() - entry1.getValue())
+            .map(Map.Entry::getValue);
+
+        // ps: 如果输入为空，返回的是空集合
+        return maxOptional.map(integer -> countMap.entrySet().stream()
+            .filter(entry -> Objects.equals(entry.getValue(), integer))
+            .map(Map.Entry::getKey)
+            .collect(Collectors.toList()))
+            .orElse(Collections.emptyList());
+
+    }
+
+    public static void main(String[] args) {
+        System.out.println(findMode(new int[]{1,3,2}));
     }
 }

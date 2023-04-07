@@ -2,7 +2,6 @@ package com.common.unqid.leafcore.service;
 
 import com.common.unqid.leafcore.IdManager;
 import com.common.unqid.leafcore.segment.model.ID;
-import com.common.unqid.leafcore.segment.model.entity.LeafAlloc;
 
 /**
  * ID 生成接口

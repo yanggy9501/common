@@ -3,7 +3,6 @@ package com.common.unqid.server.controller;
 import com.common.unqid.leafcore.IdManager;
 import com.common.unqid.leafcore.segment.model.SegmentBuffer;
 import com.common.unqid.leafcore.segment.model.entity.LeafAlloc;
-import com.common.unqid.leafcore.service.IdGenerator;
 import com.common.unqid.server.module.SegmentBufferView;
 import com.common.unqid.server.service.SegmentService;
 import org.slf4j.Logger;
@@ -20,14 +19,12 @@ import java.util.Map;
  * 监控 Controller 接口
  */
 @RestController
-@RequestMapping("/segment")
+@RequestMapping("/monitor")
 public class LeafMonitorController {
     private final Logger logger = LoggerFactory.getLogger(LeafMonitorController.class);
 
     @Autowired
     private SegmentService segmentService;
-
-
 
     @RequestMapping(value = "/cache")
     public Map<String, SegmentBufferView> getCache() {
@@ -35,8 +32,7 @@ public class LeafMonitorController {
         if (segmentService == null) {
             throw new IllegalArgumentException("You should config leaf.segment.enable=true first");
         }
-        IdGenerator idGenerator = segmentService.getIdGenerator();
-        IdManager idManager = idGenerator.getIdManager();
+        IdManager idManager = IdManager.getIdManager();
         Map<String, SegmentBuffer> cache = idManager.getSegmentContextMap();
         for (Map.Entry<String, SegmentBuffer> entry : cache.entrySet()) {
             SegmentBufferView sv = new SegmentBufferView();
@@ -70,7 +66,7 @@ public class LeafMonitorController {
         if (segmentService == null) {
             throw new IllegalArgumentException("You should config leaf.segment.enable=true first");
         }
-        IdManager idManager = segmentService.getIdGenerator().getIdManager();
+        IdManager idManager = IdManager.getIdManager();
         List<LeafAlloc> items = idManager.getAllLeafAllocs();
         logger.info("DB info {}", items);
         return items;

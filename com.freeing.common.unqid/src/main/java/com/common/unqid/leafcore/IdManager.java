@@ -19,6 +19,8 @@ import java.util.concurrent.*;
 public class IdManager {
     private static final Logger logger = LoggerFactory.getLogger(IdManager.class);
 
+    private static volatile IdManager idManager;
+
     /**
      * 缓存
      */
@@ -74,7 +76,22 @@ public class IdManager {
     private final LeafAllocDao allocDao;
 
     public static IdManager getInstance(LeafAllocDao allocDao) {
-        return new IdManager(allocDao);
+        if (idManager == null) {
+            synchronized (IdManager.class) {
+                if (idManager == null) {
+                    idManager = new IdManager(allocDao);
+                }
+            }
+        }
+        return idManager;
+    }
+
+    public static IdManager getIdManager() {
+        if (idManager == null) {
+            logger.warn("IdManager must be instanced.");
+            throw new NullPointerException("Please instance IdManager firstly.");
+        }
+        return idManager;
     }
 
     private IdManager(LeafAllocDao allocDao) {

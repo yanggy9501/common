@@ -108,7 +108,7 @@ public class ClassUtils extends org.apache.commons.lang3.ClassUtils {
      *
      * @param object object
      * @param methodName method of object
-     * @param setterValue setter value
+     * @param setterValue setter value，必须是基础数据类型
      */
     public static void callSetterMethod(final Object object, final String methodName, final String setterValue) {
         for (Class<?> each : GENERAL_CLASS_TYPE) {

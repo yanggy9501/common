@@ -87,4 +87,47 @@ public class CommonPage implements Serializable {
     public void setRows(List<?> rows) {
         this.rows = rows;
     }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+    public static class Builder {
+        private long currentPage;
+
+        private long pageSize;
+
+        private long pageCount;
+
+        private long total;
+
+        private List<?> rows;
+
+        public Builder currentPage(long currentPage) {
+            this.currentPage = currentPage;
+            return this;
+        }
+
+        public Builder pageSize(long pageSize) {
+            this.pageSize = pageSize;
+            return this;
+        }
+
+        public Builder pageCount(long pageCount) {
+            this.pageCount = pageCount;
+            return this;
+        }
+
+        public Builder total(long total) {
+            this.total = total;
+            return this;
+        }
+
+        public Builder rows(List<?> rows) {
+            this.rows = rows;
+            return this;
+        }
+        public CommonPage build() {
+            return new CommonPage(currentPage, pageSize, pageCount, total, rows);
+        }
+    }
 }

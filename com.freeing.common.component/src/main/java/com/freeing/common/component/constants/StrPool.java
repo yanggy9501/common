@@ -5,7 +5,6 @@ package com.freeing.common.component.constants;
  */
 public interface StrPool {
     String EMPTY = "";
-
     String AMPERSAND = "&";
     String AT = "@";
     String BACK_SLASH = "\\";

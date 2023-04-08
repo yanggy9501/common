@@ -577,7 +577,6 @@ public class DateUtils extends DateFormatUtils {
         return cal.getTime();
     }
 
-
     /**
      * 获取本周的结束时间
      *
@@ -617,7 +616,6 @@ public class DateUtils extends DateFormatUtils {
         calendar.set(getNowYear(), getNowMonth() - 1, day);
         return getEndOf(calendar.getTime());
     }
-
 
     /**
      * 获取本年的开始时间

@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
+ * https://renjie.blog.csdn.net/article/details/127994883
+ *
  * @author yanggy
  */
 public class Od5 {

@@ -30,6 +30,7 @@
         <reflections.io.version>0.10.2</reflections.io.version>
         <gauva.version>20.0</gauva.version>
         <vavr.version>0.10.3</vavr.version>
+        <fastjson.version>1.2.79</fastjson.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -57,6 +58,13 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-compress</artifactId>
             <version>${apach.commons.commons-compress.version}</version>
+        </dependency>
+
+        <!-- json -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
         </dependency>
 
         <dependency>

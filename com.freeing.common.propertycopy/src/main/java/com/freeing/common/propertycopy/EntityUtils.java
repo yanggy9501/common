@@ -9,8 +9,8 @@ import java.util.Map;
  *
  * @author yanggy
  */
-public class ObjectCopyUtils {
-    private final PropertyMapper PROPERTY_MAPPER = new PropertyMapper();
+public class EntityUtils {
+    private final OrikaMapperHelper PROPERTY_MAPPER = new OrikaMapperHelper();
 
     /**
      *  属性映射

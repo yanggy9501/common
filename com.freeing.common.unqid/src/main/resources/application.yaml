@@ -1,7 +1,0 @@
-server:
-  port: 8181
-
-# 日志
-logging:
-  level:
-    com.common.unqid.leafcore: info

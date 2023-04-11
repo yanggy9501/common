@@ -285,9 +285,6 @@ public class DateUtils extends DateFormatUtils {
         return instant.atZone(zoneId).toLocalTime();
     }
 
-    //-计算日期 start
-
-
     /**
      * 计算结束时间与当前时间中的天数
      *
@@ -308,7 +305,6 @@ public class DateUtils extends DateFormatUtils {
     public static long until(Date startDate, Date endDate) {
         return date2LocalDateTime(startDate).until(date2LocalDateTime(endDate), ChronoUnit.DAYS);
     }
-
 
     /**
      * 计算结束时间与开始时间中的天数
@@ -380,7 +376,6 @@ public class DateUtils extends DateFormatUtils {
                 .forEach(f -> list.add(f.format(DateTimeFormatter.ofPattern(finalPattern))));
         return list;
     }
-
 
     /**
      * 计算2个日期之间的所有的周 yyyy-ww

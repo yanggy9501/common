@@ -1,4 +1,4 @@
-package com.common.support.filter;
+package com.common.support.chain;
 
 import com.freeing.common.support.chain.v1.AbstractHandler;
 

@@ -1,4 +1,4 @@
-package com.common.support.filter;
+package com.common.support.chain;
 
 import com.freeing.common.support.chain.v2.Handler;
 import com.freeing.common.support.chain.v2.HandlerChain;

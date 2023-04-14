@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author yanggy
  */
-class PropertyMapper {
+class OrikaMapperHelper {
     /**
      * 默认映射属性字段工厂
      */

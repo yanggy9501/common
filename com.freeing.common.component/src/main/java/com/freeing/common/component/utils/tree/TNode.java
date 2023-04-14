@@ -14,6 +14,7 @@ public class TNode<K, V> {
 
     private K parentId;
 
+    private List<K> parentPath;
     private V data;
 
     private List<TNode<K, V>> children;
@@ -34,6 +35,14 @@ public class TNode<K, V> {
 
     public void setParentId(K parentId) {
         this.parentId = parentId;
+    }
+
+    public List<K> getParentPath() {
+        return parentPath;
+    }
+
+    public void setParentPath(List<K> parentPath) {
+        this.parentPath = parentPath;
     }
 
     public V getData() {

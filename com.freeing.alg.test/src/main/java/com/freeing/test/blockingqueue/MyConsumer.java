@@ -1,4 +1,4 @@
-package com.freeing.test.blockingqueue.arraybqmodel;
+package com.freeing.test.blockingqueue;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.function.Consumer;

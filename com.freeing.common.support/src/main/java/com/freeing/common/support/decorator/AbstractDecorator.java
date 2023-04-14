@@ -12,7 +12,7 @@ public abstract class AbstractDecorator extends AbstractComponent {
     /**
      * 聚合被装饰对象
      */
-    private AbstractComponent component;
+    private final AbstractComponent component;
 
     public AbstractDecorator(AbstractComponent component) {
         this.component = component;

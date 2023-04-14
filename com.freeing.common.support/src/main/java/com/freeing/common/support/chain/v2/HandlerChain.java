@@ -21,7 +21,7 @@ public class HandlerChain <T> {
         chain.add(handler);
     }
 
-    public void doHandle(T obj) {
+    public final void doHandle(T obj) {
         if (position >= 0 && position < chain.size()) {
             chain.get(position++).doHandle(obj, this);
         }

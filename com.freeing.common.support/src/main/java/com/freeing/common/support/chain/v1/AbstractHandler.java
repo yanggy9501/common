@@ -28,7 +28,7 @@ public abstract class AbstractHandler<T> {
      *
      * @param obj
      */
-    public void chain(T obj) {
+    public final void chain(T obj) {
         // 执行本handler逻辑
         handler(obj);
         // 执行下一个handler

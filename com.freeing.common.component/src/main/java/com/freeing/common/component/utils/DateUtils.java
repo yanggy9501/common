@@ -43,6 +43,28 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     }
 
     /**
+     * 获取 LocalDate 属于第几季度
+     *
+     * @param localDate LocalDate
+     * @return
+     */
+    public static int quarter(LocalDate localDate) {
+        int monthValue = localDate.getMonthValue();
+        return (monthValue >> 2) + 1;
+    }
+
+    /**
+     * 获取 Date 属于第几季度
+     *
+     * @param date Date
+     * @return
+     */
+    public static int quarter(Date date) {
+        LocalDate localDate = date2LocalDate(date);
+        return quarter(localDate);
+    }
+
+    /**
      * LocalDateTime转换为Date
      *
      * @param localDateTime LocalDateTime

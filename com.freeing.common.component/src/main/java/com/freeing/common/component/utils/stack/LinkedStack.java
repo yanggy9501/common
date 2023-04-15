@@ -1,6 +1,6 @@
 package com.freeing.common.component.utils.stack;
 
-import com.freeing.common.component.exception.EmptyStackException;
+import com.freeing.common.component.utils.stack.exception.EmptyStackException;
 
 import java.util.LinkedList;
 

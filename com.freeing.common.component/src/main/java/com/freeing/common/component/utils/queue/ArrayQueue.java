@@ -1,7 +1,7 @@
 package com.freeing.common.component.utils.queue;
 
-import com.freeing.common.component.exception.EmptyQueueException;
-import com.freeing.common.component.exception.FullQueueException;
+import com.freeing.common.component.utils.queue.exception.EmptyQueueException;
+import com.freeing.common.component.utils.queue.exception.FullQueueException;
 
 /**
  * 数组实现的队列

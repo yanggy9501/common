@@ -1,4 +1,4 @@
-package com.freeing.common.component.exception;
+package com.freeing.common.component.utils.queue.exception;
 
 /**
  * @author yanggy

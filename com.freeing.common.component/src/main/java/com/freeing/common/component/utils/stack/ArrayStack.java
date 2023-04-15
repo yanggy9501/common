@@ -1,7 +1,7 @@
 package com.freeing.common.component.utils.stack;
 
-import com.freeing.common.component.exception.EmptyStackException;
-import com.freeing.common.component.exception.FullStackException;
+import com.freeing.common.component.utils.stack.exception.EmptyStackException;
+import com.freeing.common.component.utils.stack.exception.FullStackException;
 
 /**
  * 数组实现的栈

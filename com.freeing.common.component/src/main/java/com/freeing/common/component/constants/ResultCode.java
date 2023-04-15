@@ -23,7 +23,7 @@ public enum ResultCode {
     /**
      * Exception
      */
-    ERROR(-2, "Unknow exception");
+    ERROR(-2, "Unknown exception");
 
     /**
      * 状态码

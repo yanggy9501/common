@@ -1,4 +1,4 @@
-package com.freeing.common.support;
+package com.freeing.common.component.exception;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -132,6 +132,13 @@ public class ExceptionContext {
             description.append(LINE_SEPARATOR);
             description.append("### The error may involve ");
             description.append(object);
+        }
+
+        // extra
+        if (extra != null) {
+            description.append(LINE_SEPARATOR);
+            description.append("### The extra info ");
+            description.append(extra);
         }
 
         // cause

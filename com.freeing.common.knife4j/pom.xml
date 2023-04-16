@@ -2,48 +2,52 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
     <modelVersion>4.0.0</modelVersion>
+
     <groupId>com.freeing</groupId>
-    <artifactId>com.freeing.common.web</artifactId>
-    <version>1.0</version>
+    <artifactId>com.freeing.common.knife4j</artifactId>
+    <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <tomcat-api.version>10.1.0</tomcat-api.version>
-        <apach.commons.lang.version>3.12.0</apach.commons.lang.version>
-        <springmvc.version>2.3.2.RELEASE</springmvc.version>
+        <knife4j.version>2.0.1</knife4j.version>
+        <swagger.aggr.version>2.0.9</swagger.aggr.version>
 
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <spring.processor.version>2.3.2.RELEASE</spring.processor.version>
+        <spring-boot.version>2.3.2.RELEASE</spring-boot.version>
+
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <description>app 接口文档模块</description>
+
     <dependencies>
+        <!-- knife4j 接口文档 -->
         <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat-annotations-api</artifactId>
-            <version>${tomcat-api.version}</version>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-spring-boot-starter</artifactId>
+            <version>${knife4j.version}</version>
+        </dependency>
+        <!-- knife4j 聚合 -->
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-aggregation-spring-boot-starter</artifactId>
+            <version>${swagger.aggr.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <version>${springmvc.version}</version>
+            <artifactId>spring-boot-starter</artifactId>
+            <version>${spring-boot.version}</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
-            <version>2.3.2.RELEASE</version>
+            <version>${spring.processor.version}</version>
             <optional>true</optional>
-        </dependency>
-
-        <!-- apache common 工具包 -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>${apach.commons.lang.version}</version>
         </dependency>
     </dependencies>
 

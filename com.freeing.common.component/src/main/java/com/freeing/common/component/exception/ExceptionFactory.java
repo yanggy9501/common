@@ -1,4 +1,4 @@
-package com.freeing.common.support;
+package com.freeing.common.component.exception;
 
 public class ExceptionFactory {
 

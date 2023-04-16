@@ -77,8 +77,10 @@ public class Factory {
     /**
      * 初始化
      */
-    public void init() {
-        refresh();
+    public synchronized void  init() {
+        scanAbsolutePath();
+        scanClassPath();
+        scanPackages();
     }
 
     public Object get(String key) {
@@ -93,15 +95,6 @@ public class Factory {
             return (T) bean;
         }
         return null;
-    }
-
-    /**
-     * 刷新方法
-     */
-    public synchronized void refresh() {
-        scanAbsolutePath();
-        scanClassPath();
-        scanPackages();
     }
 
     private void scanClassPath() {

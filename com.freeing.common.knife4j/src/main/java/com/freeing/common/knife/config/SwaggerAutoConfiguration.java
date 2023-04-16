@@ -29,7 +29,7 @@ import java.util.List;
  * swagger 自动配置类
  * 服务URL: http://localhost:port/doc.html
  * 配置案例：
- * 案例1 - 分组文档方式
+ * 案例1 - 分组文档方式，要求必须至少有两个分组
  * app:
  *   swagger:
  *     enabled: true #是否启用swagger

@@ -1,0 +1,53 @@
+# 服务URL: http://localhost:port/doc.html
+# swagger 分组配置
+# ps: 该配置必须至少有两个分组，不然无法使用
+app:
+  swagger:
+    enabled: true
+    docket:
+      user: # 自定义分组模块名
+        title: 在线文档标题
+        group: 自定义组名
+        description: 在线文档描述
+        version: 接口文档版本
+        licenseUrl: 许可证 URL
+        termsOfServiceUrl: 服务条款URL
+        base-package: com.freeing.mall.controller.user
+        basePath:
+          - 解析的url规则, 该路径为ant路径，指定controller中哪些url会被解析成文档
+          - 解析的url规则, 该路径为ant路径，指定controller中哪些url会被解析成文档
+        excludePath:
+          - 在basePath基础上需要排除的url规则
+          - 在basePath基础上需要排除的url规则
+        order: 排序
+        contact:
+          name: 联系人
+          url: 联系人url
+          email: 联系人email
+      menu:
+        title: 菜单模块
+        base-package: com.freeing.mall.controller.menu
+
+# 案例2 - 单组文档方式
+app:
+  swagger:
+    enabled: true
+    title: 在线接口文档标题
+    group: 接口分组-组名
+    description: 在线文档描述
+    version: 接口文档版本
+    licenseUrl: 许可证 URL
+    termsOfServiceUrl: 服务条款URL
+    base-package: com.app.knife4j.controller
+    basePath:
+      - 解析的url规则, 该路径为ant路径，指定controller中哪些url会被解析成文档
+      - 解析的url规则, 该路径为ant路径，指定controller中哪些url会被解析成文档
+    excludePath:
+      - 在basePath基础上需要排除的url规则
+      - 在basePath基础上需要排除的url规则
+    host: host信息
+    order: 排序
+    contact:
+      name: 联系人
+      url: 联系人url
+      email: 联系人email

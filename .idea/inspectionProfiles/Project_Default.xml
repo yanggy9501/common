@@ -129,5 +129,6 @@
         </Options>
       </option>
     </inspection_tool>
+    <inspection_tool class="UnusedSymbol" enabled="true" level="INFORMATION" enabled_by_default="true" />
   </profile>
 </component>

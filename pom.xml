@@ -7,6 +7,9 @@
     <groupId>com.freeing</groupId>
     <artifactId>com.freeing.common</artifactId>
     <packaging>pom</packaging>
+    <modules>
+        <module>com.freeing.commom.xss</module>
+    </modules>
     <version>1.0</version>
 
 </project>

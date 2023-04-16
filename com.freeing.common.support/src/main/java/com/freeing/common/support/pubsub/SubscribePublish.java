@@ -130,7 +130,7 @@ public class SubscribePublish {
      *
      * @return SubscribePublish对象
      */
-    public static SubscribePublish getSubscribePublish() {
+    public static SubscribePublish getInstance() {
         if (SUBSCRIBE_PUBLISH == null) {
             synchronized (SubscribePublish.class) {
                 // 再次检查，防止进来的时候单例刚好创建完

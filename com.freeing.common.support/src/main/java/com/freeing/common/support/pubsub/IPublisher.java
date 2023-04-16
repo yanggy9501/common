@@ -22,7 +22,7 @@ public interface IPublisher {
         if (getMessageType() == null){
             throw new IllegalArgumentException("Message type have to not be null.");
         }
-        SubscribePublish.getSubscribePublish().syncPublishMessage(getMessageType(), message);
+        SubscribePublish.getInstance().syncPublishMessage(getMessageType(), message);
     }
 
     /**
@@ -34,7 +34,7 @@ public interface IPublisher {
         if (getMessageType() == null){
             throw new IllegalArgumentException("Message type have to not be null.");
         }
-        SubscribePublish.getSubscribePublish().asyncPublishMessage(getMessageType(), message);
+        SubscribePublish.getInstance().asyncPublishMessage(getMessageType(), message);
     }
 }
 

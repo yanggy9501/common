@@ -16,14 +16,14 @@ public interface ISubscriber {
      * 订阅
      */
     default void subcribe() {
-        SubscribePublish.getSubscribePublish().subscribe(this);
+        SubscribePublish.getInstance().subscribe(this);
     }
 
     /**
      * 取消订阅
      */
-    default  void unSubcribe(){
-        SubscribePublish.getSubscribePublish().unSubscribe(this);
+    default void unSubcribe(){
+        SubscribePublish.getInstance().unSubscribe(this);
     }
 
     /**

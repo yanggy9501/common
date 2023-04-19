@@ -31,7 +31,7 @@ public class ResourceUtils {
      * @return 输入流
      */
     public static String readAsString(ClassLoader classLoader, String fileName) {
-        InputStream resource = classLoader.getResourceAsStream("/" + fileName);
+        InputStream resource = classLoader.getResourceAsStream(File.separator + fileName);
         if (resource == null) {
             return StrPool.EMPTY;
         }

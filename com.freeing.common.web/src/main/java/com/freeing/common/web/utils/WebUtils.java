@@ -1,4 +1,4 @@
-package com.freeing.common.web;
+package com.freeing.common.web.utils;
 
 
 import org.apache.commons.lang3.StringUtils;

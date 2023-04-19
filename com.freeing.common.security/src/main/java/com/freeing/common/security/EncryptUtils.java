@@ -1,7 +1,9 @@
 package com.freeing.common.security;
 
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
 /**
  * 摘要工具
@@ -62,6 +64,30 @@ public class EncryptUtils {
             return null;
         }
         return strDes;
+    }
+
+    /**
+     * base64 加密
+     *
+     * @param text
+     * @return
+     */
+    public static String encryptByBase64(String text) {
+        Base64.Encoder encoder = Base64.getEncoder();
+        byte[] bytes = encoder.encode(text.getBytes(StandardCharsets.UTF_8));
+        return new String(bytes);
+    }
+
+    /**
+     * base64 解密
+     *
+     * @param text
+     * @return
+     */
+    public static String decryptByBase64(String text) {
+        Base64.Decoder decoder = Base64.getDecoder();
+        byte[] bytes = decoder.decode(text.getBytes(StandardCharsets.UTF_8));
+        return new String(bytes);
     }
 
     /**

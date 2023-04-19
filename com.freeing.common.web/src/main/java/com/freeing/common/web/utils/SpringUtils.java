@@ -1,4 +1,4 @@
-package com.freeing.common.web;
+package com.freeing.common.web.utils;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

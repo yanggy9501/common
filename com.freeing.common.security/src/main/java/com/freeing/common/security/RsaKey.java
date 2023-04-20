@@ -34,7 +34,7 @@ public class RsaKey {
             throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
         String key = PUBLIC_KEY_PREFIX + filename;
         Object publicKey = cache.get(key);
-        if (publicKey != null && publicKey instanceof PublicKey) {
+        if (publicKey instanceof PublicKey) {
             return (PublicKey) publicKey;
         }
         InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream(filename);
@@ -62,7 +62,7 @@ public class RsaKey {
             throws IOException, InvalidKeySpecException, NoSuchAlgorithmException {
         String key = PRIVATE_KEY_PREFIX + filename;
         Object privateKey = cache.get(key);
-        if (privateKey != null && privateKey instanceof PrivateKey) {
+        if (privateKey instanceof PrivateKey) {
             return (PrivateKey) privateKey;
         }
 

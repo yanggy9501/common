@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * @author yanggy
  */
-public class ServerletUtils {
+public class ServletUtils {
     /**
      * 获取请求参数的值
      *

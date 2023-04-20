@@ -19,7 +19,7 @@ import java.util.Objects;
  *
  * @author yanggy
  */
-public class JwtUtils {
+public class JwtUtils2 {
     public static final String DEFUALT_PUBLIC_KEY = "pub.key";
     public static final String DEFUALT_PRIVATE_KEY = "pri.key";
 
@@ -33,7 +33,7 @@ public class JwtUtils {
      */
     private static final Map<String, Object> HEADER = new HashMap<>(2);
     static {
-        HEADER.put("alg", SignatureAlgorithm.HS256.getValue());
+        HEADER.put("alg", SignatureAlgorithm.RS256.getValue());
         HEADER.put("typ", "JWT");
     }
 

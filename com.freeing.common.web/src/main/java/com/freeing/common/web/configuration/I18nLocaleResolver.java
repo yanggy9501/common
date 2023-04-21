@@ -1,8 +1,6 @@
 package com.freeing.common.web.configuration;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.LocaleResolver;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,12 +10,14 @@ import java.util.Locale;
 /**
  * @author yanggy
  */
-@Component
 public class I18nLocaleResolver implements LocaleResolver {
-    
-    @Autowired
+
     private HttpServletRequest request;
-    
+
+    public I18nLocaleResolver(HttpServletRequest request) {
+        this.request = request;
+    }
+
     public Locale getLocal() {
         return resolveLocale(request);
     }

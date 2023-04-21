@@ -5,9 +5,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,39 +14,30 @@ import java.util.Objects;
 
 /**
  * jwt 工具类
- * RS256 非对称加密
+ * HS256 对称加密
  *
  * @author yanggy
  */
-public class JwtUtils2 {
-    public static final String DEFAULT_PUBLIC_KEY = "pub.key";
-    public static final String DEFAULT_PRIVATE_KEY = "pri.key";
-
-    /**
-     * rsa非对称加密获取公/私钥文件工具
-     */
-    private static final RsaKey RSA_KEY_HELPER = new RsaKey();
+public class JwtUtils {
 
     /**
      * jwt header头部
      */
     private static final Map<String, Object> HEADER = new HashMap<>(2);
     static {
-        HEADER.put("alg", SignatureAlgorithm.RS256.getValue());
+        HEADER.put("alg", SignatureAlgorithm.HS256.getValue());
         HEADER.put("typ", "JWT");
     }
 
     /**
      * 生成 token (签名)
-     * 私钥用于签名、公钥用于验签
      *
      * @param body 自定义有效载荷
-     * @param priKeyPath 密钥文件名
+     * @param secret 密钥
      * @param expire 过期时间
      * @return token
      */
-    public static String generateToken(Map<String, Object> body, String priKeyPath, long expire)
-            throws NoSuchAlgorithmException, IOException, InvalidKeySpecException {
+    public static String generateToken(Map<String, Object> body, String secret, long expire) {
         return Jwts.builder()
                 .setHeader(HEADER)
                 // 过期时间
@@ -56,27 +45,25 @@ public class JwtUtils2 {
                 // 自定义有效载荷
                 .setClaims(body)
                 // 签名
-                .signWith(SignatureAlgorithm.RS256, RSA_KEY_HELPER.getPrivateKey(priKeyPath))
+                .signWith(SignatureAlgorithm.HS256, secret.getBytes(StandardCharsets.UTF_8))
                 // 合成
                 .compact();
     }
 
     /**
      * 获取任意claim 的value值
-     * 私钥用于签名、公钥用于验签
      *
      * @param token jwt令牌
      * @param claim claimName
-     * @param pubKeyPath 公钥路径
+     * @param secret 密钥
      * @return claim值
      */
-    public static String getClaim(String token, String claim, String pubKeyPath)
-            throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+    public static String getClaim(String token, String claim, String secret) {
         if (token == null || "".equals(token)) {
             return "";
         }
         Jws<Claims> claimsJws = Jwts.parser()
-            .setSigningKey(RSA_KEY_HELPER.getPublicKey(pubKeyPath))
+            .setSigningKey(secret.getBytes(StandardCharsets.UTF_8))
             .parseClaimsJws(token);
         Claims body = claimsJws.getBody();
         return (String) body.get(claim);
@@ -87,30 +74,28 @@ public class JwtUtils2 {
      * 私钥用于签名、公钥用于验签
      *
      * @param token jwt令牌
-     * @param pubKeyPath 公钥路径
+     * @param secret 密钥
      * @return claim值
      */
-    public static Claims getClaims(String token, String pubKeyPath)
-            throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+    public static Claims getClaims(String token, String secret) {
         Jws<Claims> claimsJws = Jwts.parser()
-            .setSigningKey(RSA_KEY_HELPER.getPublicKey(pubKeyPath))
+            .setSigningKey(secret.getBytes(StandardCharsets.UTF_8))
             .parseClaimsJws(token);
         return claimsJws.getBody();
     }
 
     /**
      * 判断 token 是否存在与有效
-     * 私钥用于签名、公钥用于验签
      *
-     * @param pubKeyPath 公钥路径
+     * @param secret 密钥
      * @return boolean
      */
-    public static boolean checkToken(String token, String pubKeyPath) {
+    public static boolean checkToken(String token, String secret) {
         if(token == null || Objects.equals("", token)) {
             return false;
         }
         try {
-            Jwts.parser().setSigningKey(RSA_KEY_HELPER.getPublicKey(pubKeyPath)).parseClaimsJws(token);
+            Jwts.parser().setSigningKey(secret.getBytes(StandardCharsets.UTF_8)).parseClaimsJws(token);
         } catch (Exception e) {
             return false;
         }

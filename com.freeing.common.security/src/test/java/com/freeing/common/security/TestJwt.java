@@ -15,10 +15,14 @@ public class TestJwt {
         map.put("name", "kato");
         map.put("sex", "女");
         // 私钥用于签名、公钥用于验签
-        String token = JwtUtils2.generateToken(map, JwtUtils2.DEFUALT_PRIVATE_KEY, 9000);
-        System.out.println(token);
-        System.out.println(JwtUtils2.checkToken(token, JwtUtils2.DEFUALT_PUBLIC_KEY));
+//        String token = JwtUtils2.generateToken(map, JwtUtils2.DEFAULT_PRIVATE_KEY, 9000);
+//        System.out.println(token);
+//        System.out.println(JwtUtils2.checkToken(token, JwtUtils2.DEFAULT_PUBLIC_KEY));
+//
+//        System.out.println(JwtUtils2.getClaims(token, JwtUtils2.DEFAULT_PUBLIC_KEY));
+        String s = JwtUtils.generateToken(map, "123", 52000);
+        System.out.println(s);
+        System.out.println(JwtUtils.getClaims(s, "123"));
 
-        System.out.println(JwtUtils2.getClaims(token, JwtUtils2.DEFUALT_PUBLIC_KEY));
     }
 }

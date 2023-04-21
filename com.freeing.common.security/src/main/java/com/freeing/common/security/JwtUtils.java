@@ -71,7 +71,6 @@ public class JwtUtils {
 
     /**
      * 获取任意claim 的value值
-     * 私钥用于签名、公钥用于验签
      *
      * @param token jwt令牌
      * @param secret 密钥

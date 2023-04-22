@@ -3,6 +3,7 @@ package com.freeing.common.component.utils.tree;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
@@ -23,25 +24,28 @@ public class TNodeHelper {
      * @param childPredicate 孩子节点断言 T = 可能的父节点, U = 可能的孩子节点
      * @return tree
      */
-    public static <K, V> List<TNode<K, V>> buildTree(List<TNode<K, V>> nodes,
-            Predicate<TNode<K, V>> rootPredicate, BiPredicate<TNode<K, V>, TNode<K, V>> childPredicate) {
-        List<TNode<K, V>> rootNodes = nodes.stream().filter(rootPredicate).collect(Collectors.toList());
+    public static <K, V> List<TNode<K, V>> buildTree(List<TNode<K, V>> nodes, Predicate<TNode<K, V>> rootPredicate,
+            BiPredicate<TNode<K, V>, TNode<K, V>> childPredicate, Comparator<TNode<K, V>> comparator) {
+        List<TNode<K, V>> rootNodes = nodes.stream()
+            .filter(rootPredicate)
+            .sorted(comparator).collect(Collectors.toList());
         for (TNode<K, V> node : rootNodes) {
-            doBuildTreeChildren(node, nodes, childPredicate);
+            doBuildTreeChildren(node, nodes, childPredicate, comparator);
         }
         return rootNodes;
     }
 
-    private static <K, V> void doBuildTreeChildren(TNode<K, V> root,
-            List<TNode<K, V>> nodes, BiPredicate<TNode<K, V>, TNode<K, V>> childPredicate) {
+    private static <K, V> void doBuildTreeChildren(TNode<K, V> root, List<TNode<K, V>> nodes,
+            BiPredicate<TNode<K, V>, TNode<K, V>> childPredicate, Comparator<TNode<K, V>> comparator) {
         List<TNode<K, V>> childrenNodes = new ArrayList<>();
         for (TNode<K, V> mightChildNode : nodes) {
             if (childPredicate.test(root, mightChildNode)) {
                 childrenNodes.add(mightChildNode);
-                doBuildTreeChildren(mightChildNode, nodes, childPredicate);
+                doBuildTreeChildren(mightChildNode, nodes, childPredicate, comparator);
             }
         }
         if (CollectionUtils.isNotEmpty(childrenNodes)) {
+            childrenNodes.sort(comparator);
             root.setChildren(childrenNodes);
         }
     }

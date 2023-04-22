@@ -56,7 +56,8 @@ public class TestTNode {
 
         List<TNode<Long, String>> tNodes = TNodeHelper.buildTree(list,
             node -> Objects.equals(node.getParentId(), -1L),
-            (root, child) -> child.getParentId().equals(root.getNodeId()));
+            (root, child) -> child.getParentId().equals(root.getNodeId()),
+            (o1, o2) -> 0);
         System.out.println(tNodes);
     }
 }

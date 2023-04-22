@@ -26,11 +26,15 @@ public class SpringUtils implements ApplicationContextAware {
      * @param beanClass Bean 的类型，如果beanName 对应的 Bean 不是该类型，就会尝试转换为该类型
      * @return Bean
      */
-    public <T> T getBean(String beanName, Class<T> beanClass) {
+    public static  <T> T getBean(String beanName, Class<T> beanClass) {
         return beanFactory.getBean(beanName, beanClass);
     }
 
-    public Object getBean(String beanName) {
+    public static <T> T getBean(Class<T> beanClass) {
+        return beanFactory.getBean(beanClass);
+    }
+
+    public static Object getBean(String beanName) {
         return beanFactory.getBean(beanName);
     }
 }

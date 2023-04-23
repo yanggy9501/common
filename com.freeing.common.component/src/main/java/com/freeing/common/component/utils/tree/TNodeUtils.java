@@ -10,11 +10,11 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
- * 构建树的工具类
+ * TNode 的工具类
  *
  * @author yanggy
  */
-public class TNodeHelper {
+public class TNodeUtils {
 
     /**
      *  构建一个树
@@ -30,18 +30,20 @@ public class TNodeHelper {
             .filter(rootPredicate)
             .sorted(comparator).collect(Collectors.toList());
         for (TNode<K, V> node : rootNodes) {
-            doBuildTreeChildren(node, nodes, childPredicate, comparator);
+            node.setLevel(1);
+            doBuildTreeChildren(node, nodes, childPredicate, comparator, 1);
         }
         return rootNodes;
     }
 
     private static <K, V> void doBuildTreeChildren(TNode<K, V> root, List<TNode<K, V>> nodes,
-            BiPredicate<TNode<K, V>, TNode<K, V>> childPredicate, Comparator<TNode<K, V>> comparator) {
+            BiPredicate<TNode<K, V>, TNode<K, V>> childPredicate, Comparator<TNode<K, V>> comparator, int level) {
         List<TNode<K, V>> childrenNodes = new ArrayList<>();
         for (TNode<K, V> mightChildNode : nodes) {
             if (childPredicate.test(root, mightChildNode)) {
+                mightChildNode.setLevel(level + 1);
                 childrenNodes.add(mightChildNode);
-                doBuildTreeChildren(mightChildNode, nodes, childPredicate, comparator);
+                doBuildTreeChildren(mightChildNode, nodes, childPredicate, comparator, level + 1);
             }
         }
         if (CollectionUtils.isNotEmpty(childrenNodes)) {

@@ -55,6 +55,17 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
+     * 判断不相等
+     *
+     * @param strA
+     * @param strB
+     * @return
+     */
+    public static boolean isNotEquals(String strA, String strB) {
+        return !equals(strA, strB);
+    }
+
+    /**
      * 截取字符串
      * input: str="aaa.bbb", endStr='.'
      * output: "aaa"

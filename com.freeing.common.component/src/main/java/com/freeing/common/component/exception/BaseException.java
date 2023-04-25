@@ -10,14 +10,14 @@ public class BaseException extends RuntimeException {
     private String code;
 
     /**
-     * 异常时入参参数
-     */
-    private Object[] args;
-
-    /**
      * 错误消息
      */
     private String msg;
+
+    /**
+     * 异常参数
+     */
+    private Object[] args;
 
     public BaseException(String code, String msg, Object... args) {
         this.code = code;

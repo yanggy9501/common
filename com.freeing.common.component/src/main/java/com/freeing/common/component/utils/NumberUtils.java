@@ -190,6 +190,9 @@ public class NumberUtils extends org.apache.commons.lang3.math.NumberUtils {
      * @return 和
      */
     public static int sum(int[] array, int start, int end) {
+        if (start < 0 || end >= array.length - 1) {
+            throw new IllegalArgumentException("Illegal range of array.");
+        }
         int sum = 0;
         for (int i = start; i <= end; i++) {
             sum += array[i];

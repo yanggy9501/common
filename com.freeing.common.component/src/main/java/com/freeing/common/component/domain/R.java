@@ -242,7 +242,7 @@ public class R extends HashMap<String, Object> implements Serializable {
                 DataMap dataMap = (DataMap) super.get(DATA);
                 dataMap.put(key, value);
             } catch (Exception e) {
-                throw new RuntimeException("error！dataM");
+                throw new IllegalArgumentException("error！dataM");
             }
         } else {
             // 初始化时不存在，创建hashMap对象

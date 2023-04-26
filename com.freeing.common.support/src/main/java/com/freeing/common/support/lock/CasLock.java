@@ -1,8 +1,9 @@
-package com.freeing.common.support.safe;
+package com.freeing.common.support.lock;
 
+import com.freeing.common.support.safe.UnsafeFactory;
 import sun.misc.Unsafe;
 
-public class CASLock {
+public class CasLock {
 
     /**
      * 加锁标记
@@ -15,21 +16,21 @@ public class CASLock {
     static {
         try {
             UNSAFE = UnsafeFactory.getUnsafe();
-            OFFSET = UnsafeFactory.getFieldOffset(UNSAFE, CASLock.class, "state");
+            OFFSET = UnsafeFactory.getFieldOffset(UNSAFE, CasLock.class, "state");
         } catch (Exception e) {
             throw new Error(e);
         }
     }
 
-    public boolean cas() {
+    public boolean lock() {
         return UNSAFE.compareAndSwapInt(this, OFFSET, 0, 1);
+    }
+
+    public boolean unlock() {
+        return UNSAFE.compareAndSwapInt(this, OFFSET, 1, 0);
     }
 
     public int getState() {
         return state;
-    }
-
-    public void setState(int state) {
-        this.state = state;
     }
 }

@@ -2,6 +2,7 @@ package com.freeing.common.support.lock;
 
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -15,7 +16,7 @@ public class SafeLockKey<T> implements LockKey<T> {
     /**
      * 统计同一个 key 正在排队锁的个数
      */
-    private final ConcurrentHashMap<T, Integer> LOCAL_LOCK_COUNT = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<T, AtomicInteger> LOCAL_LOCK_COUNT = new ConcurrentHashMap<>();
 
     /**
      * 加锁
@@ -28,7 +29,8 @@ public class SafeLockKey<T> implements LockKey<T> {
         // 获取或创建一个ReentrantLock对象
         synchronized (key) {
             ReentrantLock lock = LOCAL_LOCK_MAP.computeIfAbsent(key, k -> new ReentrantLock());
-            LOCAL_LOCK_COUNT.compute(key, (k, v) -> v == null ? 1 : ++v);
+            AtomicInteger count = LOCAL_LOCK_COUNT.compute(key, (k, v) -> v == null ? new AtomicInteger(1) : v);
+            count.incrementAndGet();
             // 获取锁
             lock.lock();
         }
@@ -53,16 +55,17 @@ public class SafeLockKey<T> implements LockKey<T> {
             throw new IllegalStateException("Current thread has not the lock {" + key + "} ，Release is not allowed.");
         }
         lock.unlock();
-        if (Objects.equals(LOCAL_LOCK_COUNT.get(key), 1L)) {
+        if (Objects.equals(LOCAL_LOCK_COUNT.get(key).get(), 1L)) {
             // 双重检查，避免 remove 的过程中还有线程要获取该 key 的锁导致一些临界问题.
             synchronized (key) {
-                if (Objects.equals(LOCAL_LOCK_COUNT.get(key), 1L)) {
+                if (Objects.equals(LOCAL_LOCK_COUNT.get(key).get(), 1L)) {
                     LOCAL_LOCK_MAP.remove(key);
                     LOCAL_LOCK_COUNT.remove(key);
                 }
             }
         } else {
-            LOCAL_LOCK_COUNT.compute(key, (k, v) -> v == null ? 1 : --v);
+            AtomicInteger count = LOCAL_LOCK_COUNT.get(key);
+            count.decrementAndGet();
         }
     }
 }

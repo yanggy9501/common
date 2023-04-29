@@ -2,7 +2,6 @@ package com.freeing.common.component.utils;
 
 import com.freeing.common.component.constants.StrPool;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -24,24 +23,47 @@ public class ResourceUtils {
     }
 
     /**
-     * 从 classpath 读取文件
+     * 获取资源
+     *
+     * @param resource 资源
+     * @param classLoader 类加载器
+     * @return
+     */
+    public static InputStream getResourceAsStream(String resource, ClassLoader classLoader) {
+        ClassLoader[] classLoaders =  getClassLoader(classLoader);
+        for (ClassLoader loader : classLoaders) {
+            if (loader != null) {
+                InputStream returnValue = loader.getResourceAsStream(resource);
+                if (returnValue == null) {
+                    returnValue = loader.getResourceAsStream("/" + resource);
+                }
+                if (returnValue != null){
+                    return returnValue;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 读取资源为字符串
      *
      * @param classLoader 类加载器
-     * @param fileName 文件全名
+     * @param resource 资源
      * @return 输入流
      */
-    public static String readAsString(ClassLoader classLoader, String fileName) {
-        InputStream resource = classLoader.getResourceAsStream(File.separator + fileName);
-        if (resource == null) {
+    public static String readAsString(ClassLoader classLoader, String resource) {
+        InputStream inputStream = getResourceAsStream(resource, classLoader);
+        if (inputStream == null) {
             return StrPool.EMPTY;
         }
         String res;
         try {
-            res = IOUtils.toString(resource);
+            res = IOUtils.toString(inputStream);
         } catch (IOException e) {
             res = StrPool.EMPTY;
         } finally {
-            IOUtils.closeQuietly(resource);
+            IOUtils.closeQuietly(inputStream);
         }
         return res;
     }
@@ -50,19 +72,27 @@ public class ResourceUtils {
      * 从 classpath 读取 properties 文件
      *
      * @param classLoader 类加载器
-     * @param fileName 文件全名
+     * @param resource 资源
      * @return 输入流
      */
-    public static Properties readAsProperties(ClassLoader classLoader, String fileName) {
+    public static Properties readAsProperties(ClassLoader classLoader, String resource) {
         Properties properties = new Properties();
-        InputStream resource = classLoader.getResourceAsStream(File.separator + fileName);
+        InputStream inputStream = getResourceAsStream(resource, classLoader);
         try {
-            properties.load(resource);
+            properties.load(inputStream);
         } catch (IOException ignored) {
 
         } finally {
-            IOUtils.closeQuietly(resource);
+            IOUtils.closeQuietly(inputStream);
         }
         return properties;
+    }
+
+    private static ClassLoader[] getClassLoader(ClassLoader classLoader) {
+        return new ClassLoader[] {
+            classLoader,
+            Thread.currentThread().getContextClassLoader(),
+            ClassLoader.getSystemClassLoader()
+        };
     }
 }

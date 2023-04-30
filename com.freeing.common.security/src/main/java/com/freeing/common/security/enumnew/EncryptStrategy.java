@@ -1,4 +1,4 @@
-package com.freeing.common.component.enumnew;
+package com.freeing.common.security.enumnew;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;

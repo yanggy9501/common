@@ -17,12 +17,12 @@ public class ObjectUtils extends org.apache.commons.lang3.ObjectUtils {
     private static final Logger log = LoggerFactory.getLogger(ObjectUtils.class);
 
     /**
-     * 给对象中有 @Trim 注解的属性去两边空格
+     * 为对象中有 @Trim 注解的 String 属性去两边空格
      * {@link Trim}
      *
      * @param object 对象
      */
-    public static void trim(Object object) {
+    public static void trimByAnno(Object object) {
         if (object == null) {
             return;
         }
@@ -49,12 +49,14 @@ public class ObjectUtils extends org.apache.commons.lang3.ObjectUtils {
                     String fieldName = field.getName();
                     char[] chars = fieldName.toCharArray();
                     chars[0] = (char) (chars[0] - 32);
+                    // 为什么采用调用 setter 方法的方式而不是调用 Field#set：是为保证封装的完整性，setter 方法可以存在其他的操作
+                    // 如：拼接前缀，后缀等等
                     String setMethodName = "set" + String.valueOf(chars);
                     Method method = clazz.getMethod(setMethodName, String.class);
                     method.invoke(object, attrValue.toString().trim());
                 }
             } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-                log.warn("LOG00060: class: {}", object.getClass().getTypeName(), e);
+                log.warn("class: {}", object.getClass().getTypeName(), e);
             }
             field.setAccessible(false);
         }

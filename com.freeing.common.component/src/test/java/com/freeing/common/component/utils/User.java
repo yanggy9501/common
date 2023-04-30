@@ -2,7 +2,7 @@ package com.freeing.common.component.utils;
 
 import com.freeing.common.component.annotation.Encrypt;
 import com.freeing.common.component.annotation.Trim;
-import com.freeing.common.component.enumnew.EncryptStrategy;
+import com.freeing.common.security.enumnew.EncryptStrategy;
 
 /**
  * @author yanggy

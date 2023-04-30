@@ -1,6 +1,6 @@
-package com.freeing.common.component.annotation;
+package com.freeing.common.security.annotation;
 
-import com.freeing.common.component.enumnew.EncryptStrategy;
+import com.freeing.common.security.enumnew.EncryptStrategy;
 
 import java.lang.annotation.*;
 

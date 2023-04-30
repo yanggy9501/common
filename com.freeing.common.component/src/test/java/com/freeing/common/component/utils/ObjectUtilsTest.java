@@ -19,7 +19,6 @@ public class ObjectUtilsTest {
         System.out.println(user);
         ObjectUtils.trim(user);
         System.out.println(user);
-        ObjectUtils.encoder(user);
         System.out.println(user);
     }
 }

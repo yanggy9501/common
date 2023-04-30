@@ -28,7 +28,7 @@ public class NumberUtils extends org.apache.commons.lang3.math.NumberUtils {
     }
 
     /**
-     * 判断两个整型是否相等
+     * 获取值，若输入为 null，则输出默认值
      *
      * @param number 整数
      * @param defaultValue 默认值

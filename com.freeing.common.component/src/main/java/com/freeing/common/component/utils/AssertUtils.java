@@ -32,12 +32,24 @@ public class AssertUtils {
         }
     }
 
+    /**
+     * 断言为 true，否则抛出异常
+     *
+     * @param value
+     * @param message
+     */
     public static void isTrue(boolean value, String message) {
         if (!value) {
             throw new IllegalArgumentException(message);
         }
     }
 
+    /**
+     * 断言为指定条件，否则抛出异常
+     *
+     * @param condition
+     * @param message
+     */
     public static void assertState(boolean condition, String message) {
         if (!condition) {
             throw new IllegalStateException(message);

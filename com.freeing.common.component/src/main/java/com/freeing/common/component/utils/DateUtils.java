@@ -40,6 +40,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     public final static long MAX_YEAR_DAY = 365;
 
     private DateUtils() {
+
     }
 
     /**
@@ -128,7 +129,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
      * @return long 天数
      */
     public static long until(Date endDate) {
-        return LocalDateTime.now().until(date2LocalDateTime(endDate), ChronoUnit.DAYS);
+        return LocalDate.now().until(date2LocalDate(endDate), ChronoUnit.DAYS);
     }
 
     /**
@@ -139,7 +140,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
      * @return long 天数
      */
     public static long until(Date startDate, Date endDate) {
-        return date2LocalDateTime(startDate).until(date2LocalDateTime(endDate), ChronoUnit.DAYS);
+        return date2LocalDate(startDate).until(date2LocalDate(endDate), ChronoUnit.DAYS);
     }
 
     /**
@@ -517,7 +518,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
      *
      * @return Integer
      */
-    public static Integer getNowYear() {
+    public static int getNowYear() {
         Date date = new Date();
         GregorianCalendar gc = (GregorianCalendar) Calendar.getInstance();
         gc.setTime(date);
@@ -538,13 +539,14 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     }
 
     /**
-     * 返回某个日期下几天的日期
+     * 返回某个日期，后 next 几天的日期时间
      *
      * @param date Date
      * @param step 步长
      * @return Date
      */
     public static Date nextDay(Date date, int step) {
+        addDays(date, step);
         Calendar cal = new GregorianCalendar();
         cal.setTime(date);
         cal.set(Calendar.DATE, cal.get(Calendar.DATE) + step);
@@ -552,7 +554,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     }
 
     /**
-     * 返回某个日期前几天的日期
+     * 返回某个日期的前几天的日期时间
      *
      * @param date Date
      * @param step 步长

@@ -11,7 +11,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 序列化脱敏
+ * 序列化脱敏，指定自定义的序列化器进行脱敏
+ * ps：只适用 String 类型
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

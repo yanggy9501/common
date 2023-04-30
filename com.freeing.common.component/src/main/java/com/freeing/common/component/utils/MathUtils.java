@@ -266,6 +266,7 @@ public class MathUtils {
 
     /**
      * 判断两个数大小是否相等
+     * 【注意】：BigDecimal 比较相等，不要使用 equals 方法，该方法处理比较大小还判断精度
      *
      * @param v1 v1
      * @param v2 v2
@@ -276,7 +277,7 @@ public class MathUtils {
     }
 
     /**
-     * 小于
+     * 小于 less than
      *
      * @param v1 v1
      * @param v2 v2
@@ -287,7 +288,18 @@ public class MathUtils {
     }
 
     /**
-     * 大于
+     * 小于等于 less than equals
+     *
+     * @param v1 v1
+     * @param v2 v2
+     * @return boolean
+     */
+    public static boolean lte(BigDecimal v1, BigDecimal v2) {
+        return v1.compareTo(v2) <= 0;
+    }
+
+    /**
+     * 大于 greater than
      *
      * @param v1 v1
      * @param v2 v2
@@ -295,5 +307,16 @@ public class MathUtils {
      */
     public static boolean gt(BigDecimal v1, BigDecimal v2) {
         return v1.compareTo(v2) > 0;
+    }
+
+    /**
+     * 大于等于 greater than equals
+     *
+     * @param v1 v1
+     * @param v2 v2
+     * @return boolean
+     */
+    public static boolean gte(BigDecimal v1, BigDecimal v2) {
+        return v1.compareTo(v2) >= 0;
     }
 }

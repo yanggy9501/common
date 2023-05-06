@@ -1,6 +1,6 @@
 package com.freeing.common.component.domain;
 
-import com.freeing.common.component.constants.ResultCode;
+import com.freeing.common.component.constant.ResultCode;
 
 import java.io.Serializable;
 import java.util.HashMap;

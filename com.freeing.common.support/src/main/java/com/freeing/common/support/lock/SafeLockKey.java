@@ -11,6 +11,9 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author yanggy
  */
 public class SafeLockKey<T> implements LockKey<T> {
+
+    private static final String LOCK_PREFIX = "safe_lock_prefix_";
+
     private final ConcurrentHashMap<T, ReentrantLock> LOCAL_LOCK_MAP = new ConcurrentHashMap<>();
 
     /**
@@ -27,7 +30,8 @@ public class SafeLockKey<T> implements LockKey<T> {
             throw new IllegalArgumentException("Locked key can not be null");
         }
         // 获取或创建一个ReentrantLock对象
-        synchronized (key) {
+        // 加前缀避免外界也在对key进行加锁操作，这里加锁以包装获取锁和加锁与解锁都是原子性的，两者没有交叉执行
+        synchronized (LOCK_PREFIX + key) {
             ReentrantLock lock = LOCAL_LOCK_MAP.computeIfAbsent(key, k -> new ReentrantLock());
             AtomicInteger count = LOCAL_LOCK_COUNT.compute(key, (k, v) -> v == null ? new AtomicInteger(1) : v);
             count.incrementAndGet();
@@ -57,7 +61,7 @@ public class SafeLockKey<T> implements LockKey<T> {
         lock.unlock();
         if (Objects.equals(LOCAL_LOCK_COUNT.get(key).get(), 1L)) {
             // 双重检查，避免 remove 的过程中还有线程要获取该 key 的锁导致一些临界问题.
-            synchronized (key) {
+            synchronized (LOCK_PREFIX + key) {
                 if (Objects.equals(LOCAL_LOCK_COUNT.get(key).get(), 1L)) {
                     LOCAL_LOCK_MAP.remove(key);
                     LOCAL_LOCK_COUNT.remove(key);

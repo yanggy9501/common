@@ -1,6 +1,6 @@
 package com.freeing.common.web.configuration;
 
-import com.freeing.common.web.utils.ServletUtils;
+import com.freeing.common.web.util.ServletUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.LocaleResolver;
 

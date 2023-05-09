@@ -1,4 +1,4 @@
-package com.freeing.common.web.utils;
+package com.freeing.common.web.util;
 
 import com.freeing.common.web.configuration.I18nLocaleResolver;
 import org.apache.commons.lang3.StringUtils;

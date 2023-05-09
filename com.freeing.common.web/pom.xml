@@ -45,6 +45,21 @@
             <artifactId>commons-lang3</artifactId>
             <version>${apach.commons.lang.version}</version>
         </dependency>
+
+
+        <!-- Spring Email -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>5.2.15.RELEASE</version>
+        </dependency>
+
+        <!-- 电子邮件 -->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4.7</version>
+        </dependency>
     </dependencies>
 
     <build>

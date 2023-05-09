@@ -1,6 +1,6 @@
 package com.freeing.common.xss.filter;
 
-import com.freeing.common.xss.utils.StrHelper;
+import com.freeing.common.xss.util.StrHelper;
 import com.freeing.common.xss.wrapper.XssRequestWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

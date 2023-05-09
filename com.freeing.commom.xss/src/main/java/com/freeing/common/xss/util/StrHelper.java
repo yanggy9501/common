@@ -1,4 +1,4 @@
-package com.freeing.common.xss.utils;
+package com.freeing.common.xss.util;
 
 
 /**

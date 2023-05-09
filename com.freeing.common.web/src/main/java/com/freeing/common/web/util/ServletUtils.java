@@ -1,4 +1,4 @@
-package com.freeing.common.web.utils;
+package com.freeing.common.web.util;
 
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;

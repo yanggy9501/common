@@ -1,4 +1,4 @@
-package com.freeing.common.xss.utils;
+package com.freeing.common.xss.util;
 
 import org.owasp.validator.html.*;
 import org.slf4j.Logger;

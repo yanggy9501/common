@@ -1,6 +1,6 @@
 package com.freeing.common.web.configuration;
 
-import com.freeing.common.web.utils.I18Utils;
+import com.freeing.common.web.util.I18Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;

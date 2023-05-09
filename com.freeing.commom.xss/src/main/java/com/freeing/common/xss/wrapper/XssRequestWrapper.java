@@ -1,7 +1,7 @@
 package com.freeing.common.xss.wrapper;
 
 
-import com.freeing.common.xss.utils.XssUtils;
+import com.freeing.common.xss.util.XssUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;

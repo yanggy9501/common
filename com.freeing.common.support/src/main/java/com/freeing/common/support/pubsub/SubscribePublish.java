@@ -119,9 +119,7 @@ public class SubscribePublish {
          * 如果把 for 循环写在threadPool.submit方法里面则代表一组相同类型的订阅者对同一个消息的处理是由一个线程处理
          */
         subscriberMap.get(messageType).forEach(subscriber ->
-            this.threadPool.submit(() ->
-                subscriber.receiveMessage(message)
-            )
+            this.threadPool.execute(() -> subscriber.receiveMessage(message))
         );
     }
 

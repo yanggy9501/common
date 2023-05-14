@@ -14,7 +14,7 @@ public interface ICallback<T, V> {
     /**
      * 任务开始前的回调
      */
-    default void beforeStart() {}
+    default void beforeAction() {}
 
     /**
      * 任务执行完毕后

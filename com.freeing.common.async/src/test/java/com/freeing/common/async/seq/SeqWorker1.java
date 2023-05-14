@@ -30,7 +30,7 @@ public class SeqWorker1 implements IWorker<String, String>, ICallback<String, St
     }
 
     @Override
-    public void beforeStart() {
+    public void beforeAction() {
         //System.out.println(Thread.currentThread().getName() + "- start --" + System.currentTimeMillis());
     }
 

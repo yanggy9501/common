@@ -7,12 +7,10 @@ import com.freeing.common.async.worker.WorkResult;
  */
 public class DefaultCallback<T, V> implements ICallback<T, V> {
     @Override
-    public void beforeStart() {
-        
+    public void beforeAction() {
     }
 
     @Override
     public void afterFinish(T param, WorkResult<V> workResult) {
-
     }
 }

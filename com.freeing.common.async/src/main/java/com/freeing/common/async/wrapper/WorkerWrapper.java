@@ -6,9 +6,13 @@ import com.freeing.common.async.action.IWorker;
 import com.freeing.common.async.worker.DependWrapper;
 import com.freeing.common.async.worker.ResultState;
 import com.freeing.common.async.worker.WorkResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -17,6 +21,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author yanggy
  */
 public class WorkerWrapper<T, V> {
+
+    private static final Logger log = LoggerFactory.getLogger(WorkerWrapper.class);
 
     private static final int INIT = 0;
     private static final int FINISH = 1;
@@ -78,11 +84,15 @@ public class WorkerWrapper<T, V> {
         this.worker = worker;
         this.param = param;
         this.id = id;
-        //允许不设置回调
+        // 允许不设置回调
         if (callback == null) {
             callback = new DefaultCallback<>();
         }
         this.callback = callback;
+    }
+
+    public WorkResult<V> getWorkResult() {
+        return workResult;
     }
 
     private void addDepend(WorkerWrapper<?, ?> workerWrapper, boolean must) {
@@ -120,18 +130,165 @@ public class WorkerWrapper<T, V> {
         this.forAllUsedWrappers = forAllUsedWrappers;
         // 将自己也存放到被使用的 WorkerWrapper 集合中
         forAllUsedWrappers.put(id, this);
-        // 判断是否超时，若超时则快速失败
+        // 判断是否超时，若超时则快速失败，进行下一个（下一个自己快速失败）
         // 多线程执行的，假设该任务由 a 线程执行并且快成功了，b 线程刚进来并且判断超时，会怎样
         long now = System.currentTimeMillis();
         if (remainTime <= 0) {
             fastFail(INIT, null);
+            beginNext(executorService, now, remainTime);
+            return;
+        }
+
+        // 如果自己已经执行过了，提前判断，否则需要到 #fire 中 cas 才会结束
+        // 可能有多个依赖，其中的一个依赖已经执行完了，并且自己也已开始执行或执行完毕。当另一个依赖执行完毕，又进来该方法时，不重复处理的一次提前检查
+        if (getState() == FINISH || getState() == ERROR) {
+            beginNext(executorService, now, remainTime);
+            return;
         }
 
         // 【核心：执行自己的任务】如果没有任何依赖，说明自己就是第一批要执行的
-        if (dependWrappers == null || dependWrappers.size() == 0) {
+        if (dependWrappers == null || dependWrappers.isEmpty()) {
             // 阻塞执行本任务
             fire();
             // 执行下个任务
+            beginNext(executorService, now, remainTime);
+            // 结束，否则下面 dependWrappers#size 可能发送 NPE
+            return;
+        }
+        /*  有依赖：
+            如果有前方依赖，存在两种情况
+            一种是前面只有一个wrapper。即 A  ->  B
+            一种是前面有多个wrapper。A C D ->   B。需要A、C、D都完成了才能轮到B。但是无论是A执行完，还是C执行完，都会去唤醒B。
+            所以需要B来做判断，必须A、C、D都完成，自己才能执行
+        */
+        // 只有一个依赖
+        if (dependWrappers.size() == 1) {
+            // 检查上一个（依赖）的执行情况，并按情况执行本任务
+            DependWrapper dependWrapper = dependWrappers.get(0);
+            doDependOneJob(dependWrapper);
+            beginNext(executorService, now, remainTime);
+        } else {
+            // 有多个依赖（可以由某个依赖触发进来的，检查其依赖的所有依赖的执行情况）
+            doDependedJobs(executorService, fromWrapper, now, remainTime);
+        }
+    }
+
+    private void doDependedJobs(ExecutorService executorService,  WorkerWrapper<?, ?> fromWrapper, long now, long remainTime) {
+        // 有两种依赖 1：必须完成之后本任务才能完成的，2：非必须依赖
+        // 本任务以及执行过了，上游有多个依赖，每个依赖都会进来，需要检查状态判断是否要执行
+        if (getState() != INIT) {
+            return;
+        }
+        // fromWrapper(触发本 Worker 的) 是不是必须的
+        boolean nowDependIsMust = false;
+        HashSet<DependWrapper> mustWrapper = new HashSet<>();
+        for (DependWrapper dependWrapper : dependWrappers) {
+            if (dependWrapper.isMust()) {
+                mustWrapper.add(dependWrapper);
+            }
+            if (dependWrapper.getDependWrapper().equals(fromWrapper)) {
+                nowDependIsMust = dependWrapper.isMust();
+            }
+        }
+        // 如果全部是不必须的条件，那么只要到了这里，就可以执行自己
+        if (mustWrapper.isEmpty()) {
+            // 上游只需要判断是否超时即可，非必须的情况时入参就不应该是上游的输入
+            if (ResultState.TIMEOUT == fromWrapper.getWorkResult().getResultState()) {
+                fastFail(INIT, null);
+            } else if (ResultState.EXCEPTION == fromWrapper.getWorkResult().getResultState()) {
+                fastFail(INIT, null);
+            } else {
+                fire();
+            }
+            beginNext(executorService, now, remainTime);
+            return;
+        }
+        // 存在必须需要先完成的任务，而触发不任务的是一个非必须的任务，那么 return，让必须完成的任务来触发往下执行
+        if (!nowDependIsMust) {
+            return;
+        }
+        boolean existNoFinish = false;
+        boolean hasError = false;
+        boolean timeout = false;
+        // 先判断前面必须要执行的依赖任务的执行结果，如果有任何一个失败，那就不用走 action了，直接给自己设置为失败，进行下一步就是了
+        for (DependWrapper dependWrapper : mustWrapper) {
+            WorkerWrapper<?, ?> workerWrapper = dependWrapper.getDependWrapper();
+            WorkResult<?> tempWorkResult = workerWrapper.getWorkResult();
+            // 为null或者isWorking，说明它依赖的某个任务还没执行到或没执行完
+            if (workerWrapper.getState() == INIT || workerWrapper.getState() == WORKING) {
+                existNoFinish = true;
+                break;
+            }
+            if (ResultState.TIMEOUT == tempWorkResult.getResultState()) {
+                workResult = defaultResult();
+                timeout = true;
+                break;
+            }
+            if (ResultState.EXCEPTION == tempWorkResult.getResultState()) {
+                workResult = defaultExResult(workerWrapper.getWorkResult().getEx());
+                hasError = true;
+                break;
+            }
+        }
+        if (hasError || timeout) {
+            fastFail(INIT, null);
+            beginNext(executorService, now, remainTime);
+            return;
+        }
+        // 如果上游都没有失败，分为两种情况，一种是都finish了，一种是有的在 working
+        // 都 finish的 话
+        if (!existNoFinish) {
+            //上游都finish了，进行自己
+            fire();
+            beginNext(executorService, now, remainTime);
+        }
+    }
+
+    private void doDependOneJob(DependWrapper dependWrapper) {
+        WorkerWrapper<?, ?> dependWorkerWrapper = dependWrapper.getDependWrapper();
+        if (dependWorkerWrapper.getWorkResult().getResultState() == ResultState.TIMEOUT) {
+           // 超时-快速失败
+            fastFail(INIT, null);
+        } else if (dependWorkerWrapper.getWorkResult().getResultState() == ResultState.EXCEPTION) {
+            // 异常情况-快速失败
+            fastFail(INIT, null);
+        } else {
+            fire();
+        }
+    }
+
+
+    private int getState() {
+        return state.get();
+    }
+
+    /**
+     * 开始下一个任务
+     */
+    private void beginNext(ExecutorService executorService, long now, long remainTime) {
+        if (nextWrappers == null) {
+            return;
+        }
+        // 花费的时间
+        long costTime = System.currentTimeMillis() - now;
+        // 只有一个将要执行的任务时，用当前线程执行（本任务已经执行完成了，可以用于执行下一个）
+        if (nextWrappers.size() == 1) {
+            nextWrappers
+                .get(0).work(executorService, this,  remainTime - costTime, forAllUsedWrappers);
+        }
+        CompletableFuture<?>[] futures = new CompletableFuture[nextWrappers.size()];
+        // 使用其他线程执行
+        for (int i = 0; i < nextWrappers.size(); i++) {
+            int finalI = i;
+            futures[i] = CompletableFuture.runAsync(() -> nextWrappers.get(finalI)
+                .work(executorService, WorkerWrapper.this, remainTime - costTime, forAllUsedWrappers),
+            executorService);
+        }
+        // 超时等待
+        try {
+            CompletableFuture.allOf(futures).get(remainTime - costTime, TimeUnit.MILLISECONDS);
+        } catch (Exception e) {
+            log.warn("Asynchronous worker timed out", e);
         }
     }
 
@@ -156,7 +313,7 @@ public class WorkerWrapper<T, V> {
                 return workResult;
             }
             // 执行任务前的回调
-            callback.beforeStart();
+            callback.beforeAction();
             // 执行任务
             V resultValue = worker.action(param, forAllUsedWrappers);
 

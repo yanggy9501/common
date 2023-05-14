@@ -42,6 +42,28 @@ public class DependWrapper {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof DependWrapper)) {
+            return false;
+        }
+        DependWrapper that = (DependWrapper) o;
+        if (isMust() != that.isMust()) {
+            return false;
+        }
+        return getDependWrapper().equals(that.getDependWrapper());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getDependWrapper().hashCode();
+        result = 31 * result + (isMust() ? 1 : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "DependWrapper{" +
                 "dependWrapper=" + dependWrapper +

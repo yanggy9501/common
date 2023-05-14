@@ -24,7 +24,9 @@ public class ExceptionContext {
     private String resource;
 
     private String code;
+
     private String message;
+
     private String object;
 
     /**
@@ -46,6 +48,12 @@ public class ExceptionContext {
         return context;
     }
 
+    /**
+     * 存储当前的 ExceptionContext，返回新的 ExceptionContext，并将当前的 ExceptionContext 存储到新的 ExceptionContext
+     * 同时将新 ExceptionContext 绑定到当前线程
+     *
+     * @return new ExceptionContext
+     */
     public ExceptionContext store() {
         ExceptionContext newContext = new ExceptionContext();
         newContext.stored = this;
@@ -53,6 +61,11 @@ public class ExceptionContext {
         return LOCAL.get();
     }
 
+    /**
+     * 当前 ExceptionContext 召回其存储的 ExceptionContext，同时将自己的 stored 置空
+     *
+     * @return
+     */
     public ExceptionContext recall() {
         if (stored != null) {
             LOCAL.set(stored);
@@ -106,7 +119,7 @@ public class ExceptionContext {
     @Override
     public String toString() {
         StringBuilder description = new StringBuilder();
-        // message
+        // code
         if (this.code != null) {
             description.append(LINE_SEPARATOR);
             description.append("### error code ");
@@ -148,6 +161,11 @@ public class ExceptionContext {
             description.append(cause.toString());
         }
 
+        if (stored != null) {
+            description.append(LINE_SEPARATOR);
+            description.append("### More exception context info: ");
+            description.append(recall());
+        }
         return description.toString();
     }
 

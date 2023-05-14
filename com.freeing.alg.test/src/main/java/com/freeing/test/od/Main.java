@@ -1,15 +1,14 @@
 package com.freeing.test.od;
 
 import java.util.HashMap;
-import java.util.Scanner;
 
 class Main {
     public static void main(String[] args) {
-        // 处理输入
-        Scanner in = new Scanner(System.in);
-        String content = in.nextLine();
-        String word = in.nextLine();
-        System.out.println(contin(content, word));
+        String s = "1110";
+        String s1 = "1110001111";
+        // 11101110001111
+        // 11100011111110
+        System.out.println(s.compareTo(s1));
     }
 
     public static int contin(String content, String word){

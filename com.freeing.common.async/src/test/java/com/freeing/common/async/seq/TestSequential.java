@@ -1,8 +1,9 @@
 package com.freeing.common.async.seq;
 
+import com.freeing.common.async.Async;
 import com.freeing.common.async.wrapper.WorkerWrapper;
 
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -43,8 +44,8 @@ public class TestSequential {
         testGroupTimeout(workerWrapper);
     }
 
-    private static void testGroupTimeout(WorkerWrapper<String, String> workerWrapper)  {
+    private static void testGroupTimeout(WorkerWrapper<String, String> workerWrapper) throws ExecutionException, InterruptedException {
         ExecutorService executorService = Executors.newFixedThreadPool(3);
-        workerWrapper.work(executorService, null,  15000, new HashMap<>());
+        Async.beginWork(120000, Arrays.asList(workerWrapper));
     }
 }

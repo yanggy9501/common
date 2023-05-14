@@ -6,8 +6,6 @@ import com.freeing.common.async.action.IWorker;
 import com.freeing.common.async.worker.DependWrapper;
 import com.freeing.common.async.worker.ResultState;
 import com.freeing.common.async.worker.WorkResult;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -21,8 +19,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author yanggy
  */
 public class WorkerWrapper<T, V> {
-
-    private static final Logger log = LoggerFactory.getLogger(WorkerWrapper.class);
 
     private static final int INIT = 0;
     private static final int FINISH = 1;
@@ -125,7 +121,19 @@ public class WorkerWrapper<T, V> {
         nextWrappers.add(workerWrapper);
     }
 
-    public void work(ExecutorService executorService, WorkerWrapper<?, ?> fromWrapper, long remainTime,
+    /**
+     * 执行任务
+     *
+     * @param executorService 线程池
+     * @param remainTime 超时时间
+     * @param forParamUseWrappers
+     */
+    public void work(ExecutorService executorService, long remainTime, Map<String,
+        WorkerWrapper<?, ?>> forParamUseWrappers) {
+        work(executorService, null, remainTime, forParamUseWrappers);
+    }
+
+    private void work(ExecutorService executorService, WorkerWrapper<?, ?> fromWrapper, long remainTime,
             Map<String, WorkerWrapper<?, ?>> forAllUsedWrappers) {
         this.forAllUsedWrappers = forAllUsedWrappers;
         // 将自己也存放到被使用的 WorkerWrapper 集合中
@@ -288,7 +296,7 @@ public class WorkerWrapper<T, V> {
         try {
             CompletableFuture.allOf(futures).get(remainTime - costTime, TimeUnit.MILLISECONDS);
         } catch (Exception e) {
-            log.warn("Asynchronous worker timed out", e);
+
         }
     }
 
@@ -324,6 +332,8 @@ public class WorkerWrapper<T, V> {
             }
             workResult.setResultState(ResultState.SUCCESS);
             workResult.setResult(resultValue);
+            // 调用执行成功后的回调
+            callback.afterFinish(param, workResult);
             return workResult;
         } catch (Exception e) {
             // 这一步也感觉多余，能执行到这里必然是执行任务的时候出现异常了，任务的执行也只能由一个线程执行，其他线程都会在 cas 出返回

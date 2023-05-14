@@ -21,6 +21,7 @@ public class SeqWorker1 implements IWorker<String, String>, ICallback<String, St
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        System.out.println("result = " + "---param = " + object + " from 0");
         return "result = " + "---param = " + object + " from 0";
     }
 
@@ -31,7 +32,7 @@ public class SeqWorker1 implements IWorker<String, String>, ICallback<String, St
 
     @Override
     public void beforeAction() {
-        //System.out.println(Thread.currentThread().getName() + "- start --" + System.currentTimeMillis());
+        System.out.println(Thread.currentThread().getName() + "- start --" + System.currentTimeMillis());
     }
 
     @Override

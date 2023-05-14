@@ -59,6 +59,7 @@ public class WorkResult<V> {
         this.ex = ex;
     }
 
+
     @Override
     public String toString() {
         return "WorkResult{" +

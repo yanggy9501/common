@@ -1,6 +1,8 @@
 package com.freeing.common.async;
 
 import com.freeing.common.async.wrapper.WorkerWrapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
@@ -10,6 +12,7 @@ import java.util.concurrent.*;
  * @author yanggy
  */
 public class Async {
+    private static final Logger log = LoggerFactory.getLogger(Async.class);
     /**
      * 创建线程池:
      * 核心线程数：计算机内核数 / 2
@@ -38,8 +41,8 @@ public class Async {
         try {
             CompletableFuture.allOf(futures).get(timeout, TimeUnit.MILLISECONDS);
             return true;
-        } catch (TimeoutException e) {
-
+        } catch (TimeoutException ex) {
+            log.info("Timeout: ", ex);
         }
         return false;
     }

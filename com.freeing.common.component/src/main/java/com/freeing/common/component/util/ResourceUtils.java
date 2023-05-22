@@ -1,6 +1,7 @@
 package com.freeing.common.component.util;
 
 import com.freeing.common.component.constant.StrPool;
+import com.freeing.common.component.exception.BaseException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -61,7 +62,7 @@ public class ResourceUtils {
         try {
             res = IOUtils.toString(inputStream);
         } catch (IOException e) {
-            res = StrPool.EMPTY;
+            throw new BaseException("Fail to read file of {" + resource  + "} as string");
         } finally {
             IOUtils.closeQuietly(inputStream);
         }
@@ -81,7 +82,7 @@ public class ResourceUtils {
         try {
             properties.load(inputStream);
         } catch (IOException ignored) {
-
+            throw new BaseException("Fail to read file of {" + resource  + "} as properties");
         } finally {
             IOUtils.closeQuietly(inputStream);
         }

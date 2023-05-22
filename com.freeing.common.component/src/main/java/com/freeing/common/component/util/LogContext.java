@@ -11,16 +11,11 @@ import java.util.Map;
 public class LogContext {
 
     private static final String LINE_SEPARATOR = System.getProperty("line.separator","\n");
+
     private static final ThreadLocal<LogContext> LOCAL = new ThreadLocal<>();
 
-    /**
-     * 下一个异常存储（跨线程时使用）
-     */
     private LogContext stored;
 
-    /**
-     * 错误放生在什么资源上
-     */
     private String resource;
 
     private String code;
@@ -146,6 +141,12 @@ public class LogContext {
             description.append(LINE_SEPARATOR);
             description.append("### Cause: ");
             description.append(cause.toString());
+        }
+
+        if (stored != null) {
+            description.append(LINE_SEPARATOR);
+            description.append("### Next log info: ");
+            description.append(stored.toString());
         }
 
         return description.toString();

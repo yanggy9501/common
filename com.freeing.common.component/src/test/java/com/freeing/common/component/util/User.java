@@ -1,13 +1,10 @@
 package com.freeing.common.component.util;
 
-import com.freeing.common.component.annotation.Encrypt;
 import com.freeing.common.component.annotation.Trim;
-import com.freeing.common.security.enumnew.EncryptStrategy;
 
 /**
  * @author yanggy
  */
-@Encrypt(strategy = EncryptStrategy.BASE64)
 public class User {
     @Trim
     private String username;

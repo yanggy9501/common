@@ -27,17 +27,11 @@ public class XPathParser {
     private final Document document;
 
     /**
-     * 是否根据 dtd 校验 xml
-     */
-    private final boolean validation;
-
-    /**
      * xpath
      */
     private final XPath xpath;
 
     public XPathParser(InputStream inputStream, boolean validation) {
-        this.validation = validation;
         XPathFactory factory = XPathFactory.newInstance();
         this.xpath = factory.newXPath();
         this.document = createDocument(new InputSource(inputStream));
@@ -47,7 +41,6 @@ public class XPathParser {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-            factory.setValidating(validation);
 
             factory.setNamespaceAware(false);
             factory.setIgnoringComments(true);
@@ -74,7 +67,7 @@ public class XPathParser {
             });
             return builder.parse(inputSource);
         } catch (Exception e) {
-            throw new BuilderException("Error create duocument." + e, e);
+            throw new BuilderException("Error create document." + e, e);
         }
     }
 

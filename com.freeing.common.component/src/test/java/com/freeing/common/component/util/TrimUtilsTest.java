@@ -14,8 +14,8 @@ public class TrimUtilsTest {
         User user1 = new User("   n  ame   ", 19, "love   ");
         System.out.println(user);
         System.out.println(user1);
-        ObjectUtils.trim(user);
-        ObjectUtils.trim(user1);
+        TrimUtils.trimByAnnotation(user);
+        TrimUtils.trimByAnnotation(user1, "username");
         System.out.println(user);
         System.out.println(user1);
     }
@@ -24,7 +24,7 @@ public class TrimUtilsTest {
     public void testTrim1() {
         User user = new User("  @ 测试汉字  &* ", 19, "");
         System.out.println(user);
-        ObjectUtils.trim(user);
+        TrimUtils.trimByAnnotation(user);
         System.out.println(user);
     }
 
@@ -36,7 +36,7 @@ public class TrimUtilsTest {
         map.put("3", " fdf   ");
         map.put("3", "dfdf");
         System.out.println(map);
-        ObjectUtils.trim(map);
+        TrimUtils.trimByAnnotation(map);
         System.out.println(map);
     }
 
@@ -44,7 +44,7 @@ public class TrimUtilsTest {
     public void testTrim3() {
         String[] strings = {"11", "  ", "dfdfd"};
         System.out.println(Arrays.toString(strings));
-        ObjectUtils.trim(strings);
+        TrimUtils.trimByAnnotation(strings);
         System.out.println(Arrays.toString(strings));
     }
 }

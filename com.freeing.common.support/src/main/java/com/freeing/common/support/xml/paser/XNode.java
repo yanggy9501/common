@@ -96,7 +96,7 @@ public class XNode {
      * @return 属性值
      */
     public String getStringAttribute(String name) {
-        return getStringAttribute(name, (String) null);
+        return getStringAttribute(name, null);
     }
 
     /**

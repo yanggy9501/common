@@ -6,6 +6,10 @@ package com.freeing.common.support.reflection;
 public class TestReflection {
 
     public static void main(String[] args) {
-        new Reflector(User.class);
+        Reflector reflector = new Reflector(User.class);
+        User user = new User();
+        user.setName("name");
+        user.setGender("女");
+        System.out.println(user);
     }
 }

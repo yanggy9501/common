@@ -2,6 +2,7 @@ package com.freeing.common.support.reflection;
 
 import com.freeing.common.support.reflection.invoker.AmbiguousMethodInvoker;
 import com.freeing.common.support.reflection.invoker.GetterSetterMethodInvoker;
+import com.freeing.common.support.reflection.invoker.Invoker;
 import com.freeing.common.support.reflection.property.PropertyNameHelper;
 
 import java.lang.reflect.Constructor;
@@ -16,8 +17,8 @@ public class Reflector {
     private final Class<?> type;
     private String[] readablePropertyNames;
     private String[] writablePropertyNames;
-    private final Map<String, Object> setMethods = new HashMap<>();
-    private final Map<String, Object> getMethods = new HashMap<>();
+    private final Map<String, Invoker> setMethods = new HashMap<>();
+    private final Map<String, Invoker> getMethods = new HashMap<>();
     private final Map<String, Class<?>> setTypes = new HashMap<>();
     private final Map<String, Class<?>> getTypes = new HashMap<>();
     private Constructor<?> defaultConstructor;
@@ -241,5 +242,22 @@ public class Reflector {
 
     private boolean isValidPropertyName(String name) {
         return !(name.startsWith("$") || "serialVersionUID".equals(name) || "class".equals(name));
+    }
+
+    public Invoker getSetInvoker(String propertyName) {
+        Invoker method = setMethods.get(propertyName);
+        if (method == null) {
+            throw new NullPointerException("There is no setter for property named '"
+                + propertyName + "' in '" + type + "'");
+        }
+        return method;
+    }
+
+    public Invoker getGetInvoker(String propertyName) {
+        Invoker method = getMethods.get(propertyName);
+        if (method == null) {
+            throw new NullPointerException("There is no getter for property named '"
+                + propertyName + "' in '" + type + "'");        }
+        return method;
     }
 }

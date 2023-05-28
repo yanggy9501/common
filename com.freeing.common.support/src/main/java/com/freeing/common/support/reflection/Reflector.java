@@ -22,11 +22,23 @@ public class Reflector {
     private final Map<String, Class<?>> getTypes = new HashMap<>();
     private Constructor<?> defaultConstructor;
 
+    private final Map<String, String> caseInsensitivePropertyMap = new HashMap<>();
+
+
     public Reflector(Class<?> clazz) {
         type = clazz;
         addDefaultConstructor(clazz);
         addGetMethods(clazz);
         addSetMethods(clazz);
+        ddFields(clazz);
+        readablePropertyNames = getMethods.keySet().toArray(new String[0]);
+        writablePropertyNames = setMethods.keySet().toArray(new String[0]);
+        for (String propName : readablePropertyNames) {
+            caseInsensitivePropertyMap.put(propName.toUpperCase(Locale.ENGLISH), propName);
+        }
+        for (String propName : writablePropertyNames) {
+            caseInsensitivePropertyMap.put(propName.toUpperCase(Locale.ENGLISH), propName);
+        }
     }
 
     private void addDefaultConstructor(Class<?> clazz) {
@@ -61,6 +73,11 @@ public class Reflector {
             .forEach(method -> addMethodConflict(conflictingSetters, method));
         resolveSetterConflicts(conflictingSetters);
     }
+
+    private void ddFields(Class<?> clazz) {
+        // TODO
+    }
+
 
     private void resolveGetterConflicts(Map<String, List<Method>> conflictingGetters) {
         for (Map.Entry<String, List<Method>> entry : conflictingGetters.entrySet()) {

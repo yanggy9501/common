@@ -1,5 +1,7 @@
 package com.freeing.common.support.reflection.property;
 
+import java.util.Locale;
+
 /**
  * @author yanggy
  */
@@ -7,20 +9,24 @@ public class PropertyNameHelper {
 
     /**
      * getter | setter 方法名转换为属性命名
-     * PS: 首字母还是大写的
      *
      * @param name method name
      * @return property name
      */
     public static String methodToProperty(String name) {
+        String finalName = name;
         if (name.startsWith("is")) {
-            return name.substring(2);
+            finalName = name.substring(2);
+        } else if (name.startsWith("get") || name.startsWith("set")) {
+            finalName = name.substring(3);
+        } else {
+            throw new IllegalArgumentException("Error parsing property name '" + name +
+                "'.  Didn't start with 'is', 'get' or 'set'.");
         }
-        if (name.startsWith("get") || name.startsWith("set")) {
-            return name.substring(3);
+        if (finalName.length() == 1 || (finalName.length() > 1 && !Character.isUpperCase(finalName.charAt(1)))) {
+            finalName = name.substring(0, 1).toLowerCase(Locale.ENGLISH) + name.substring(1);
         }
-        throw new IllegalArgumentException("Error parsing property name '" + name +
-            "'.  Didn't start with 'is', 'get' or 'set'.");
+        return finalName;
     }
 
     public static boolean isGetter(String name) {

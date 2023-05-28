@@ -1,5 +1,6 @@
 package com.freeing.common.support.reflection;
 
+import com.freeing.common.support.reflection.invoker.AmbiguousMethodInvoker;
 import com.freeing.common.support.reflection.invoker.GetterSetterMethodInvoker;
 import com.freeing.common.support.reflection.property.PropertyNameHelper;
 
@@ -25,6 +26,7 @@ public class Reflector {
         type = clazz;
         addDefaultConstructor(clazz);
         addGetMethods(clazz);
+        addSetMethods(clazz);
     }
 
     private void addDefaultConstructor(Class<?> clazz) {
@@ -47,8 +49,17 @@ public class Reflector {
                 && method.getReturnType() != void.class
                 && PropertyNameHelper.isGetter(method.getName()))
             .forEach(method -> addMethodConflict(conflictingGetters, method));
-
         resolveGetterConflicts(conflictingGetters);
+    }
+
+    private void addSetMethods(Class<?> clazz) {
+        Map<String, List<Method>> conflictingSetters = new HashMap<>();
+        Method[] methods = getClassMethods(clazz);
+        Arrays.stream(methods).filter(method -> method.getParameterTypes().length == 1
+                && PropertyNameHelper.isSetter(method.getName())
+                && method.getReturnType() == void.class)
+            .forEach(method -> addMethodConflict(conflictingSetters, method));
+        resolveSetterConflicts(conflictingSetters);
     }
 
     private void resolveGetterConflicts(Map<String, List<Method>> conflictingGetters) {
@@ -58,7 +69,7 @@ public class Reflector {
             // 模棱两可的
             boolean isAmbiguous = false;
             // 由于 conflictingGetters 是根据方法对应的属性进行收集的，若 getter/setter 不按标准写冲突是可能的
-            // 以返回值类型最多的那个为最终方法
+            // 以子类为主
             for (Method candidate : entry.getValue()) {
                 if (winner == null) {
                     winner = candidate;
@@ -85,15 +96,61 @@ public class Reflector {
                     break;
                 }
             }
-            if (isAmbiguous) {
-                throw new IllegalArgumentException("Illegal overloaded getter method with ambiguous types: "
-                    + entry.getValue());
-            }
-            addGetMethod(propName, winner);
+            addGetMethod(propName, winner, isAmbiguous);
         }
     }
 
-    private void addGetMethod(String name, Method method) {
+    private void resolveSetterConflicts(Map<String, List<Method>> conflictingSetters) {
+        for (String propName : conflictingSetters.keySet()) {
+            List<Method> setters = conflictingSetters.get(propName);
+            // getter 方法是否缓存有该属性的
+            Class<?> getterType = getTypes.get(propName);
+            boolean isSetterAmbiguous = false;
+            Method match = null;
+            for (Method setter : setters) {
+                // setter 与 getter 方法属性匹配，setter 入参类型 == getter 返回值类型，由于 getter 已经处理过
+                if (setter.getParameterTypes()[0].equals(getterType)) {
+                    match = setter;
+                    break;
+                }
+                // 或者只纯粹的有 setter 方法或者 setter 重载
+                if (match == null) {
+                    match = setter;
+                    continue;
+                }
+                isSetterAmbiguous = true;
+                // 查看入参
+                Class<?> paramType1 = match.getParameterTypes()[0];
+                Class<?> paramType2 = setter.getParameterTypes()[0];
+                // 父子类关系 paramType1 可以转换为 paramType2（父类）
+                if (paramType1.isAssignableFrom(paramType2)) {
+                    match = setter;
+                    continue;
+                }
+                if (paramType2.isAssignableFrom(paramType1)) {
+                    continue;
+                }
+                GetterSetterMethodInvoker invoker =
+                    new AmbiguousMethodInvoker(setter, "Ambiguous setters definition");
+                setMethods.put(propName, invoker);
+                setTypes.put(propName, setter.getReturnType());
+            }
+            if (!isSetterAmbiguous && match != null) {
+                GetterSetterMethodInvoker invoker = new GetterSetterMethodInvoker(match);
+                setMethods.put(propName, invoker);
+                setTypes.put(propName, match.getReturnType());
+            }
+        }
+    }
+
+    private void addGetMethod(String name, Method method, boolean isAmbiguous) {
+        if (isAmbiguous) {
+            GetterSetterMethodInvoker invoker =
+                new AmbiguousMethodInvoker(method, "Ambiguous setters definition");
+            setMethods.put(name, invoker);
+            setTypes.put(name, method.getReturnType());
+            return;
+        }
         getMethods.put(name, new GetterSetterMethodInvoker(method));
         getTypes.put(name, method.getReturnType());
     }

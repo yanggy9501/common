@@ -7,6 +7,7 @@ public class PropertyNameHelper {
 
     /**
      * getter | setter 方法名转换为属性命名
+     * PS: 首字母还是大写的
      *
      * @param name method name
      * @return property name
@@ -24,5 +25,9 @@ public class PropertyNameHelper {
 
     public static boolean isGetter(String name) {
         return (name.startsWith("get") && name.length() > 3) || (name.startsWith("is") && name.length() > 2);
+    }
+
+    public static boolean isSetter(String name) {
+        return (name.startsWith("set") && name.length() > 3);
     }
 }

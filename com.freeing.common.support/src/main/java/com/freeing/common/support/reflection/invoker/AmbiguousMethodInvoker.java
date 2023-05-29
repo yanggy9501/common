@@ -1,6 +1,5 @@
 package com.freeing.common.support.reflection.invoker;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -15,7 +14,7 @@ public class AmbiguousMethodInvoker extends GetterSetterMethodInvoker {
     }
 
     @Override
-    public Object invoke(Object target, Object[] args) throws IllegalAccessException, InvocationTargetException {
+    public Object invoke(Object target, Object[] args) throws IllegalAccessException {
         throw new IllegalAccessException(exceptionMessage);
     }
 

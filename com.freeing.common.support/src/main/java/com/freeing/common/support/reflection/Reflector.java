@@ -151,12 +151,12 @@ public class Reflector {
                 GetterSetterMethodInvoker invoker =
                     new AmbiguousMethodInvoker(setter, "Ambiguous setters definition");
                 setMethods.put(propName, invoker);
-                setTypes.put(propName, setter.getReturnType());
+                setTypes.put(propName, setter.getParameterTypes()[0]);
             }
             if (!isSetterAmbiguous && match != null) {
                 GetterSetterMethodInvoker invoker = new GetterSetterMethodInvoker(match);
                 setMethods.put(propName, invoker);
-                setTypes.put(propName, match.getReturnType());
+                setTypes.put(propName,  match.getParameterTypes()[0]);
             }
         }
     }
@@ -244,7 +244,18 @@ public class Reflector {
         return !(name.startsWith("$") || "serialVersionUID".equals(name) || "class".equals(name));
     }
 
-    public Invoker getSetInvoker(String propertyName) {
+    private String toUpperCase(String name) {
+        if (name != null) {
+            return name.toUpperCase(Locale.ENGLISH);
+        }
+        return null;
+    }
+
+    public boolean hasSetterMehtod(String propertyName) {
+        return setMethods.containsKey(propertyName);
+    }
+
+    public Invoker getSetterInvoker(String propertyName) {
         Invoker method = setMethods.get(propertyName);
         if (method == null) {
             throw new NullPointerException("There is no setter for property named '"
@@ -253,7 +264,11 @@ public class Reflector {
         return method;
     }
 
-    public Invoker getGetInvoker(String propertyName) {
+    public boolean hasGettterMehtod(String propertyName) {
+        return getMethods.containsKey(propertyName);
+    }
+
+    public Invoker getGetterInvoker(String propertyName) {
         Invoker method = getMethods.get(propertyName);
         if (method == null) {
             throw new NullPointerException("There is no getter for property named '"

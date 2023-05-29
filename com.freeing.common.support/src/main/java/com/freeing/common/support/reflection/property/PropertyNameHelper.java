@@ -24,7 +24,7 @@ public class PropertyNameHelper {
                 "'.  Didn't start with 'is', 'get' or 'set'.");
         }
         if (finalName.length() == 1 || (finalName.length() > 1 && !Character.isUpperCase(finalName.charAt(1)))) {
-            finalName = name.substring(0, 1).toLowerCase(Locale.ENGLISH) + name.substring(1);
+            finalName = finalName.substring(0, 1).toLowerCase(Locale.ENGLISH) + finalName.substring(1);
         }
         return finalName;
     }

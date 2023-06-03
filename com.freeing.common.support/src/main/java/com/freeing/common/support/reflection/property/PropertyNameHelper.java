@@ -14,7 +14,7 @@ public class PropertyNameHelper {
      * @return property name
      */
     public static String methodToProperty(String name) {
-        String finalName = name;
+        String finalName;
         if (name.startsWith("is")) {
             finalName = name.substring(2);
         } else if (name.startsWith("get") || name.startsWith("set")) {

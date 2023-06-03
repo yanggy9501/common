@@ -4,10 +4,16 @@
         <table id = "table_id" tableName = "用户表">
             <title>一级标题</title>
             <table-head>
-                <column name = "姓名" field = "username" javaType = "string" comment = "用户姓名" color = "100.100.100"/>
-                <column name = "年龄" field = "age" javaType = "int" comment = "用户年龄" color = "100.100.100"/>
-                <column name = "生日" field = "birthday" javaType = "int" comment = "用户年龄" color = "100.100.100"/>
+                <head name = "姓名" mapper = "username" comment = "用户姓名" color = "100.100.100"/>
+                <head name = "年龄" mapper = "age" comment = "用户年龄" color = "100.100.100"/>
+                <head name = "生日" mapper = "birthday" comment = "用户年龄" color = "100.100.100"/>
             </table-head>
+
+            <table-body>
+                <column field = "username" javaType = "string"  color = "100.100.100"/>
+                <column field = "age" javaType = "int" color = "100.100.100"/>
+                <column field = "birthday" javaType = "int" color = "100.100.100"/>
+            </table-body>
 
             <export>
 

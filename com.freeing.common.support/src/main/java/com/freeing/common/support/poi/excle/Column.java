@@ -13,7 +13,5 @@ public class Column {
 
     private String javaType;
 
-    private String comment;
-
     private String color;
 }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<tables>
+    <!-- 表定义 id: 表的唯一性标识 -->
+    <table id = "tb_user" name="tableName">
+        <!-- name 表头名称；field 映射的对象字段； comment 表头注释； color 字体颜色-->
+        <column name = "姓名" field = "username" comment = "用户姓名" color = "100.100.100"/>
+        <column name = "年龄" field = "age" comment = "用户年龄" color = "100.100.100"/>
+        <column name = "生日" field = "birthday" comment = "用户年龄" color = "100.100.100"/>
+    </table>
+</tables>

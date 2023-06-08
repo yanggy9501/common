@@ -1,5 +1,8 @@
 package com.freeing.common.component.constant;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 返回状态码
  * 操作成功：1
@@ -12,7 +15,7 @@ public enum ResultCode {
     /**
      * 操作成功
      */
-    SUCCESS(1, "Operation success"),
+    SUCCESS(200, "Operation success"),
 
     /**
      * 操作失败
@@ -20,9 +23,23 @@ public enum ResultCode {
     FAIL(-1, "Operation fail"),
 
     /**
+     * 重复提交
+     */
+    REPEAT_SUBMIT(201, "Repeat submit"),
+
+    /**
      * Exception
      */
     ERROR(-2, "Unknown exception");
+
+    private static final Map<Integer, ResultCode> cache;
+
+    static {
+        cache = new HashMap<>();
+        for (ResultCode value : ResultCode.values()) {
+            cache.put(value.getCode(), value);
+        }
+    }
 
     /**
      * 状态码
@@ -39,6 +56,10 @@ public enum ResultCode {
         this.msg = msg;
     }
 
+    public static ResultCode get(int code) {
+        return cache.get(code);
+    }
+
     public int getCode() {
         return code;
     }
@@ -46,4 +67,5 @@ public enum ResultCode {
     public String getMsg() {
         return msg;
     }
+
 }

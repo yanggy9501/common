@@ -3,12 +3,6 @@
     <sheet sheetName = "sheet_name">
         <table id = "table_id" tableName = "用户表">
             <title>一级标题</title>
-            <table-head>
-                <head name = "姓名" mapper = "username" comment = "用户姓名" color = "100.100.100"/>
-                <head name = "年龄" mapper = "age" comment = "用户年龄" color = "100.100.100"/>
-                <head name = "生日" mapper = "birthday" comment = "用户年龄" color = "100.100.100"/>
-            </table-head>
-
             <table-body>
                 <column field = "username" javaType = "string"  color = "100.100.100"/>
                 <column field = "age" javaType = "int" color = "100.100.100"/>

@@ -83,7 +83,7 @@ public class IpAddress {
         int segmentLength = ipv4Flag ?
             NumConstants.IPV4_SEGMENT_BIT_LENGTH : NumConstants.IPV6_SEGMENT_BIT_LENGTH;
         // ip 地址段的进制表示
-        int ipRadix = ipv4Flag? NumConstants.RADIX_10 : NumConstants.RADIX_16;
+        int ipRadix = ipv4Flag ? NumConstants.RADIX_10 : NumConstants.RADIX_16;
         // ip 地址段的分隔符
         String separator = ipv4Flag ? StrPool.BACK_SLASH_DOT : StrPool.COLON;
 

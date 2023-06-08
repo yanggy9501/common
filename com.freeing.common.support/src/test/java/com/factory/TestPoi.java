@@ -1,6 +1,6 @@
 package com.factory;
 
-import com.freeing.common.support.poi.excle.ExcelXMLParserBuilder;
+import com.freeing.common.support.poi.builder.ExcelXMLParserBuilder;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

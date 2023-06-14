@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author yanggy
@@ -63,12 +64,31 @@ public class Async {
                         60,
                         TimeUnit.SECONDS,
                         new LinkedBlockingQueue<>(200 * processors),
-                        Executors.defaultThreadFactory(),
+                        new DefaultThreadFactory(),
                         new ThreadPoolExecutor.CallerRunsPolicy()
                     );
                 }
             }
         }
         return COMMON_POOL;
+    }
+
+    static class DefaultThreadFactory implements ThreadFactory {
+        private final AtomicInteger threadNumber = new AtomicInteger(1);
+        private final String namePrefix;
+
+        DefaultThreadFactory() {
+            namePrefix = "WorkerWrapper" + "-pool-";
+        }
+
+        public Thread newThread(Runnable r) {
+            Thread t = new Thread(null, r, namePrefix + threadNumber.getAndIncrement(),
+                0);
+            if (t.isDaemon())
+                t.setDaemon(false);
+            if (t.getPriority() != Thread.NORM_PRIORITY)
+                t.setPriority(Thread.NORM_PRIORITY);
+            return t;
+        }
     }
 }

@@ -1,6 +1,6 @@
 package com.lock;
 
-import com.freeing.common.support.lock.DefaultLockKey;
+import com.freeing.common.support.lock.DefaultKeyLock;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -11,7 +11,7 @@ import java.util.concurrent.Executors;
 public class TestDefaultLockKey {
     public static void main(String[] args) {
         ExecutorService pool = Executors.newFixedThreadPool(16);
-        DefaultLockKey<String> lock = new DefaultLockKey<>();
+        DefaultKeyLock<String> lock = new DefaultKeyLock<>();
 
         for (int i = 0; i < 50; i++) {
             int finalI = i;

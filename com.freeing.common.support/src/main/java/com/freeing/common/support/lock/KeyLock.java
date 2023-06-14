@@ -5,7 +5,7 @@ package com.freeing.common.support.lock;
  *
  * @author yanggy
  */
-public interface LockKey<T> {
+public interface KeyLock<T> {
     /**
      * 加锁
      */

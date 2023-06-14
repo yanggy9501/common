@@ -10,7 +10,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *
  * @author yanggy
  */
-public class SafeLockKey<T> implements LockKey<T> {
+public class SafeKeyLock<T> implements KeyLock<T> {
 
     private static final String LOCK_PREFIX = "safe_lock_prefix_";
 

@@ -1,7 +1,5 @@
 package com.freeing.common.support.observer;
 
-import lombok.Data;
-
 import java.util.Map;
 
 /**
@@ -9,7 +7,6 @@ import java.util.Map;
  *
  * @author yanggy
  */
-@Data
 public class NotifyEvent {
     /**
      * 通知事件
@@ -33,5 +30,38 @@ public class NotifyEvent {
     public NotifyEvent(String event, Map<String, Object> extra) {
         this.event = event;
         this.extra = extra;
+    }
+
+    public String getEvent() {
+        return event;
+    }
+
+    public void setEvent(String event) {
+        this.event = event;
+    }
+
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
+    }
+
+    public Map<String, Object> getExtra() {
+        return extra;
+    }
+
+    public void setExtra(Map<String, Object> extra) {
+        this.extra = extra;
+    }
+
+    @Override
+    public String toString() {
+        return "NotifyEvent{" +
+            "event='" + event + '\'' +
+            ", data=" + data +
+            ", extra=" + extra +
+            '}';
     }
 }

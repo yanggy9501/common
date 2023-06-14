@@ -10,7 +10,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *
  * @author yanggy
  */
-public class DefaultLockKey<T> implements LockKey<T> {
+public class DefaultKeyLock<T> implements KeyLock<T> {
     private final ConcurrentHashMap<T, ReentrantLock> LOCAL_LOCK_MAP = new ConcurrentHashMap<>();
 
     /**
@@ -46,7 +46,7 @@ public class DefaultLockKey<T> implements LockKey<T> {
         ReentrantLock lock = LOCAL_LOCK_MAP.get(key);
         // 如果没有加锁，就尝试解锁，获取的 lock 就为 null
         if (lock == null) {
-            throw new IllegalArgumentException("Key{ " + key + "} is not locked");
+            throw new IllegalArgumentException("Key { " + key + "} is not locked");
         }
         // 其他线程持有该锁，当前不允许释放锁（一个线程上锁之后才能释放锁）
         if (!lock.isHeldByCurrentThread()) {

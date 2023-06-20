@@ -1,7 +1,7 @@
-package com.freeing.common.component.util;
+package com.freeing.common.component.object;
 
 /**
- * value 容器
+ * 值容器
  *
  * @author yanggy
  */

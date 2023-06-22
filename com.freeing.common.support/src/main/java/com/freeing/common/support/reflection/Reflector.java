@@ -31,7 +31,7 @@ public class Reflector {
         addDefaultConstructor(clazz);
         addGetMethods(clazz);
         addSetMethods(clazz);
-        ddFields(clazz);
+        addFields(clazz);
         readablePropertyNames = getMethods.keySet().toArray(new String[0]);
         writablePropertyNames = setMethods.keySet().toArray(new String[0]);
         for (String propName : readablePropertyNames) {
@@ -75,7 +75,7 @@ public class Reflector {
         resolveSetterConflicts(conflictingSetters);
     }
 
-    private void ddFields(Class<?> clazz) {
+    private void addFields(Class<?> clazz) {
         // TODO
     }
 

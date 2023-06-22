@@ -79,12 +79,12 @@ public class SubscribePublish {
      */
     public void subscribe(ISubscriber subscriber) {
         if (subscriber == null) {
-            throw new IllegalArgumentException("Fail to subscribe! subscriber have to not be null.");
+            throw new IllegalArgumentException("Fail to subscribe! subscriber can not null.");
         }
         // 获取消息类型
         String messageType = subscriber.getMessageType();
         if (messageType == null) {
-            throw new IllegalArgumentException("Fail to subscribe! Message type have to not be null.");
+            throw new IllegalArgumentException("Fail to subscribe! Message type can not null.");
         }
         // 绑定订阅对象
         if (subscriberMap.get(messageType) == null) {

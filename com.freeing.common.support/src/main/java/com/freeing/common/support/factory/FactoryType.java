@@ -11,14 +11,14 @@ import java.lang.annotation.*;
 @Documented
 public @interface FactoryType {
     /**
-     * key
+     * key 对象的唯一标识
      */
     String value() default "";
 
     /**
      * 所属工厂
      */
-    Class<?> of();
+    Class<? extends Factory> of();
 
     /**
      * 是否单例

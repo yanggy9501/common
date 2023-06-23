@@ -10,7 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 /**
- * 抽象的工厂，子类提供获取单例的实现
+ * 抽象的工厂，子类提供获取单例的实现并且调用初始化方法完成初始化
  *
  * @author yanggy
  */
@@ -83,12 +83,12 @@ public abstract class Factory {
      *
      * @return Factory
      */
-    public abstract Factory getSingletonInstance();
+    public abstract Factory getInstance();
 
     /**
      * 初始化
      */
-    public synchronized void init() {
+    protected synchronized void init() {
         if (init) {
             return;
         }
@@ -183,8 +183,8 @@ public abstract class Factory {
         try {
             Class<?> clazz = Class.forName(className);
             registry(key, clazz, isSingleton);
-        } catch (ClassNotFoundException ignored) {
-
+        } catch (ClassNotFoundException ex) {
+            throw new ReflectionsException(ex);
         }
     }
 

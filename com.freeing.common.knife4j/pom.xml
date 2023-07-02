@@ -47,6 +47,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
         <!-- knife4j 聚合 -->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>

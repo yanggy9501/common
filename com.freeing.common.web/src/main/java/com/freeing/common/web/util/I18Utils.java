@@ -30,7 +30,7 @@ public class I18Utils {
 
     @PostConstruct
     public void init() {
-        logger.info("加载 I18N 资源路径：{}", messageSource.getBasenameSet());
+        logger.info("load i18n files: {}", messageSource.getBasenameSet());
         I18Utils.customLocaleResolver = resolver;
         I18Utils.customMessageSource = messageSource;
     }
@@ -84,7 +84,7 @@ public class I18Utils {
         try {
             content = customMessageSource.getMessage(code, args, locale);
         } catch (Exception e) {
-            logger.error("国际化参数获取失败: code = {}", code, e);
+            logger.warn("fail to get i18n message : code = {}", code, e);
             content = defaultMessage;
         }
         return content;

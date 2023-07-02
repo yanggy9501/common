@@ -53,7 +53,7 @@ public class MathUtils {
         }
         BigDecimal b1 = new BigDecimal(v1);
         BigDecimal b2 = new BigDecimal(v2);
-        return b1.add(b2).setScale(scale, BigDecimal.ROUND_HALF_UP).toString();
+        return b1.add(b2).setScale(scale, RoundingMode.HALF_UP).toString();
     }
 
     /**

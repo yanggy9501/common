@@ -7,6 +7,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 根据某个 key 加锁的默认实现
+ * 1.可重入
  *
  * @author yanggy
  */

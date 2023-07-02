@@ -11,7 +11,7 @@
     <properties>
         <tomcat-api.version>10.1.0</tomcat-api.version>
         <apach.commons.lang.version>3.12.0</apach.commons.lang.version>
-        <springmvc.version>2.3.2.RELEASE</springmvc.version>
+        <spring.version>2.3.2.RELEASE</spring.version>
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -28,14 +28,20 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>${springmvc.version}</version>
+            <version>${spring.version}</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
-            <version>2.3.2.RELEASE</version>
+            <version>${spring.version}</version>
             <optional>true</optional>
         </dependency>
 

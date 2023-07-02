@@ -1,4 +1,4 @@
-package com.freeing.common.web.configuration;
+package com.freeing.common.web.config;
 
 import com.freeing.common.web.util.ServletUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -13,6 +13,8 @@ import java.util.Locale;
  */
 public class I18nLocaleResolver implements LocaleResolver {
 
+    public String LANG_KEY = "i18n_lang";
+
     public Locale getLocal() {
         return resolveLocale(ServletUtils.getRequest());
     }
@@ -25,10 +27,15 @@ public class I18nLocaleResolver implements LocaleResolver {
      */
     @Override
     public Locale resolveLocale(HttpServletRequest httpServletRequest) {
-        String language = httpServletRequest.getParameter("lang");
+        String lang = null;
+        if (httpServletRequest.getAttribute(LANG_KEY) != null) {
+            lang = (String) httpServletRequest.getAttribute(LANG_KEY);
+        } else {
+            lang = httpServletRequest.getParameter(LANG_KEY);
+        }
         Locale locale = Locale.getDefault();
-        if (StringUtils.isNotEmpty(language)) {
-            String[] split = language.split("_");
+        if (StringUtils.isNotEmpty(lang)) {
+            String[] split = lang.split("_");
             locale = split.length > 1 ? new Locale(split[0], split[1]) : new Locale(split[0]);
 
         }
@@ -37,6 +44,7 @@ public class I18nLocaleResolver implements LocaleResolver {
 
     /**
      * 用于实现 Local 的切换，如用户想要切换中英文展示样式
+     * 需要配置拦截器去设置国际化，调用 I18nLocaleResolver#setLocale
      *
      * @param httpServletRequest
      * @param httpServletResponse
@@ -44,6 +52,11 @@ public class I18nLocaleResolver implements LocaleResolver {
      */
     @Override
     public void setLocale(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Locale locale) {
-
+        if (locale != null) {
+            String language = locale.getLanguage();
+            String country = locale.getCountry();
+            String localeStr = country == null || country.isEmpty() ? language : language + "_" + country;
+            httpServletRequest.setAttribute(LANG_KEY, localeStr);
+        }
     }
 }

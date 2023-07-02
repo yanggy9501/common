@@ -5,7 +5,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 /**
- * 解决入参为 Date 类型
+ * 解决入参为 日期事件 类型
  *
  */
 public abstract class BaseDateConverter<T> {
@@ -21,7 +21,7 @@ public abstract class BaseDateConverter<T> {
                 return function.apply(entry.getKey());
             }
         }
-        throw new IllegalArgumentException("无效的日期参数格式:'" + source + "'");
+        throw new IllegalArgumentException("Error format '" + source + "'");
     }
 
     /**

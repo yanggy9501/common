@@ -1,4 +1,4 @@
-package com.freeing.common.web.configuration;
+package com.freeing.common.web.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

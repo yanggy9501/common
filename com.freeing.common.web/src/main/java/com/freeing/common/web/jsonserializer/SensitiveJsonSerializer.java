@@ -1,4 +1,4 @@
-package com.freeing.common.web.configuration;
+package com.freeing.common.web.jsonserializer;
 
 
 import com.fasterxml.jackson.core.JsonGenerator;

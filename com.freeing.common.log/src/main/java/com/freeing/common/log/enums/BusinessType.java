@@ -8,7 +8,6 @@ import java.util.Objects;
  * @author yanggy
  */
 public enum BusinessType {
-
     /**
      * 新增
      */

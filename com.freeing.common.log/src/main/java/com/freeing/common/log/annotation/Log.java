@@ -2,9 +2,14 @@ package com.freeing.common.log.annotation;
 
 import com.freeing.common.log.enums.BusinessType;
 
+import java.lang.annotation.*;
+
 /**
  * 日志注解
  */
+@Target({ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
 public @interface Log {
     /**
      * 操作类型
@@ -29,5 +34,5 @@ public @interface Log {
     /**
      * 是否需要保存耗时
      */
-    boolean saveTake() default true;
+    boolean saveConsumingTime() default true;
 }

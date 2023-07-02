@@ -6,6 +6,9 @@ import org.apache.commons.lang3.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
+import java.util.Enumeration;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * web utils
@@ -13,9 +16,28 @@ import java.nio.charset.StandardCharsets;
  * @author yanggy
  */
 public class WebUtils {
+    /**
+     * 获取请求头
+     *
+     * @param request HttpServletRequest
+     * @return request header
+     */
+    public static Map<String, String> getHeaders(HttpServletRequest request) {
+        Map<String, String> map = new LinkedHashMap<>();
+        Enumeration<String> enumeration = request.getHeaderNames();
+        String encoding = request.getParameter("encoding");
+        if (enumeration != null) {
+            while (enumeration.hasMoreElements()) {
+                String key = enumeration.nextElement();
+                String value = request.getHeader(key);
+                map.put(key, resolveValue(value, encoding));
+            }
+        }
+        return map;
+    }
 
     /**
-     * 从parameterMap获取目标值，如果找不到，将返回默认值。
+     * 从 parameterMap 获取目标值，如果找不到，将返回默认值。
      *
      * @param req  {@link HttpServletRequest}
      * @param key  key
@@ -35,7 +57,7 @@ public class WebUtils {
     }
 
     /**
-     * 从parameterMap获取目标值，如果找不到抛出参数异常 {@link IllegalArgumentException}.
+     * 从 parameterMap 获取目标值，如果找不到抛出参数异常 {@link IllegalArgumentException}.
      *
      * @param req {@link HttpServletRequest}
      * @param key key

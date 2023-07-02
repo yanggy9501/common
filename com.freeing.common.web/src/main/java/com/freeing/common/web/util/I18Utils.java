@@ -1,6 +1,6 @@
 package com.freeing.common.web.util;
 
-import com.freeing.common.web.configuration.I18nLocaleResolver;
+import com.freeing.common.web.config.I18nLocaleResolver;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

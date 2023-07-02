@@ -1,5 +1,7 @@
-package com.freeing.common.web.configuration;
+package com.freeing.common.web;
 
+import com.freeing.common.web.config.I18nLocaleResolver;
+import com.freeing.common.web.config.I18nProperties;
 import com.freeing.common.web.util.I18Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

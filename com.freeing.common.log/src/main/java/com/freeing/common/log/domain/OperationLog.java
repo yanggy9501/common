@@ -2,7 +2,8 @@ package com.freeing.common.log.domain;
 
 import com.freeing.common.log.enums.BusinessType;
 
-import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.Map;
 
 /**
  * 操作日志
@@ -26,12 +27,17 @@ public class OperationLog {
     private String description;
 
     /**
+     * 操作 ID
+     */
+    private String userId;
+
+    /**
      * 操作人
      */
     private String username;
 
     /**
-     * 操作IP
+     * 操作 IP
      */
     private String requestIp;
 
@@ -52,7 +58,7 @@ public class OperationLog {
 
     /**
      * 请求类型
-     * HttpMethod{GET; POST; PUT; DELETE; PATCH; TRACE; HEAD; OPTIONS}
+     * HttpMethod {GET; POST; PUT; DELETE; PATCH; TRACE; HEAD; OPTIONS}
      */
     private String httpMethod;
 
@@ -79,17 +85,27 @@ public class OperationLog {
     /**
      * 开始时间
      */
-    private LocalDateTime startTime;
+    private Date startTime;
 
     /**
      * 完成时间
      */
-    private LocalDateTime finishTime;
+    private Date finishTime;
 
     /**
-     * 消耗时间
+     * 消耗时间，如  15 ms
      */
-    private Long consumingTime;
+    private String consumingTime;
+
+    /**
+     * 操作状态，成功，失败
+     */
+    private String status;
+
+    /**
+     * 其他额外信息
+     */
+    private Map<String, Object> extra;
 
     /**
      * 浏览器信息
@@ -118,6 +134,14 @@ public class OperationLog {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getUsername() {
@@ -200,27 +224,27 @@ public class OperationLog {
         this.exDetail = exDetail;
     }
 
-    public LocalDateTime getStartTime() {
+    public Date getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
+    public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 
-    public LocalDateTime getFinishTime() {
+    public Date getFinishTime() {
         return finishTime;
     }
 
-    public void setFinishTime(LocalDateTime finishTime) {
+    public void setFinishTime(Date finishTime) {
         this.finishTime = finishTime;
     }
 
-    public Long getConsumingTime() {
+    public String getConsumingTime() {
         return consumingTime;
     }
 
-    public void setConsumingTime(Long consumingTime) {
+    public void setConsumingTime(String consumingTime) {
         this.consumingTime = consumingTime;
     }
 
@@ -230,5 +254,21 @@ public class OperationLog {
 
     public void setBrowser(String browser) {
         this.browser = browser;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Map<String, Object> getExtra() {
+        return extra;
+    }
+
+    public void setExtra(Map<String, Object> extra) {
+        this.extra = extra;
     }
 }

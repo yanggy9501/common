@@ -2,7 +2,7 @@ package com.freeing.common.web.annotation;
 
 import com.fasterxml.jackson.annotation.JacksonAnnotationsInside;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.freeing.common.web.configuration.SensitiveJsonSerializer;
+import com.freeing.common.web.jsonserializer.SensitiveJsonSerializer;
 import com.freeing.common.web.enumnew.SensitiveStrategy;
 
 import java.lang.annotation.ElementType;

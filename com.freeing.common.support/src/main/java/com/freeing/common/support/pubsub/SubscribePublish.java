@@ -56,14 +56,11 @@ public class SubscribePublish {
             group = (s != null) ? s.getThreadGroup() :
                 Thread.currentThread().getThreadGroup();
             namePrefix = "SubscribePublish-pool-" +
-                poolNumber.getAndIncrement() +
-                "-thread-";
+                poolNumber.getAndIncrement();
         }
 
         public Thread newThread(Runnable r) {
-            Thread t = new Thread(group, r,
-                namePrefix + threadNumber.getAndIncrement(),
-                0);
+            Thread t = new Thread(group, r, namePrefix + threadNumber.getAndIncrement(), 0);
             if (t.isDaemon())
                 t.setDaemon(false);
             if (t.getPriority() != Thread.NORM_PRIORITY)

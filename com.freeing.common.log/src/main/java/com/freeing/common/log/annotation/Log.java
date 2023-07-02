@@ -17,9 +17,14 @@ public @interface Log {
     BusinessType businessType() default BusinessType.OTHER;
 
     /**
-     * 操作描述
+     * 操作说明
      */
     String description() default "";
+
+    /**
+     * 项目模块
+     */
+    String module() default "";
 
     /**
      * 是否保存请求参数
@@ -30,9 +35,4 @@ public @interface Log {
      * 是否保存响应结果
      */
     boolean saveResult() default false;
-
-    /**
-     * 是否需要保存耗时
-     */
-    boolean saveConsumingTime() default true;
 }

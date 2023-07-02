@@ -1,26 +1,43 @@
 package com.freeing.common.log.aspect;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.alibaba.fastjson.JSONArray;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.freeing.common.log.annotation.Log;
 import com.freeing.common.log.domain.OperationLog;
-import com.google.common.base.Stopwatch;
-import org.aspectj.lang.JoinPoint;
+import com.freeing.common.log.event.LogEvent;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 操作日志使用 spring event异步入库
  *
  * @author yanggy
  */
-public class BaseLogAspect {
+public abstract class BaseLogAspect implements ApplicationContextAware {
+
+    private static ApplicationContext applicationContext;
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+
+    }
+
     /**
      * 排除敏感属性字段
      */
@@ -39,8 +56,12 @@ public class BaseLogAspect {
     }
 
     @Around(value = "logPointcut()")
-    public Object logAround(ProceedingJoinPoint pjp) throws JsonProcessingException {
+    public Object logAround(ProceedingJoinPoint pjp) throws Throwable {
         OperationLog operationLog = new OperationLog();
+
+        // 登录者信息
+        operationLog.setUsername(getUsername());
+        operationLog.setUserId(getUserId());
 
         MethodSignature methodSignature = (MethodSignature) pjp.getSignature();
         // 获取正在访问的类
@@ -51,130 +72,158 @@ public class BaseLogAspect {
         // 获取访问的方法的名称
         String methodName = pjp.getSignature().getName();
         operationLog.setActionMethod(methodName);
+
         // 获取 @Log
         Log annoLog = executionMethod.getAnnotation(Log.class);
+        operationLog.setBusinessType(annoLog.businessType().getType());
+        operationLog.setDescription(annoLog.description());
+        operationLog.setMoudle(annoLog.module());
+
+        // 设置请求
+        operationLog.setHttpMethod(getRequest().getMethod());
+        operationLog.setRequestUri(getRequest().getRequestURI());
+        operationLog.setRequestIp(getIpAddr(getRequest()));
+
         if (annoLog.saveParmas()) {
             // 获取访问的方法的参数
             Object[] args = pjp.getArgs();
-            if (args != null) {
-                operationLog.setParams(jsonUtil.writeValueAsString(args));
+            if (args != null && args.length > 0) {
+                operationLog.setParams(subString(JSONArray.toJSONString(args), 2048));
             }
         }
 
-        Stopwatch stopwatch = null;
-        if (annoLog.saveConsumingTime()) {
-            stopwatch = Stopwatch.createStarted();
-            operationLog.setStartTime(new Date(System.currentTimeMillis()));
-        }
-        Object result = null;
+        long startNanos = System.nanoTime();
+        operationLog.setStartTime(new Date(System.currentTimeMillis()));
+
+        Object result;
         try {
             //让代理方法执行
             result = pjp.proceed();
-            if (annoLog.saveConsumingTime()) {
-                assert stopwatch != null;
-                stopwatch.stop();
-                operationLog.setConsumingTime(stopwatch.toString());
-                operationLog.setFinishTime(new Date(System.currentTimeMillis()));
+
+            if (annoLog.saveResult()) {
+                // 获取访问的方法的参数
+                if (result != null) {
+                    operationLog.setParams(subString(JSONArray.toJSONString(result), 2048));
+                }
             }
-        } catch (Throwable e) {
-            // 3.异常通知
+            operationLog.setStatus("1");
+        } catch (Throwable ex) {
+            operationLog.setStatus("0");
+            operationLog.setExDesc(subString(ex.getMessage(), 2048));
+            operationLog.setExDetail(subString(ex.toString(), 2048));
+            // 需要抛出异常，全局异常处理可能还需要进行处理
+            throw ex;
         } finally {
-            // 4.最终通知
+            long endNanos = System.nanoTime();
+            operationLog.setConsumingTime(toString(endNanos - startNanos));
+            operationLog.setFinishTime(new Date(System.currentTimeMillis()));
+
+            // 发布事件，日志交给监听者处理
+            applicationContext.publishEvent(new LogEvent(operationLog));
         }
         return result;
     }
 
-    /**
-     * 获取用户名
-     *
-     * @return
-     */
-    protected String getUsername() {
-        return "";
+
+    protected abstract String getUsername();
+
+    protected abstract String getUserId();
+
+    protected void handlerExtraAtferFinish() {
+
     }
 
+    protected void toJsonString(Object obj) {
 
-    /**
-     * 日志处理
-     *
-     * @param joinPoint 切入点
-     * @param annoLog 操作注解
-     * @param e 异常对象
-     * @param result
-     */
-    protected void handleLog(JoinPoint joinPoint, Log annoLog, Object result, Exception e) {
-
-        OperationLog operationLog = new OperationLog();
-
-        // 设置操作状态
-        // operationLog.setStatus(BusinessStatus.SUCCESS.getCode());
-        // 设置请求地址，如: /user/1
-        // operationLog.setRequestUri(getUri());
-        // // 请求ip
-        // operationLog.setRequestIp(getRequestIp());
-        // // 设置操作人
-        // operationLog.setUsername(getUsername());
-
-        // // 处理请求参数
-        // handleRequestParams(joinPoint, operationLog, annoLog);
-        //
-        // // 设置响应参数和值
-        // if (annoLog.isSaveResponseDate() && result != null) {
-        //     operationLog.setJsonResult(JSON.toJSONString(result));
-        // }
-        //
-        // // 发送操作日志消息
-        // rabbitTemplate.convertAndSend(RabbitConfig.LOG_TOPIC_EXCHANGE,
-        //     RoutingKeyConstants.OPERATION_LOG_BINDING_LOG_EXCHANGE,
-        //     JSON.toJSONString(operationLog));
     }
 
-    /**
-     * 处理请求参数
-     *
-     * @param joinPoint 连接点
-     * @param operationLog 日志对象
-     * @param annoLog 日志注解
-     */
-    // public void handleRequestParams(JoinPoint joinPoint,SysOperationLog operationLog, Log annoLog) {
-    //     // 设置方法名称
-    //     String className = joinPoint.getSignature().getDeclaringTypeName();
-    //     String methodName = joinPoint.getSignature().getName();
-    //     operationLog.setMethod(className + "." + methodName + "()");
-    //     // 设置请求方式
-    //     operationLog.setRequestMethod(ServletUtils.getRequest().getMethod());
-    //     // 处理Log注解的参数
-    //     operationLog.setBusinessType(annoLog.businessType().getCode());
-    //     // 设置标题（操作模块）
-    //     operationLog.setTitle(annoLog.title());
-    //     // 设置操作人类别
-    //     operationLog.setOperatorType(annoLog.operatorType().ordinal());
-    //     // 设置请求参数
-    //     if (annoLog.isSaveRequestData()) {
-    //         setRequestValue(operationLog, joinPoint);
-    //     }
-    // }
+    private static String subString(String str, int maxLength) {
+        if (str == null) {
+            return null;
+        }
+        return str.length() > maxLength ? str.substring(0, maxLength) : str;
+    }
 
-    /**
-     *
-     *
-     * @param operationLog 日志对象
-     * @param joinPoint 连接点
-     */
-    // public void setRequestValue(SysOperationLog operationLog, JoinPoint joinPoint) {
-    //     // 请求对象获取请求参数
-    //     Map<String, String[]> parameterMap = ServletUtils.getRequest().getParameterMap();
-    //     if (parameterMap != null && parameterMap.size() > 0) {
-    //         String paramsStr = JSON.toJSONString(parameterMap, excludePropertyFilter());
-    //         operationLog.setOperParam(paramsStr);
-    //     } else {
-    //         // request获取不到，从joinPoint连接点获取参数
-    //         Object[] args = joinPoint.getArgs();
-    //         if (args != null && args.length > 0) {
-    //             String paramsStr = JSONArray.toJSONString(args);
-    //             operationLog.setOperParam(paramsStr);
-    //         }
-    //     }
-    // }
+    private static HttpServletRequest getRequest() {
+        return ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+    }
 
+    public static String getIpAddr(HttpServletRequest request) {
+        String ipAddress = request.getHeader("x-forwarded-for");
+        if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
+            ipAddress = request.getHeader("Proxy-Client-IP");
+        }
+        if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
+            ipAddress = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
+            ipAddress = request.getRemoteAddr();
+            if (ipAddress.equals("127.0.0.1") || ipAddress.equals("0:0:0:0:0:0:0:1")) {
+                // 根据网卡取本机配置的IP
+                InetAddress inet = null;
+                try {
+                    inet = InetAddress.getLocalHost();
+                } catch (UnknownHostException ignored) {
+                    return null;
+                }
+                ipAddress = inet.getHostAddress();
+            }
+        }
+        // 对于通过多个代理的情况，第一个IP为客户端真实IP, 多个IP按照','分割
+        // "***.***.***.***".length() = 15
+        if (ipAddress != null && ipAddress.length() > 15) {
+            if (ipAddress.indexOf(",") > 0) {
+                ipAddress = ipAddress.substring(0, ipAddress.indexOf(","));
+            }
+        }
+        return ipAddress;
+    }
+
+    private static String toString(long nanos) {
+        TimeUnit unit = chooseUnit(nanos);
+        double value = (double)nanos / (double)TimeUnit.NANOSECONDS.convert(1L, unit);
+        return formatCompact4Digits(value) + " " + abbreviate(unit);
+    }
+
+    private static String formatCompact4Digits(double value) {
+        return String.format(Locale.ROOT, "%.4g", value);
+    }
+
+    private static TimeUnit chooseUnit(long nanos) {
+        if (TimeUnit.DAYS.convert(nanos, TimeUnit.NANOSECONDS) > 0L) {
+            return TimeUnit.DAYS;
+        } else if (TimeUnit.HOURS.convert(nanos, TimeUnit.NANOSECONDS) > 0L) {
+            return TimeUnit.HOURS;
+        } else if (TimeUnit.MINUTES.convert(nanos, TimeUnit.NANOSECONDS) > 0L) {
+            return TimeUnit.MINUTES;
+        } else if (TimeUnit.SECONDS.convert(nanos, TimeUnit.NANOSECONDS) > 0L) {
+            return TimeUnit.SECONDS;
+        } else if (TimeUnit.MILLISECONDS.convert(nanos, TimeUnit.NANOSECONDS) > 0L) {
+            return TimeUnit.MILLISECONDS;
+        } else {
+            return TimeUnit.MICROSECONDS.convert(nanos, TimeUnit.NANOSECONDS) > 0L
+                ? TimeUnit.MICROSECONDS : TimeUnit.NANOSECONDS;
+        }
+    }
+
+    private static String abbreviate(TimeUnit unit) {
+        switch (unit) {
+            case NANOSECONDS:
+                return "ns";
+            case MICROSECONDS:
+                return "μs";
+            case MILLISECONDS:
+                return "ms";
+            case SECONDS:
+                return "s";
+            case MINUTES:
+                return "min";
+            case HOURS:
+                return "h";
+            case DAYS:
+                return "d";
+            default:
+                throw new AssertionError();
+        }
+    }
 }

@@ -1,7 +1,6 @@
 package com.freeing.common.web.config;
 
 import com.freeing.common.web.util.ServletUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.LocaleResolver;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,13 +37,12 @@ public class I18nLocaleResolver implements LocaleResolver {
             lang = httpServletRequest.getHeader(LANG_KEY);
         }
 
-        Locale locale = Locale.getDefault();
-        if (StringUtils.isNotEmpty(lang)) {
+        if (lang != null && !lang.isEmpty()) {
             String[] split = lang.split("_");
-            locale = split.length > 1 ? new Locale(split[0], split[1]) : new Locale(split[0]);
+            return split.length > 1 ? new Locale(split[0], split[1]) : new Locale(split[0]);
 
         }
-        return locale;
+        return Locale.getDefault();
     }
 
     /**

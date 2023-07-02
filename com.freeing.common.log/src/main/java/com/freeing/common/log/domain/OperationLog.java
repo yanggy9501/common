@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class OperationLog {
     /**
-     * 日志主键
+     * 日志自增主键
      */
     private Long id;
 
@@ -25,6 +25,11 @@ public class OperationLog {
      * 操作描述
      */
     private String description;
+
+    /**
+     * 模块
+     */
+    private String moudle;
 
     /**
      * 操作 ID
@@ -134,6 +139,14 @@ public class OperationLog {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getMoudle() {
+        return moudle;
+    }
+
+    public void setMoudle(String moudle) {
+        this.moudle = moudle;
     }
 
     public String getUserId() {

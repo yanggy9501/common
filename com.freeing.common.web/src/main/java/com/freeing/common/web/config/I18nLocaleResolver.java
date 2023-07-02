@@ -13,7 +13,7 @@ import java.util.Locale;
  */
 public class I18nLocaleResolver implements LocaleResolver {
 
-    public String LANG_KEY = "i18n_lang";
+    public String LANG_KEY = "lang";
 
     public Locale getLocal() {
         return resolveLocale(ServletUtils.getRequest());
@@ -30,9 +30,14 @@ public class I18nLocaleResolver implements LocaleResolver {
         String lang = null;
         if (httpServletRequest.getAttribute(LANG_KEY) != null) {
             lang = (String) httpServletRequest.getAttribute(LANG_KEY);
-        } else {
+        }
+        if (lang == null) {
             lang = httpServletRequest.getParameter(LANG_KEY);
         }
+        if (lang == null) {
+            lang = httpServletRequest.getHeader(LANG_KEY);
+        }
+
         Locale locale = Locale.getDefault();
         if (StringUtils.isNotEmpty(lang)) {
             String[] split = lang.split("_");

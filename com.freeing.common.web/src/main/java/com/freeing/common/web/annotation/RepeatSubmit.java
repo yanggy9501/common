@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-@Inherited
 @Documented
 public @interface RepeatSubmit {
     /**

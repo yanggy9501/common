@@ -24,7 +24,7 @@ public class RepeatSubmitAspect {
     private static final String PREFIX = "repeat_submit:";
 
     @Before("@annotation(repeatSubmit)")
-    public void doBefore(JoinPoint joinPoint, RepeatSubmit repeatSubmit) {
+    public void before(JoinPoint joinPoint, RepeatSubmit repeatSubmit) {
         long interval = 0;
         if (repeatSubmit.interval() > 0) {
             interval = repeatSubmit.timeUnit().toMillis(repeatSubmit.interval());

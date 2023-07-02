@@ -16,7 +16,7 @@ public class Async {
      * 核心线程数：计算机内核数 / 2
      * 最大线程数：计算机内核数
      * 空闲时间：60s，超过60s超过核心线程数的空闲线程被杀死
-     * 任务队列长度：200
+     * 任务队列长度：MAX_VALUE
      * 线程池工厂：使用了jdk默认工厂
      * handler（队列满时的任务拒绝策略）：让提交任务的线程去执行
      */
@@ -60,7 +60,7 @@ public class Async {
                         processors,
                         60,
                         TimeUnit.SECONDS,
-                        new LinkedBlockingQueue<>(200 * processors),
+                        new LinkedBlockingQueue<>(Integer.MAX_VALUE),
                         new DefaultThreadFactory(),
                         new ThreadPoolExecutor.CallerRunsPolicy()
                     );
@@ -75,7 +75,7 @@ public class Async {
         private final String namePrefix;
 
         DefaultThreadFactory() {
-            namePrefix = "WorkerWrapper" + "-pool-";
+            namePrefix = "Async" + "-COMMON_POOL-";
         }
 
         public Thread newThread(Runnable r) {

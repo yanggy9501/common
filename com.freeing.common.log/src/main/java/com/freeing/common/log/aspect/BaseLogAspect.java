@@ -1,7 +1,6 @@
 package com.freeing.common.log.aspect;
 
 import com.alibaba.fastjson.JSONArray;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.freeing.common.log.annotation.Log;
 import com.freeing.common.log.domain.OperationLog;
 import com.freeing.common.log.event.LogEvent;
@@ -10,7 +9,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -25,27 +23,18 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 操作日志使用 spring event异步入库
+ * 操作日志使用 spring event 异步入库
  *
  * @author yanggy
  */
 public abstract class BaseLogAspect implements ApplicationContextAware {
 
-    private static ApplicationContext applicationContext;
+    private ApplicationContext applicationContext;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-
+        this.applicationContext = applicationContext;
     }
-
-    /**
-     * 排除敏感属性字段
-     */
-    public static final String[] EXCLUDE_PROPERTIES = { "password", "oldPassword", "newPassword", "confirmPassword",
-        "username", "phone", "mobilePhone", "identityCard"};
-
-    @Autowired
-    private ObjectMapper jsonUtil;
 
     /***
      * 定义切面
@@ -59,10 +48,11 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
     public Object logAround(ProceedingJoinPoint pjp) throws Throwable {
         OperationLog operationLog = new OperationLog();
 
-        // 登录者信息
+        // 设置登录信息
         operationLog.setUsername(getUsername());
         operationLog.setUserId(getUserId());
 
+        // 设置 class 信息
         MethodSignature methodSignature = (MethodSignature) pjp.getSignature();
         // 获取正在访问的类
         Class<?> executionClass = pjp.getTarget().getClass();
@@ -73,18 +63,18 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
         String methodName = pjp.getSignature().getName();
         operationLog.setActionMethod(methodName);
 
-        // 获取 @Log
+        // 获取 @Log 注解信息
         Log annoLog = executionMethod.getAnnotation(Log.class);
         operationLog.setBusinessType(annoLog.businessType().getType());
         operationLog.setDescription(annoLog.description());
-        operationLog.setMoudle(annoLog.module());
+        operationLog.setModule(annoLog.module());
 
-        // 设置请求
+        // 设置请求 Request 信息
         operationLog.setHttpMethod(getRequest().getMethod());
         operationLog.setRequestUri(getRequest().getRequestURI());
         operationLog.setRequestIp(getIpAddr(getRequest()));
 
-        if (annoLog.saveParmas()) {
+        if (annoLog.enableSaveParma()) {
             // 获取访问的方法的参数
             Object[] args = pjp.getArgs();
             if (args != null && args.length > 0) {
@@ -100,23 +90,25 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
             //让代理方法执行
             result = pjp.proceed();
 
-            if (annoLog.saveResult()) {
-                // 获取访问的方法的参数
+            if (annoLog.enableSaveResult()) {
+                // 获取访问的方法的请求参数
                 if (result != null) {
                     operationLog.setParams(subString(JSONArray.toJSONString(result), 2048));
                 }
             }
             operationLog.setStatus("1");
         } catch (Throwable ex) {
+            // 设置异常信息
             operationLog.setStatus("0");
             operationLog.setExDesc(subString(ex.getMessage(), 2048));
             operationLog.setExDetail(subString(ex.toString(), 2048));
             // 需要抛出异常，全局异常处理可能还需要进行处理
             throw ex;
         } finally {
+            // 设置耗时
             long endNanos = System.nanoTime();
             operationLog.setConsumingTime(toString(endNanos - startNanos));
-            operationLog.setFinishTime(new Date(System.currentTimeMillis()));
+            operationLog.setEndTime(new Date(System.currentTimeMillis()));
 
             // 发布事件，日志交给监听者处理
             applicationContext.publishEvent(new LogEvent(operationLog));
@@ -160,7 +152,7 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
             ipAddress = request.getRemoteAddr();
             if (ipAddress.equals("127.0.0.1") || ipAddress.equals("0:0:0:0:0:0:0:1")) {
                 // 根据网卡取本机配置的IP
-                InetAddress inet = null;
+                InetAddress inet;
                 try {
                     inet = InetAddress.getLocalHost();
                 } catch (UnknownHostException ignored) {

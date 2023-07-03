@@ -29,7 +29,7 @@ public class OperationLog {
     /**
      * 模块
      */
-    private String moudle;
+    private String module;
 
     /**
      * 操作 ID
@@ -95,7 +95,7 @@ public class OperationLog {
     /**
      * 完成时间
      */
-    private Date finishTime;
+    private Date endTime;
 
     /**
      * 消耗时间，如  15 ms
@@ -141,12 +141,12 @@ public class OperationLog {
         this.description = description;
     }
 
-    public String getMoudle() {
-        return moudle;
+    public String getModule() {
+        return module;
     }
 
-    public void setMoudle(String moudle) {
-        this.moudle = moudle;
+    public void setModule(String module) {
+        this.module = module;
     }
 
     public String getUserId() {
@@ -245,12 +245,12 @@ public class OperationLog {
         this.startTime = startTime;
     }
 
-    public Date getFinishTime() {
-        return finishTime;
+    public Date getEndTime() {
+        return endTime;
     }
 
-    public void setFinishTime(Date finishTime) {
-        this.finishTime = finishTime;
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 
     public String getConsumingTime() {

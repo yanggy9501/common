@@ -125,10 +125,6 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
 
     }
 
-    protected void toJsonString(Object obj) {
-
-    }
-
     private static String subString(String str, int maxLength) {
         if (str == null) {
             return null;

@@ -4,6 +4,7 @@ import com.freeing.common.component.constant.StrPool;
 import com.freeing.common.component.util.stack.CharStack;
 import com.freeing.common.component.util.stack.IntStack;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -224,5 +225,13 @@ public class NumberUtils extends org.apache.commons.lang3.math.NumberUtils {
             // orElse 不管前面如何都会执行，orElseGet 当之后前面没有了最后才执行
             .orElseGet(Collections::emptyList);
 
+    }
+
+    public static String toString(BigDecimal value) {
+        if (value == null) {
+            throw new NullPointerException("Input cannot be null");
+        }
+        // stripTrailingZeros 去重尾部的 0，toPlainString 转换为 string 并保证不是科学计数法
+        return value.stripTrailingZeros().toPlainString();
     }
 }

@@ -1,7 +1,5 @@
 package com.freeing.common.web.enumnew;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.function.Function;
 
 /**
@@ -26,12 +24,7 @@ public enum SensitiveStrategy {
     /**
      * 地址
      */
-    ADDRESS(s -> s.replaceAll("(\\S{3})\\S{2}(\\S*)\\S{2}", "$1****$2****")),
-
-    /**
-     * BASE64
-     */
-    BASE64(s -> Base64.getEncoder().encodeToString(s.getBytes(StandardCharsets.UTF_8)));
+    ADDRESS(s -> s.replaceAll("(\\S{3})\\S{2}(\\S*)\\S{2}", "$1****$2****"));
 
     private final Function<String, String> desensitizer;
 

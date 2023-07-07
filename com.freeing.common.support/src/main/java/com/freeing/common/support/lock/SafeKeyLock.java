@@ -32,13 +32,11 @@ public class SafeKeyLock<T> implements KeyLock<T> {
         }
         // 获取或创建一个ReentrantLock对象
         // 加前缀避免外界也在对key进行加锁操作，这里加锁以包装获取锁和加锁与解锁都是原子性的，两者没有交叉执行
-        synchronized (LOCK_PREFIX + key) {
-            ReentrantLock lock = LOCAL_LOCK_MAP.computeIfAbsent(key, k -> new ReentrantLock());
-            AtomicInteger count = LOCAL_LOCK_COUNT.compute(key, (k, v) -> v == null ? new AtomicInteger(1) : v);
-            count.incrementAndGet();
-            // 获取锁
-            lock.lock();
-        }
+        ReentrantLock lock = LOCAL_LOCK_MAP.computeIfAbsent(key, k -> new ReentrantLock());
+        // 获取锁
+        lock.lock();
+        AtomicInteger count = LOCAL_LOCK_COUNT.compute(key, (k, v) -> v == null ? new AtomicInteger(1) : v);
+        count.incrementAndGet();
     }
 
     /**
@@ -55,22 +53,20 @@ public class SafeKeyLock<T> implements KeyLock<T> {
         if (!LOCAL_LOCK_MAP.containsKey(key)) {
             throw new IllegalArgumentException("Key{ " + key + "} is not locked");
         }
-        // 其他线程持有该锁，当前不允许释放锁（一个线程上锁之后才能释放锁）
-        if (!lock.isHeldByCurrentThread()) {
+        // 非当前线程获取锁，而是其他线程持有该锁，当前不允许释放锁（一个线程上锁之后才能释放锁）
+        if (lock == null || !lock.isHeldByCurrentThread()) {
             throw new IllegalStateException("Current thread has not the lock {" + key + "} ，Release is not allowed.");
         }
-        lock.unlock();
         if (Objects.equals(LOCAL_LOCK_COUNT.get(key).get(), 1L)) {
             // 双重检查，避免 remove 的过程中还有线程要获取该 key 的锁导致一些临界问题.
-            synchronized (LOCK_PREFIX + key) {
-                if (Objects.equals(LOCAL_LOCK_COUNT.get(key).get(), 1L)) {
-                    LOCAL_LOCK_MAP.remove(key);
-                    LOCAL_LOCK_COUNT.remove(key);
-                }
+            if (Objects.equals(LOCAL_LOCK_COUNT.get(key).get(), 1L)) {
+                LOCAL_LOCK_MAP.remove(key);
+                LOCAL_LOCK_COUNT.remove(key);
             }
         } else {
             AtomicInteger count = LOCAL_LOCK_COUNT.get(key);
             count.decrementAndGet();
         }
+        lock.unlock();
     }
 }

@@ -1,7 +1,6 @@
 package com.freeing.common.support.lock;
 
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -14,11 +13,6 @@ public class DefaultKeyLock<T> implements KeyLock<T> {
     private final ConcurrentHashMap<T, ReentrantLock> LOCAL_LOCK_MAP = new ConcurrentHashMap<>();
 
     /**
-     * 统计同一个 key 正在排队锁的个数
-     */
-    private final ConcurrentHashMap<T, AtomicInteger> LOCAL_LOCK_COUNT = new ConcurrentHashMap<>();
-
-    /**
      * 加锁
      */
     @Override
@@ -28,8 +22,6 @@ public class DefaultKeyLock<T> implements KeyLock<T> {
         }
         // 获取或创建一个ReentrantLock对象
         ReentrantLock lock = LOCAL_LOCK_MAP.computeIfAbsent(key, k -> new ReentrantLock());
-        AtomicInteger count = LOCAL_LOCK_COUNT.compute(key, (k, v) -> v == null ? new AtomicInteger(1) : v);
-        count.incrementAndGet();
         // 获取锁
         lock.lock();
     }
@@ -55,15 +47,5 @@ public class DefaultKeyLock<T> implements KeyLock<T> {
         // 这里存在一个问题就是 LOCAL_LOCK_MAP 会不断的累加 key，而且在这里不能 remove，因为并发上同一个 key 的锁，第一个上
         // 锁的线程在处理完之后，释放锁并 remove key 就会造成后面的同一个key 无法在 LOCAL_LOCK_MAP 中找到对应的锁，从而无法释放。
         lock.unlock();
-        AtomicInteger count = LOCAL_LOCK_COUNT.get(key);
-        count.decrementAndGet();
-    }
-
-    public Integer getLockedKeyCount(T key) {
-        AtomicInteger count = LOCAL_LOCK_COUNT.get(key);
-        if (count == null) {
-            return null;
-        }
-        return count.get();
     }
 }

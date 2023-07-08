@@ -1,14 +1,16 @@
-package com.freeing.common.web.aspect;
+package com.freeing.common.repsub.aspect;
 
-import com.freeing.common.web.annotation.RepeatSubmit;
-import com.freeing.common.web.util.ServletUtils;
+import com.freeing.common.repsub.annotation.RepeatSubmit;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+
 
 /**
  * 重复提交 aop 功能实现
@@ -29,16 +31,18 @@ public class RepeatSubmitAspect {
         if (repeatSubmit.interval() > 0) {
             interval = repeatSubmit.timeUnit().toMillis(repeatSubmit.interval());
         }
-
         if (interval < 1000) {
-            // TODO 抛出异常，重复提交的时间间隔 interval 必须大于 1 秒
+            throw new IllegalArgumentException("RepeatSubmit#interval: The interval is less than 1 s.");
         }
 
         // 针对本次请求设置一个唯一标识（请求uri + token + args）
-        HttpServletRequest request = ServletUtils.getRequest();
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String uri = request.getRequestURI();
+        // 该操作的操作令牌
         String token = request.getHeader("token");
-
+        if (token == null || token.isEmpty()) {
+            token = request.getParameter("token");
+        }
         Object[] args = joinPoint.getArgs();
         // key 由前缀 prefix + uri + token + args 组成
         String key = PREFIX + "key";

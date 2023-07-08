@@ -9,7 +9,7 @@ public enum SensitiveStrategy {
     /**
      * 用户名
      */
-    USERNAME(s -> s.replaceAll("(\\S)\\S(\\S*)", "$1*$2")),
+    CHINESE_USERNAME(s -> s.replaceAll("(\\S)\\S(\\S*)", "$1*$2")),
 
     /**
      * 身份证
@@ -19,7 +19,7 @@ public enum SensitiveStrategy {
     /**
      * 手机号
      */
-    PHONE(s -> s.replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2")),
+    CHINESE_PHONE(s -> s.replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2")),
 
     /**
      * 地址

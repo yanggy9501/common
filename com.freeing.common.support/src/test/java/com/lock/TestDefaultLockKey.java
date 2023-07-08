@@ -18,7 +18,6 @@ public class TestDefaultLockKey {
             pool.execute(() -> {
                 try {
                     lock.lock(String.valueOf(finalI % 5));
-                    System.out.println(String.valueOf(finalI % 5) + ": " + lock.getLockedKeyCount(String.valueOf(finalI % 5)));
                     Thread.sleep((int)(Math.random() * 1000));
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);

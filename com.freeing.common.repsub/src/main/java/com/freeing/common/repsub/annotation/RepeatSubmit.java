@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 public @interface RepeatSubmit {
     /**
      * 间隔时间（ms），小于该时间间隔则视为重复提交
-     * ps: 应该大于 1000
+     * ps: 必须大于 1 s
      *
      * @return int
      */

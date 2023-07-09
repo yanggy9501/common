@@ -48,7 +48,7 @@ public class NumberUtils extends org.apache.commons.lang3.math.NumberUtils {
      * @param number int类型字符串
      * @return int
      */
-    public static int parseInt(String number) {
+    public static int parseIntOrZero(String number) {
        return parseInt(number, 0);
     }
 
@@ -73,7 +73,7 @@ public class NumberUtils extends org.apache.commons.lang3.math.NumberUtils {
      * @param number int类型字符串
      * @return long
      */
-    public static long parseLong(String number) {
+    public static long parseLongOrZero(String number) {
         return parseLong(number, 0L);
     }
 
@@ -149,7 +149,7 @@ public class NumberUtils extends org.apache.commons.lang3.math.NumberUtils {
      * @param value 均值
      * @return 数组下标对
      */
-    public static String avgRangeLenght(int[] array, int value) {
+    public static String avgRangeLength(int[] array, int value) {
         int len = array.length;
         int sum;
         ArrayList<String> result = new ArrayList<>();
@@ -192,7 +192,7 @@ public class NumberUtils extends org.apache.commons.lang3.math.NumberUtils {
      */
     public static int sum(int[] array, int start, int end) {
         if (start < 0 || end >= array.length - 1) {
-            throw new IllegalArgumentException("Illegal range of array.");
+            throw new IndexOutOfBoundsException("Illegal range of array");
         }
         int sum = 0;
         for (int i = start; i <= end; i++) {

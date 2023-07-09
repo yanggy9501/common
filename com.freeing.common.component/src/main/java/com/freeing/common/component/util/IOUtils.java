@@ -18,10 +18,10 @@ public class IOUtils extends org.apache.commons.io.IOUtils {
      * @return String 文件内容
      * @throws IOException IOException
      */
-    public static String toString(File file) throws IOException {
+    public static String fileToString(File file) throws IOException {
         if (file.isFile()) {
             return org.apache.commons.io.IOUtils.toString(new BufferedReader(new FileReader(file)));
         }
-        throw new IllegalArgumentException("This is not file: " + file.getAbsolutePath());
+        throw new IllegalArgumentException("The " + file.getAbsolutePath() + " is not file");
     }
 }

@@ -20,11 +20,6 @@ public class R extends HashMap<String, Object> implements Serializable {
     private static final String CODE = "code";
 
     /**
-     * 错误状态码（面向开发者）
-     */
-    private static final String ERROR_CODE = "errorCode";
-
-    /**
      * 返回内容|提示用户信息(面向用户)
      */
     private static final String MSG = "msg";
@@ -102,7 +97,7 @@ public class R extends HashMap<String, Object> implements Serializable {
      * @param data 数据对象
      * @return R
      */
-    public static R error(int code, String msg, Object data) {
+    public static R error(String code, String msg, Object data) {
         R r = new R();
         r.put(CODE, code);
         if (msg == null || msg.isEmpty()) {
@@ -134,7 +129,7 @@ public class R extends HashMap<String, Object> implements Serializable {
      * @param msg 返回信息
      * @return R
      */
-    public static R error(int code, String msg) {
+    public static R error(String code, String msg) {
         return error(code, msg, null);
     }
 
@@ -304,19 +299,8 @@ public class R extends HashMap<String, Object> implements Serializable {
      * @param code 状态码
      * @return R
      */
-    public R code(int code) {
+    public R code(String code) {
         super.put(CODE, code);
-        return this;
-    }
-
-    /**
-     * 设置错误信息状态码
-     *
-     * @param errorCode 状态码
-     * @return
-     */
-    public R errorCode(int errorCode) {
-        super.put(ERROR_CODE, errorCode);
         return this;
     }
 

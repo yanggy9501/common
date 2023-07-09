@@ -1,8 +1,5 @@
 package com.freeing.common.component.constant;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * 返回状态码
  * 操作成功：1
@@ -15,52 +12,48 @@ public enum ResultCode {
     /**
      * 操作成功
      */
-    SUCCESS(200, "Operation success"),
+    SUCCESS("200", "Operation success"),
 
     /**
      * 操作失败
      */
-    FAIL(-1, "Operation fail"),
+    FAIL("-1", "Operation fail"),
 
     /**
      * 重复提交
      */
-    REPEAT_SUBMIT(201, "Repeat submit"),
+    REPEAT_SUBMIT("201", "Repeat submit"),
 
     /**
      * Exception
      */
-    ERROR(-2, "Unknown exception");
-
-    private static final Map<Integer, ResultCode> cache;
-
-    static {
-        cache = new HashMap<>();
-        for (ResultCode value : ResultCode.values()) {
-            cache.put(value.getCode(), value);
-        }
-    }
+    ERROR("-2", "Unknown exception");
 
     /**
      * 状态码
      */
-    private final int code;
+    private final String code;
 
     /**
      * 状态信息
      */
     private final String msg;
 
-    ResultCode(int code, String msg ) {
+    ResultCode(String code, String msg ) {
         this.code = code;
         this.msg = msg;
     }
 
-    public static ResultCode get(int code) {
-        return cache.get(code);
+    public static ResultCode get(String code) {
+        for (ResultCode value : ResultCode.values()) {
+            if (value.getCode().equals(code)) {
+                return value;
+            }
+        }
+        throw new IllegalArgumentException("Illegal R code '" + code + "'");
     }
 
-    public int getCode() {
+    public String getCode() {
         return code;
     }
 

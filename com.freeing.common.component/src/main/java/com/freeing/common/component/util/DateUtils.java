@@ -367,7 +367,6 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         Calendar cal = new GregorianCalendar();
         cal.setTime(getTodayBegin());
         cal.add(Calendar.DAY_OF_MONTH, 1);
-
         return cal.getTime();
     }
 
@@ -392,7 +391,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
         int dayofweek = cal.get(Calendar.DAY_OF_WEEK);
-        // 周日时
+        // 周日
         if (dayofweek == 1) {
             dayofweek += 7;
         } else {

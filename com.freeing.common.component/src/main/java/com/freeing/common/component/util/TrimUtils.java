@@ -18,20 +18,20 @@ public class TrimUtils {
      * 为对象中有 @Trim 注解的 String 属性去两边空格
      * {@link Trim}
      *
-     * @param ignored 忽略属性
+     * @param ignoredFiled 忽略属性
      * @param object 对象
      */
-    public static void trimByAnnotation(Object object, String... ignored) throws ReflectiveOperationException {
+    public static void trimByAnnotation(Object object, String... ignoredFiled) {
         if (object == null) {
             return;
         }
         HashSet<String> ignoredSet = new HashSet<>();
-        if (ignored != null) {
-            ignoredSet.addAll(Arrays.asList(ignored));
+        if (ignoredFiled != null) {
+            ignoredSet.addAll(Arrays.asList(ignoredFiled));
         }
         Class<?> clazz = object.getClass();
         while (clazz != null){
-            boolean TrimPresentType = clazz.isAnnotationPresent(Trim.class);
+            boolean trimPresentType = clazz.isAnnotationPresent(Trim.class);
             Field[] fields = clazz.getDeclaredFields();
             char[] chars;
             String fieldName;
@@ -44,10 +44,10 @@ public class TrimUtils {
                     continue;
                 }
                 // 类和属性都不存在 Trim 注解则跳过
-                if (!field.isAnnotationPresent(Trim.class) && !TrimPresentType) {
+                if (!field.isAnnotationPresent(Trim.class) && !trimPresentType) {
                     continue;
                 }
-                if (ignoredSet.contains(field.getName())) {
+                if (!ignoredSet.isEmpty() && ignoredSet.contains(field.getName())) {
                     continue;
                 }
                 try {

@@ -85,7 +85,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      * @param regex 正则表达式
      * @return 结果
      */
-    public static String substring(final String str, String regex) {
+    public static String substringByRegex(final String str, String regex) {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(str);
         if (matcher.find()) {

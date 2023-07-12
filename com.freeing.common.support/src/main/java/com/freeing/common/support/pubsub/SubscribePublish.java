@@ -39,7 +39,7 @@ public class SubscribePublish {
             processors,
             60,
             TimeUnit.SECONDS,
-            new LinkedBlockingQueue<>(Integer.MAX_VALUE),
+            new LinkedBlockingQueue<>(),
             new DefaultThreadFactory(),
             new ThreadPoolExecutor.CallerRunsPolicy()
         );

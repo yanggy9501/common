@@ -1,7 +1,7 @@
 package com.freeing.common.support.pubsub;
 
 /**
- * 发布者接口
+ * 发布者接口，发布 #getMessageType 方法返回类型的消息
  *
  * @author yanggy
  */
@@ -20,7 +20,7 @@ public interface IPublisher {
      */
     default void syncPublishMessage(Object message){
         if (getMessageType() == null){
-            throw new IllegalArgumentException("Message type can not null.");
+            throw new IllegalArgumentException("Message type can not be null");
         }
         SubscribePublish.getInstance().syncPublishMessage(getMessageType(), message);
     }
@@ -32,7 +32,7 @@ public interface IPublisher {
      */
     default void asyncPublishMessage(Object message){
         if (getMessageType() == null){
-            throw new IllegalArgumentException("Message type can not null.");
+            throw new IllegalArgumentException("Message type can not be null");
         }
         SubscribePublish.getInstance().asyncPublishMessage(getMessageType(), message);
     }

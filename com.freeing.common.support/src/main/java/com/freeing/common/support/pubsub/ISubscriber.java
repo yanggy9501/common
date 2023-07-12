@@ -1,7 +1,7 @@
 package com.freeing.common.support.pubsub;
 
 /**
- * 订阅者接口
+ * 订阅者接口, 订阅 #getMessageType 方法返回类型的消息
  */
 public interface ISubscriber {
     /**

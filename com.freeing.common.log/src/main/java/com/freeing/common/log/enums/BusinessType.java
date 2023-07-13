@@ -24,19 +24,24 @@ public enum BusinessType {
     UPDATE(3, "update"),
 
     /**
+     * 查询
+     */
+    QUERY(4, "query"),
+
+    /**
      * 授权
      */
-    GRANT(4, "grant"),
+    GRANT(5, "grant"),
 
     /**
      * 导出
      */
-    EXPORT(5, "export"),
+    EXPORT(6, "export"),
 
     /**
      * 导入
      */
-    IMPORT(6, "import"),
+    IMPORT(7, "import"),
 
     /**
      * 其它

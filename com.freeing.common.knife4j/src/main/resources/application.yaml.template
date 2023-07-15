@@ -1,6 +1,6 @@
 # 服务URL: http://localhost:port/doc.html
 # swagger 分组配置
-# ps: 该配置必须至少有两个分组，不然无法使用
+# ps: 该配置必须至少有两个分组，否则不生效
 app:
   swagger:
     enabled: true

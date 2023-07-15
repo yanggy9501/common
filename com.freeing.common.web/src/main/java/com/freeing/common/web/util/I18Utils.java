@@ -13,7 +13,7 @@ import java.util.Locale;
  * @author yanggy
  */
 public class I18Utils {
-    private static final Logger logger = LoggerFactory.getLogger(I18Utils.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(I18Utils.class);
 
     private final I18nLocaleResolver resolver;
 
@@ -30,7 +30,7 @@ public class I18Utils {
 
     @PostConstruct
     public void init() {
-        logger.info("load i18n files: {}", messageSource.getBasenameSet());
+        LOGGER.info("Load i18n files [{}]", messageSource.getBasenameSet());
         I18Utils.customLocaleResolver = resolver;
         I18Utils.customMessageSource = messageSource;
     }
@@ -84,7 +84,7 @@ public class I18Utils {
         try {
             content = customMessageSource.getMessage(code, args, locale);
         } catch (Exception e) {
-            logger.warn("fail to get i18n message : code = {}", code, e);
+            LOGGER.warn("Fail to get i18n code's message, code = {}", code, e);
             content = defaultMessage;
         }
         return content;

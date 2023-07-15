@@ -4,6 +4,7 @@ import com.freeing.common.web.config.I18nLocaleResolver;
 import com.freeing.common.web.config.I18nProperties;
 import com.freeing.common.web.util.I18Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,8 +16,9 @@ import java.nio.charset.StandardCharsets;
  * @author yanggy
  */
 @Configuration
+@ConditionalOnBean(value = {I18nProperties.class})
 @EnableConfigurationProperties(I18nProperties.class)
-public class WebAutoConfiguration {
+public class WebAutoI18nConfiguration {
 
     @Autowired
     private I18nProperties i18nProperties;

@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.freeing.common.knife.config.SwaggerAutoConfiguration
+  com.freeing.common.knife.SwaggerAutoConfiguration

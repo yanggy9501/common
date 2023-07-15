@@ -97,7 +97,7 @@ public class R extends HashMap<String, Object> implements Serializable {
      * @param data 数据对象
      * @return R
      */
-    public static R error(String code, String msg, Object data) {
+    public static R error(Integer code, String msg, Object data) {
         R r = new R();
         r.put(CODE, code);
         if (msg == null || msg.isEmpty()) {
@@ -129,7 +129,7 @@ public class R extends HashMap<String, Object> implements Serializable {
      * @param msg 返回信息
      * @return R
      */
-    public static R error(String code, String msg) {
+    public static R error(Integer code, String msg) {
         return error(code, msg, null);
     }
 
@@ -139,7 +139,7 @@ public class R extends HashMap<String, Object> implements Serializable {
      * @return 消息
      */
     public static R error() {
-        return R.error(null, null);
+        return R.error(ResultCode.ERROR.getCode(), ResultCode.ERROR.getMsg(), null);
     }
 
     /**
@@ -149,7 +149,7 @@ public class R extends HashMap<String, Object> implements Serializable {
      * @return R
      */
     public static R error(String msg) {
-        return R.error(msg, null);
+        return R.error(ResultCode.ERROR.getCode(), msg, null);
     }
 
     /**
@@ -159,7 +159,7 @@ public class R extends HashMap<String, Object> implements Serializable {
      * @return 数据对象
      */
     public static R error(Object data) {
-        return R.error(null, data);
+        return R.error(ResultCode.ERROR.getCode(), ResultCode.ERROR.getMsg(), data);
     }
 
     /**

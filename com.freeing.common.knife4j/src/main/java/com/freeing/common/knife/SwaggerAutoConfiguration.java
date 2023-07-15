@@ -1,5 +1,6 @@
-package com.freeing.common.knife.config;
+package com.freeing.common.knife;
 
+import com.freeing.common.knife.config.SwaggerProperties;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import org.springframework.beans.BeansException;

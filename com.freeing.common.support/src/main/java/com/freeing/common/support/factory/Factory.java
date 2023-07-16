@@ -1,5 +1,6 @@
 package com.freeing.common.support.factory;
 
+import com.sun.istack.internal.NotNull;
 import org.reflections.Reflections;
 
 import java.io.FileReader;
@@ -52,24 +53,10 @@ public abstract class Factory {
 
     private boolean init;
 
-    public Factory(List<String> extraFiles) {
-        this.extraFiles = extraFiles;
-    }
-
-    public Factory(List<String> propertiesFiles, ClassLoader classLoader) {
-        this.propertiesFiles = propertiesFiles;
-        this.classLoader = classLoader;
-    }
-
-    public Factory(List<String> packages, Class<?> factoryClassOf) {
-        this.packages = packages;
-        this.factoryClassOf = factoryClassOf;
-    }
-
     public Factory(List<String> packages,
             Class<?> factoryClassOf,
             List<String> propertiesFiles,
-            ClassLoader classLoader,
+            @NotNull ClassLoader classLoader,
             List<String> extraFiles) {
         this.packages = packages;
         this.factoryClassOf = factoryClassOf;

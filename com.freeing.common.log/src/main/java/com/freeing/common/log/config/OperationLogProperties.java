@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author yanggy
  */
 @ConfigurationProperties(prefix = "app.log.field")
-@ConditionalOnProperty(name = "app.log.enabled", havingValue = "false")
+@ConditionalOnProperty(name = "app.log.enabled", havingValue = "true")
 public class OperationLogProperties {
 
     /**

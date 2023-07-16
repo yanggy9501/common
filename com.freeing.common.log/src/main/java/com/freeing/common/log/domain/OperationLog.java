@@ -284,4 +284,31 @@ public class OperationLog {
     public void setExtra(Map<String, Object> extra) {
         this.extra = extra;
     }
+
+    @Override
+    public String toString() {
+        return "OperationLog{" +
+            "id=" + id +
+            ", businessType='" + businessType + '\'' +
+            ", description='" + description + '\'' +
+            ", module='" + module + '\'' +
+            ", userId='" + userId + '\'' +
+            ", username='" + username + '\'' +
+            ", requestIp='" + requestIp + '\'' +
+            ", classPath='" + classPath + '\'' +
+            ", actionMethod='" + actionMethod + '\'' +
+            ", requestUri='" + requestUri + '\'' +
+            ", httpMethod='" + httpMethod + '\'' +
+            ", params='" + params + '\'' +
+            ", result='" + result + '\'' +
+            ", exDesc='" + exDesc + '\'' +
+            ", exDetail='" + exDetail + '\'' +
+            ", startTime=" + startTime +
+            ", endTime=" + endTime +
+            ", consumingTime='" + consumingTime + '\'' +
+            ", status='" + status + '\'' +
+            ", extra=" + extra +
+            ", browser='" + browser + '\'' +
+            '}';
+    }
 }

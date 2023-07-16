@@ -58,8 +58,8 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
             for (String excludeField : excludeFields) {
                 list.add(excludeField.trim());
             }
-            list.addAll(Arrays.asList(EXCLUDE_PROPERTIES));
         }
+        list.addAll(Arrays.asList(EXCLUDE_PROPERTIES));
         EXCLUDE_PROPERTIES = list.toArray(new String[0]);
     }
 
@@ -135,7 +135,7 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
         } finally {
             // 设置耗时
             long endNanos = System.nanoTime();
-            operationLog.setConsumingTime(toString(endNanos - startNanos));
+            operationLog.setElapsedTime(toString(endNanos - startNanos));
             operationLog.setEndTime(new Date(System.currentTimeMillis()));
 
             // 发布事件，日志交给监听者处理

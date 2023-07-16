@@ -100,7 +100,7 @@ public class OperationLog {
     /**
      * 消耗时间，如  15 ms
      */
-    private String consumingTime;
+    private String elapsedTime;
 
     /**
      * 操作状态，成功，失败
@@ -253,12 +253,12 @@ public class OperationLog {
         this.endTime = endTime;
     }
 
-    public String getConsumingTime() {
-        return consumingTime;
+    public String getElapsedTime() {
+        return elapsedTime;
     }
 
-    public void setConsumingTime(String consumingTime) {
-        this.consumingTime = consumingTime;
+    public void setElapsedTime(String elapsedTime) {
+        this.elapsedTime = elapsedTime;
     }
 
     public String getBrowser() {
@@ -305,7 +305,7 @@ public class OperationLog {
             ", exDetail='" + exDetail + '\'' +
             ", startTime=" + startTime +
             ", endTime=" + endTime +
-            ", consumingTime='" + consumingTime + '\'' +
+            ", elapsedTime='" + elapsedTime + '\'' +
             ", status='" + status + '\'' +
             ", extra=" + extra +
             ", browser='" + browser + '\'' +

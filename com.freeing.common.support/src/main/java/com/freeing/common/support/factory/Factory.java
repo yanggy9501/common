@@ -100,32 +100,27 @@ public abstract class Factory {
 
     public Object get(String key) {
         if (SINGLETON_SET.contains(key)) {
-            Constructor<?> constructor = (Constructor<?>) OBJECT_POOL.get(key);
-            try {
-                return constructor.newInstance();
-            } catch (Exception ignored) {
-                return null;
-            }
+            return OBJECT_POOL.get(key);
         }
-        Object bean = OBJECT_POOL.get(key);
-        Objects.requireNonNull(bean, "The object is not existing.");
-        return bean;
+        Constructor<?> constructor = (Constructor<?>) OBJECT_POOL.get(key);
+        try {
+            return constructor.newInstance();
+        } catch (Exception ignored) {
+            return null;
+        }
     }
 
     public <T> T get(Class<T> type) {
         Object bean = OBJECT_POOL.get(type);
         if (SINGLETON_SET.contains(type.getCanonicalName())) {
-            Constructor<?> constructor = (Constructor<?>) bean;
-            try {
-                return (T) constructor.newInstance();
-            } catch (Exception ignored) {
-                return null;
-            }
-        }
-        if (bean != null && bean.getClass().isAssignableFrom(type)) {
             return (T) bean;
         }
-        return null;
+        Constructor<?> constructor = (Constructor<?>) bean;
+        try {
+            return (T) constructor.newInstance();
+        } catch (Exception ignored) {
+            return null;
+        }
     }
 
     private void scanClassPath() {
@@ -197,14 +192,14 @@ public abstract class Factory {
             Object bean = constructor.newInstance();
             if (isSingleton) {
                 SINGLETON_SET.add(key);
-                OBJECT_POOL.put(key, constructor);
-                OBJECT_POOL.put(clazz, constructor);
-            } else {
                 OBJECT_POOL.put(key, bean);
                 OBJECT_POOL.put(clazz, bean);
+            } else {
+                OBJECT_POOL.put(key, constructor);
+                OBJECT_POOL.put(clazz, constructor);
             }
 
-        }  catch (NoSuchMethodException
+        } catch (NoSuchMethodException
                   | InstantiationException
                   | InvocationTargetException
                   | IllegalAccessException ex) {

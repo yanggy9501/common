@@ -10,6 +10,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConditionalOnProperty(name = "app.log.enabled", havingValue = "false")
 public class OperationLogProperties {
 
+    /**
+     * 日志记录需要忽略的属性字段，多个则以逗号隔开，如：field1,field2
+     */
     private String excludeProperties;
 
     public String getExcludeProperties() {

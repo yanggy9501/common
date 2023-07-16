@@ -1,7 +1,9 @@
 package com.freeing.common.log.aspect;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.support.spring.PropertyPreFilters;
 import com.freeing.common.log.annotation.Log;
+import com.freeing.common.log.config.OperationLogProperties;
 import com.freeing.common.log.domain.OperationLog;
 import com.freeing.common.log.event.LogEvent;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -9,15 +11,19 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -28,12 +34,33 @@ import java.util.concurrent.TimeUnit;
  * @author yanggy
  */
 public abstract class BaseLogAspect implements ApplicationContextAware {
+    /**
+     * 排除敏感属性字段
+     */
+    private static String[] EXCLUDE_PROPERTIES = {"password", "oldPassword", "newPassword"};
 
     private ApplicationContext applicationContext;
+
+    @Autowired
+    private OperationLogProperties operationLogProperties;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
+    }
+
+    @PostConstruct
+    public void init() {
+        String excludeProperties = operationLogProperties.getExcludeProperties();
+        ArrayList<String> list = new ArrayList<>();
+        if (excludeProperties != null) {
+            String[] excludeFields = excludeProperties.split(",");
+            for (String excludeField : excludeFields) {
+                list.add(excludeField.trim());
+            }
+            list.addAll(Arrays.asList(EXCLUDE_PROPERTIES));
+        }
+        EXCLUDE_PROPERTIES = list.toArray(new String[0]);
     }
 
     /***
@@ -73,12 +100,12 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
         operationLog.setHttpMethod(getRequest().getMethod());
         operationLog.setRequestUri(getRequest().getRequestURI());
         operationLog.setRequestIp(getIpAddr(getRequest()));
-
+        Object[] args = null;
         if (annoLog.enableSaveParma()) {
             // 获取访问的方法的参数
-            Object[] args = pjp.getArgs();
+            args = pjp.getArgs();
             if (args != null && args.length > 0) {
-                operationLog.setParams(subString(JSONArray.toJSONString(args), 2048));
+                operationLog.setParams(subString(JSONArray.toJSONString(args, excludePropertyFilter()), 2048));
             }
         }
 
@@ -88,14 +115,15 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
         Object result;
         try {
             //让代理方法执行
+            beforeProceed(operationLog, args);
             result = pjp.proceed();
-
             if (annoLog.enableSaveResult()) {
                 // 获取访问的方法的请求参数
                 if (result != null) {
-                    operationLog.setParams(subString(JSONArray.toJSONString(result), 2048));
+                    operationLog.setResult(subString(JSONArray.toJSONString(result, excludePropertyFilter()), 2048));
                 }
             }
+            afterProceed(operationLog, result);
             operationLog.setStatus("1");
         } catch (Throwable ex) {
             // 设置异常信息
@@ -116,14 +144,39 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
         return result;
     }
 
-
-    protected abstract String getUsername();
-
-    protected abstract String getUserId();
-
-    protected void handlerExtraAtferFinish() {
+    /**
+     * 目标方法执行前
+     *
+     * @param operationLog 日志实体类
+     * @param args 目标方法参数
+     */
+    protected void beforeProceed(OperationLog operationLog, Object[] args) {
 
     }
+
+    /**
+     * 目标方法之后
+     *
+     * @param operationLog 日志实体类
+     * @param result 目标方法返回结果
+     */
+    private void afterProceed(OperationLog operationLog, Object result) {
+
+    }
+
+    /**
+     * 获取操作人
+     *
+     * @return
+     */
+    protected abstract String getUsername();
+
+    /**
+     * 获取操作人 ID
+     *
+     * @return
+     */
+    protected abstract String getUserId();
 
     private static String subString(String str, int maxLength) {
         if (str == null) {
@@ -213,5 +266,12 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
             default:
                 throw new AssertionError();
         }
+    }
+
+    /**
+     * 忽略敏感属性
+     */
+    public PropertyPreFilters.MySimplePropertyPreFilter excludePropertyFilter() {
+        return new PropertyPreFilters().addFilter().addExcludes(EXCLUDE_PROPERTIES);
     }
 }

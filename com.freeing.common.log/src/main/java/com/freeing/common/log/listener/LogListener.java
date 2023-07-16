@@ -3,7 +3,6 @@ package com.freeing.common.log.listener;
 import com.freeing.common.log.domain.OperationLog;
 import com.freeing.common.log.event.LogEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.scheduling.annotation.Async;
 
 import java.util.function.Consumer;
 
@@ -23,7 +22,6 @@ public class LogListener {
         this.consumer = consumer;
     }
 
-    @Async
     @EventListener(LogEvent.class)
     public void saveLog(LogEvent event) {
         OperationLog optLog = (OperationLog) event.getSource();

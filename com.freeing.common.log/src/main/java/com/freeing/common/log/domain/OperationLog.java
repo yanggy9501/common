@@ -108,14 +108,14 @@ public class OperationLog {
     private String status;
 
     /**
-     * 其他额外信息
-     */
-    private Map<String, Object> extra;
-
-    /**
      * 浏览器信息
      */
     private String browser;
+
+    /**
+     * 其他额外信息
+     */
+    private Map<String, Object> extra;
 
     public Long getId() {
         return id;
@@ -307,8 +307,8 @@ public class OperationLog {
             ", endTime=" + endTime +
             ", elapsedTime='" + elapsedTime + '\'' +
             ", status='" + status + '\'' +
-            ", extra=" + extra +
             ", browser='" + browser + '\'' +
+            ", extra=" + extra +
             '}';
     }
 }

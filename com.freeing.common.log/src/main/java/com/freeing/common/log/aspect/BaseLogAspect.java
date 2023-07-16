@@ -29,7 +29,7 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 操作日志使用 spring event 异步入库
+ * 操作日志基础切面类
  *
  * @author yanggy
  */

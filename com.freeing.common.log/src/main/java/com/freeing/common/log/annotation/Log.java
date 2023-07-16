@@ -29,10 +29,10 @@ public @interface Log {
     /**
      * 是否保存请求参数
      */
-    boolean enableSaveParma() default false;
+    boolean enableSaveParma() default true;
 
     /**
      * 是否保存响应结果
      */
-    boolean enableSaveResult() default false;
+    boolean enableSaveResult() default true;
 }

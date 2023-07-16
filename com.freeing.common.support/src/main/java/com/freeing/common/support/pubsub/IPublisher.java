@@ -18,7 +18,7 @@ public interface IPublisher {
      *
      * @param message	消息实体
      */
-    default void syncPublishMessage(Object message){
+    default void syncPublishMessage(Message message){
         if (getMessageType() == null){
             throw new IllegalArgumentException("Message type can not be null");
         }
@@ -30,7 +30,7 @@ public interface IPublisher {
      *
      * @param message 消息实体
      */
-    default void asyncPublishMessage(Object message){
+    default void asyncPublishMessage(Message message){
         if (getMessageType() == null){
             throw new IllegalArgumentException("Message type can not be null");
         }

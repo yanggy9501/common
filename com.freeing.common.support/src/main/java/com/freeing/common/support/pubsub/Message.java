@@ -1,17 +1,17 @@
-package com.freeing.common.support.observer;
+package com.freeing.common.support.pubsub;
 
 import java.util.Map;
 
 /**
- * 观察者模式的通知事件
+ * 发布订阅的消息
  *
  * @author yanggy
  */
-public class NotifyEvent {
+public class Message {
     /**
-     * 通知事件，一级分类
+     * 消息类型
      */
-    private String event;
+    private String messageType;
 
     /**
      * 标签，二级分类
@@ -28,32 +28,27 @@ public class NotifyEvent {
      */
     private Map<String, Object> extra;
 
-    public NotifyEvent() {
+    public Message() {
 
     }
 
-    public NotifyEvent(String event, Object data) {
-        this(event, null, data, null);
+    public Message(String messageType, Object data) {
+        this(messageType, null, data, null);
     }
 
-    public NotifyEvent(String event, String tag, Object data, Map<String, Object> extra) {
-        this.event = event;
+    public Message(String messageType, String tag, Object data, Map<String, Object> extra) {
+        this.messageType = messageType;
         this.tag = tag;
         this.data = data;
         this.extra = extra;
     }
 
-    public NotifyEvent(String event, Map<String, Object> extra) {
-        this.event = event;
-        this.extra = extra;
+    public String getMessageType() {
+        return messageType;
     }
 
-    public String getEvent() {
-        return event;
-    }
-
-    public void setEvent(String event) {
-        this.event = event;
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
     }
 
     public String getTag() {
@@ -82,8 +77,9 @@ public class NotifyEvent {
 
     @Override
     public String toString() {
-        return "NotifyEvent{" +
-            "event='" + event + '\'' +
+        return "Message{" +
+            "messageType='" + messageType + '\'' +
+            ", tag='" + tag + '\'' +
             ", data=" + data +
             ", extra=" + extra +
             '}';

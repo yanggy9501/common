@@ -6,6 +6,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.util.List;
 
 /**
+ * spring:
+ *   # 国际化
+ *   enabled: true
+ *   messages:
+ *     basename: i18n/message
+ *
  * @author yanggy
  */
 @ConditionalOnProperty(name = "spring.messages.enabled", havingValue = "true")

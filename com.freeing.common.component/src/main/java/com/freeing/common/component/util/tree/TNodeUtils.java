@@ -24,8 +24,11 @@ public class TNodeUtils {
      * @param childPredicate 孩子节点断言 T = 可能的父节点, U = 可能的孩子节点
      * @return tree
      */
-    public static <K, V> List<TNode<K, V>> buildTree(List<TNode<K, V>> nodes, Predicate<TNode<K, V>> rootPredicate,
-            BiPredicate<TNode<K, V>, TNode<K, V>> childPredicate, Comparator<TNode<K, V>> comparator) {
+    public static <K, V> List<TNode<K, V>> buildTree(
+        List<TNode<K, V>> nodes,
+        Predicate<TNode<K, V>> rootPredicate,
+        BiPredicate<TNode<K, V>, TNode<K, V>> childPredicate,
+        Comparator<TNode<K, V>> comparator) {
         List<TNode<K, V>> rootNodes = nodes.stream()
             .filter(rootPredicate)
             .sorted(comparator).collect(Collectors.toList());
@@ -36,8 +39,10 @@ public class TNodeUtils {
         return rootNodes;
     }
 
-    private static <K, V> void doBuildTreeChildren(TNode<K, V> root, List<TNode<K, V>> nodes,
-            BiPredicate<TNode<K, V>, TNode<K, V>> childPredicate, Comparator<TNode<K, V>> comparator, int level) {
+    private static <K, V> void doBuildTreeChildren(TNode<K, V> root,
+        List<TNode<K, V>> nodes,
+        BiPredicate<TNode<K, V>, TNode<K, V>> childPredicate,
+        Comparator<TNode<K, V>> comparator, int level) {
         List<TNode<K, V>> childrenNodes = new ArrayList<>();
         for (TNode<K, V> mightChildNode : nodes) {
             if (childPredicate.test(root, mightChildNode)) {

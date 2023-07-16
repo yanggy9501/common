@@ -31,5 +31,5 @@ public interface ISubscriber {
      *
      * @param message 消息实例
      */
-    void receiveMessage(Object message);
+    void receiveMessage(Message message);
 }

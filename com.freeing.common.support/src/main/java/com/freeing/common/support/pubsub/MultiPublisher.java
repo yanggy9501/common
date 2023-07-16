@@ -12,7 +12,7 @@ public interface MultiPublisher {
      * @param messageType 消息类型
      * @param message	消息实体
      */
-    default void syncPublishMessage(String messageType, Object message){
+    default void syncPublishMessage(String messageType, Message message){
         if (messageType == null){
             throw new IllegalArgumentException("Message type can not be null");
         }
@@ -25,7 +25,7 @@ public interface MultiPublisher {
      * @param messageType 消息类型
      * @param message 消息实体
      */
-    default void asyncPublishMessage(String messageType, Object message){
+    default void asyncPublishMessage(String messageType, Message message){
         if (messageType == null){
             throw new IllegalArgumentException("Message type can not be null");
         }

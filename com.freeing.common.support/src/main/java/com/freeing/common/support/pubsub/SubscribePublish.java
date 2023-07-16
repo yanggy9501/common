@@ -118,11 +118,11 @@ public class SubscribePublish {
      * @param messageType 消息类型
      * @param message 消息
      */
-    public void syncPublishMessage(String messageType, Object message) {
+    public void syncPublishMessage(String messageType, Message message) {
         sendMessage(messageType, message);
     }
 
-    private void sendMessage(String messageType, Object message) {
+    private void sendMessage(String messageType, Message message) {
         if (!subscriberMap.containsKey(messageType)) {
             return;
         }
@@ -135,7 +135,7 @@ public class SubscribePublish {
      * @param messageType 消息类型
      * @param message     消息
      */
-    public void asyncPublishMessage(String messageType, Object message) {
+    public void asyncPublishMessage(String messageType, Message message) {
         if (!subscriberMap.containsKey(messageType)) {
             return;
         }

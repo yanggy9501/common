@@ -83,6 +83,8 @@ public class I18Utils {
         String content;
         try {
             content = customMessageSource.getMessage(code, args, locale);
+        } catch (NullPointerException e) {
+            throw new NullPointerException("May not configure yaml 'spring.messages'. Look I18nProperties.class");
         } catch (Exception e) {
             LOGGER.warn("Fail to get i18n code's message, code = {}", code, e);
             content = defaultMessage;

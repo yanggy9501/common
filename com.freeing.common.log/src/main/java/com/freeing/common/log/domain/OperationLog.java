@@ -108,11 +108,6 @@ public class OperationLog {
     private String status;
 
     /**
-     * 浏览器信息
-     */
-    private String browser;
-
-    /**
      * 其他额外信息
      */
     private Map<String, Object> extra;
@@ -261,14 +256,6 @@ public class OperationLog {
         this.elapsedTime = elapsedTime;
     }
 
-    public String getBrowser() {
-        return browser;
-    }
-
-    public void setBrowser(String browser) {
-        this.browser = browser;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -307,7 +294,6 @@ public class OperationLog {
             ", endTime=" + endTime +
             ", elapsedTime='" + elapsedTime + '\'' +
             ", status='" + status + '\'' +
-            ", browser='" + browser + '\'' +
             ", extra=" + extra +
             '}';
     }

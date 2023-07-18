@@ -79,57 +79,57 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
             Docket docket = createDocket(swaggerProperties);
             configurableBeanFactory.registerSingleton(swaggerProperties.getTitle(), docket);
             docketList.add(docket);
-            return docketList;
-        }
-        // 分组创建
-        for (String groupName : swaggerProperties.getDocket().keySet()){
-            SwaggerProperties.DocketInfo docketInfo = swaggerProperties.getDocket().get(groupName);
-            ApiInfo apiInfo = new ApiInfoBuilder()
-                .title(docketInfo.getTitle().isEmpty() ? swaggerProperties.getTitle() : docketInfo.getTitle())
-                .description(docketInfo.getDescription().isEmpty() ?
-                    swaggerProperties.getDescription() : docketInfo.getDescription())
-                .version(docketInfo.getVersion().isEmpty() ?
-                    swaggerProperties.getVersion() : docketInfo.getVersion())
-                .licenseUrl(docketInfo.getLicenseUrl().isEmpty() ?
-                    swaggerProperties.getLicenseUrl() : docketInfo.getLicenseUrl())
-                .contact(new Contact(
-                        docketInfo.getContact().getName().isEmpty() ?
-                            swaggerProperties.getContact().getName() : docketInfo.getContact().getName(),
-                        docketInfo.getContact().getUrl().isEmpty() ?
-                            swaggerProperties.getContact().getUrl() : docketInfo.getContact().getUrl(),
-                        docketInfo.getContact().getEmail().isEmpty() ?
-                            swaggerProperties.getContact().getEmail() : docketInfo.getContact().getEmail()
+        } else {
+        // 分组
+            for (String groupName : swaggerProperties.getDocket().keySet()){
+                SwaggerProperties.DocketInfo docketInfo = swaggerProperties.getDocket().get(groupName);
+                ApiInfo apiInfo = new ApiInfoBuilder()
+                    .title(docketInfo.getTitle().isEmpty() ? swaggerProperties.getTitle() : docketInfo.getTitle())
+                    .description(docketInfo.getDescription().isEmpty() ?
+                        swaggerProperties.getDescription() : docketInfo.getDescription())
+                    .version(docketInfo.getVersion().isEmpty() ?
+                        swaggerProperties.getVersion() : docketInfo.getVersion())
+                    .licenseUrl(docketInfo.getLicenseUrl().isEmpty() ?
+                        swaggerProperties.getLicenseUrl() : docketInfo.getLicenseUrl())
+                    .contact(new Contact(
+                            docketInfo.getContact().getName().isEmpty() ?
+                                swaggerProperties.getContact().getName() : docketInfo.getContact().getName(),
+                            docketInfo.getContact().getUrl().isEmpty() ?
+                                swaggerProperties.getContact().getUrl() : docketInfo.getContact().getUrl(),
+                            docketInfo.getContact().getEmail().isEmpty() ?
+                                swaggerProperties.getContact().getEmail() : docketInfo.getContact().getEmail()
+                        )
                     )
-                )
-                .termsOfServiceUrl(docketInfo.getTermsOfServiceUrl().isEmpty() ?
-                    swaggerProperties.getTermsOfServiceUrl() : docketInfo.getTermsOfServiceUrl())
-                .build();
+                    .termsOfServiceUrl(docketInfo.getTermsOfServiceUrl().isEmpty() ?
+                        swaggerProperties.getTermsOfServiceUrl() : docketInfo.getTermsOfServiceUrl())
+                    .build();
 
-            // base-path处理
-            // 当没有配置任何path的时候，解析/**
-            if (docketInfo.getBasePath().isEmpty()) {
-                docketInfo.getBasePath().add("/**");
-            }
-            List<Predicate<String>> basePath = new ArrayList<>(docketInfo.getBasePath().size());
-            for (String path : docketInfo.getBasePath()) {
-                basePath.add(PathSelectors.ant(path));
-            }
+                // base-path处理
+                // 当没有配置任何path的时候，解析/**
+                if (docketInfo.getBasePath().isEmpty()) {
+                    docketInfo.getBasePath().add("/**");
+                }
+                List<Predicate<String>> basePath = new ArrayList<>(docketInfo.getBasePath().size());
+                for (String path : docketInfo.getBasePath()) {
+                    basePath.add(PathSelectors.ant(path));
+                }
 
-            // exclude-path处理
-            List<Predicate<String>> excludePath = new ArrayList<>(docketInfo.getExcludePath().size());
-            for (String path : docketInfo.getExcludePath()) {
-                excludePath.add(PathSelectors.ant(path));
+                // exclude-path处理
+                List<Predicate<String>> excludePath = new ArrayList<>(docketInfo.getExcludePath().size());
+                for (String path : docketInfo.getExcludePath()) {
+                    excludePath.add(PathSelectors.ant(path));
+                }
+                Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                    .host(swaggerProperties.getHost())
+                    .apiInfo(apiInfo)
+                    .groupName(docketInfo.getGroup())
+                    .select()
+                    .apis(RequestHandlerSelectors.basePackage(docketInfo.getBasePackage()))
+                    .paths(Predicates.and(Predicates.not(Predicates.or(excludePath)), Predicates.or(basePath)))
+                    .build();
+                configurableBeanFactory.registerSingleton(groupName, docket);
+                docketList.add(docket);
             }
-            Docket docket = new Docket(DocumentationType.SWAGGER_2)
-                .host(swaggerProperties.getHost())
-                .apiInfo(apiInfo)
-                .groupName(docketInfo.getGroup())
-                .select()
-                .apis(RequestHandlerSelectors.basePackage(docketInfo.getBasePackage()))
-                .paths(Predicates.and(Predicates.not(Predicates.or(excludePath)), Predicates.or(basePath)))
-                .build();
-            configurableBeanFactory.registerSingleton(groupName, docket);
-            docketList.add(docket);
         }
         return docketList;
     }

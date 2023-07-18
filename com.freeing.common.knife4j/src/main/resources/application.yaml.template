@@ -12,7 +12,7 @@ app:
         version: 接口文档版本
         licenseUrl: 许可证 URL
         termsOfServiceUrl: 服务条款URL
-        base-package: com.freeing.mall.controller.user
+        base-package: com.freeing.mall.controller.user # 某一组 controller 的包
         basePath:
           - 解析的url规则, 该路径为ant路径，指定controller中哪些url会被解析成文档
           - 解析的url规则, 该路径为ant路径，指定controller中哪些url会被解析成文档
@@ -24,9 +24,10 @@ app:
           name: 联系人
           url: 联系人url
           email: 联系人email
-      menu:
+      menu: # 自定义分组模块名
         title: 菜单模块
-        base-package: com.freeing.mall.controller.menu
+        base-package: com.freeing.mall.controller.menu # 某一组 controller 的包
+        # ...
 
 # 案例2 - 单组文档方式
 app:

@@ -76,12 +76,12 @@ public class SubscribePublish {
      */
     public void subscribe(ISubscriber subscriber) {
         if (subscriber == null) {
-            throw new IllegalArgumentException("Fail to subscribe! subscriber can not null.");
+            throw new IllegalArgumentException("Fail to subscribe! subscriber can not be null");
         }
         // 获取消息类型
         String messageType = subscriber.getMessageType();
         if (messageType == null) {
-            throw new IllegalArgumentException("Fail to subscribe! Message type can not null.");
+            throw new IllegalArgumentException("Fail to subscribe! Message type can not be null.");
         }
         // 绑定订阅对象
         if (subscriberMap.get(messageType) == null) {
@@ -124,7 +124,7 @@ public class SubscribePublish {
 
     private void sendMessage(String messageType, Message message) {
         if (!subscriberMap.containsKey(messageType)) {
-            return;
+            throw new IllegalArgumentException("Message type '" + messageType + "' is not existing");
         }
         subscriberMap.get(messageType).forEach(subscriber -> subscriber.receiveMessage(message));
     }
@@ -137,7 +137,7 @@ public class SubscribePublish {
      */
     public void asyncPublishMessage(String messageType, Message message) {
         if (!subscriberMap.containsKey(messageType)) {
-            return;
+            throw new IllegalArgumentException("Message type '" + messageType + "' is not existing");
         }
         /*
          * 此处把 for 循环写在threadPool.submit方法外面代表每个订阅者对消息的处理都是由一个线程执行

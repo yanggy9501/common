@@ -30,11 +30,12 @@ public class GetterSetterMethodInvoker implements Invoker {
     }
 
     @Override
-    public Object invoke(Object target, Object[] args) throws IllegalAccessException, InvocationTargetException {
+    public Object invoke(Object target, Object... args) throws IllegalAccessException, InvocationTargetException {
         try {
             return method.invoke(target, args);
         } catch (IllegalAccessException e) {
             method.setAccessible(true);
+            String[] strings = new String[2];
             return method.invoke(target, args);
         }
     }

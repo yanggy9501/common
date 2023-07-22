@@ -5,8 +5,7 @@ import com.freeing.common.support.reflection.invoker.GetterSetterMethodInvoker;
 import com.freeing.common.support.reflection.invoker.Invoker;
 import com.freeing.common.support.reflection.property.PropertyNameHelper;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 import java.util.*;
 
 /**
@@ -17,6 +16,7 @@ public class Reflector {
     private final Class<?> type;
     private String[] readablePropertyNames;
     private String[] writablePropertyNames;
+    private final Map<String, Field> fields = new HashMap<>();
     private final Map<String, Invoker> setMethods = new HashMap<>();
     private final Map<String, Invoker> getMethods = new HashMap<>();
     private final Map<String, Class<?>> setTypes = new HashMap<>();
@@ -44,13 +44,14 @@ public class Reflector {
 
     private void addDefaultConstructor(Class<?> clazz) {
         Constructor<?>[] allConstruct = clazz.getDeclaredConstructors();
-        if (allConstruct.length == 1) {
-            defaultConstructor = allConstruct[0];
-            return;
+        Optional<Constructor<?>> optional = Arrays.stream(allConstruct)
+            .filter(constructor -> constructor.getParameterTypes().length == 0)
+            .findAny();
+        if (optional.isPresent()) {
+            this.defaultConstructor = optional.get();
+        } else {
+            throw new NullPointerException(clazz.getName() + " need a constructor with no parameters");
         }
-        Arrays.stream(allConstruct).filter(constructor -> constructor.getParameterTypes().length == 0)
-            .findAny()
-            .ifPresent(constructor -> this.defaultConstructor = constructor);
     }
 
     private void addGetMethods(Class<?> clazz) {
@@ -76,7 +77,20 @@ public class Reflector {
     }
 
     private void addFields(Class<?> clazz) {
-        // TODO
+        while (clazz != null){
+            Field[] classFields = clazz.getDeclaredFields();
+            String fieldName;
+            for (Field field : classFields) {
+                // 忽略 final 和 static 属性
+                if (Modifier.isFinal(field.getModifiers()) || Modifier.isStatic(field.getModifiers())) {
+                    continue;
+                }
+                fieldName = field.getName();
+                this.fields.put(fieldName, field);
+            }
+            // 处理父类
+            clazz = clazz.getSuperclass();
+        }
     }
 
 

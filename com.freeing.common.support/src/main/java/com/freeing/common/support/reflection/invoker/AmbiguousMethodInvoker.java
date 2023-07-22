@@ -14,7 +14,7 @@ public class AmbiguousMethodInvoker extends GetterSetterMethodInvoker {
     }
 
     @Override
-    public Object invoke(Object target, Object[] args) throws IllegalAccessException {
+    public Object invoke(Object target, Object... args) throws IllegalAccessException {
         throw new IllegalAccessException(exceptionMessage);
     }
 

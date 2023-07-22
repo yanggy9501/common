@@ -62,8 +62,7 @@ public class OperationLog {
     private String requestUri;
 
     /**
-     * 请求类型
-     * HttpMethod {GET; POST; PUT; DELETE; PATCH; TRACE; HEAD; OPTIONS}
+     * 请求类型 HttpMethod {GET; POST; PUT; DELETE; PATCH; TRACE; HEAD; OPTIONS}
      */
     private String httpMethod;
 
@@ -98,7 +97,7 @@ public class OperationLog {
     private Date endTime;
 
     /**
-     * 消耗时间，如  15 ms
+     * 消耗时间，如 15 ms
      */
     private String elapsedTime;
 

@@ -87,12 +87,12 @@ public class RangeUtils {
             String[] splitArr = range.split(StrPool.SEMICOLON);
             for (String split : splitArr) {
                 if (!split.contains(StrPool.HYPHEN)) {
-                    numbers.add(NumberUtils.parseInt(split));
+                    numbers.add(NumberUtils.parseIntOrZero(split));
                     continue;
                 }
                 String[] splitItems = split.split(StrPool.HYPHEN);
-                int start = NumberUtils.parseInt(splitItems[0]);
-                int end = NumberUtils.parseInt(splitItems[1]);
+                int start = NumberUtils.parseIntOrZero(splitItems[0]);
+                int end = NumberUtils.parseIntOrZero(splitItems[1]);
                 if (start >= end) {
                     throw new IllegalArgumentException("Illegal range argument: " + split);
                 }

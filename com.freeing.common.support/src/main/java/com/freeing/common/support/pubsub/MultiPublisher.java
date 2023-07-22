@@ -1,7 +1,7 @@
 package com.freeing.common.support.pubsub;
 
 /**
- * 发布者接口
+ * 发布者接口，可发布任意类型的消息
  *
  * @author yanggy
  */

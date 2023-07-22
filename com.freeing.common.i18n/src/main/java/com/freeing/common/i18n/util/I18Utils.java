@@ -1,10 +1,10 @@
-package com.freeing.common.web.util;
+package com.freeing.common.i18n.util;
 
-import com.freeing.common.web.config.I18nLocaleResolver;
-import org.apache.commons.lang3.StringUtils;
+import com.freeing.common.i18n.config.I18nLocaleResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import java.util.Locale;

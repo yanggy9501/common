@@ -1,6 +1,7 @@
-package com.freeing.common.web.config;
+package com.freeing.common.i18n.config;
 
-import com.freeing.common.web.util.ServletUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.LocaleResolver;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +16,7 @@ public class I18nLocaleResolver implements LocaleResolver {
     public String LANG_KEY = "lang";
 
     public Locale getLocal() {
-        return resolveLocale(ServletUtils.getRequest());
+        return resolveLocale(getRequest());
     }
 
     /**
@@ -49,17 +50,21 @@ public class I18nLocaleResolver implements LocaleResolver {
      * 用于实现 Local 的切换，如用户想要切换中英文展示样式
      * 需要配置拦截器去设置国际化，调用 I18nLocaleResolver#setLocale
      *
-     * @param httpServletRequest
-     * @param httpServletResponse
+     * @param request
+     * @param response
      * @param locale
      */
     @Override
-    public void setLocale(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Locale locale) {
+    public void setLocale(HttpServletRequest request, HttpServletResponse response, Locale locale) {
         if (locale != null) {
             String language = locale.getLanguage();
             String country = locale.getCountry();
             String localeStr = country == null || country.isEmpty() ? language : language + "_" + country;
-            httpServletRequest.setAttribute(LANG_KEY, localeStr);
+            request.setAttribute(LANG_KEY, localeStr);
         }
+    }
+
+    private static HttpServletRequest getRequest() {
+        return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
     }
 }

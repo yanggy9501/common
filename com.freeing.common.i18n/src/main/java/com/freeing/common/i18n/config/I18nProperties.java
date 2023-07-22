@@ -1,6 +1,5 @@
-package com.freeing.common.web.config;
+package com.freeing.common.i18n.config;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.List;
@@ -8,13 +7,11 @@ import java.util.List;
 /**
  * spring:
  *   # 国际化
- *   enabled: true
  *   messages:
  *     basename: i18n/message
  *
  * @author yanggy
  */
-@ConditionalOnProperty(name = "spring.messages.enabled", havingValue = "true")
 @ConfigurationProperties(prefix = "spring.messages")
 public class I18nProperties {
 

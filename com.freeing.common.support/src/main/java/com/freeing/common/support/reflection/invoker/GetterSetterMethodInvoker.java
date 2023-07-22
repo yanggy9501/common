@@ -35,7 +35,6 @@ public class GetterSetterMethodInvoker implements Invoker {
             return method.invoke(target, args);
         } catch (IllegalAccessException e) {
             method.setAccessible(true);
-            String[] strings = new String[2];
             return method.invoke(target, args);
         }
     }

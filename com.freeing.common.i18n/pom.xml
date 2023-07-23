@@ -39,6 +39,13 @@
             <version>${spring.version}</version>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -79,6 +86,7 @@
                 <directory>src/main/resources</directory>
                 <includes>
                     <include>**/*.factories</include>
+                    <include>**/readme.md</include>
                 </includes>
                 <filtering>false</filtering>
             </resource>

@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class OperationLog {
     /**
-     * 日志自增主键
+     * 日志主键
      */
     private Long id;
 
@@ -32,17 +32,17 @@ public class OperationLog {
     private String module;
 
     /**
-     * 操作 ID
+     * 操作人 ID
      */
-    private String userId;
+    private String operatorId;
 
     /**
      * 操作人
      */
-    private String username;
+    private String operatorName;
 
     /**
-     * 操作 IP
+     * 请求 IP
      */
     private String requestIp;
 
@@ -143,20 +143,20 @@ public class OperationLog {
         this.module = module;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getOperatorId() {
+        return operatorId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setOperatorId(String operatorId) {
+        this.operatorId = operatorId;
     }
 
-    public String getUsername() {
-        return username;
+    public String getOperatorName() {
+        return operatorName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setOperatorName(String operatorName) {
+        this.operatorName = operatorName;
     }
 
     public String getRequestIp() {
@@ -278,8 +278,8 @@ public class OperationLog {
             ", businessType='" + businessType + '\'' +
             ", description='" + description + '\'' +
             ", module='" + module + '\'' +
-            ", userId='" + userId + '\'' +
-            ", username='" + username + '\'' +
+            ", userId='" + operatorId + '\'' +
+            ", username='" + operatorName + '\'' +
             ", requestIp='" + requestIp + '\'' +
             ", classPath='" + classPath + '\'' +
             ", actionMethod='" + actionMethod + '\'' +

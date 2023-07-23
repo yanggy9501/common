@@ -76,8 +76,8 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
         OperationLog operationLog = new OperationLog();
 
         // 设置登录信息
-        operationLog.setUsername(getUsername());
-        operationLog.setUserId(getUserId());
+        operationLog.setOperatorName(getOperatorName());
+        operationLog.setOperatorId(getOperatorId());
 
         // 设置 class 信息
         MethodSignature methodSignature = (MethodSignature) pjp.getSignature();
@@ -97,9 +97,12 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
         operationLog.setModule(annoLog.module());
 
         // 设置请求 Request 信息
-        operationLog.setHttpMethod(getRequest().getMethod());
-        operationLog.setRequestUri(getRequest().getRequestURI());
-        operationLog.setRequestIp(getIpAddr(getRequest()));
+        if (getRequest() != null) {
+            operationLog.setHttpMethod(getRequest().getMethod());
+            operationLog.setRequestUri(getRequest().getRequestURI());
+            operationLog.setRequestIp(getIpAddr(getRequest()));
+        }
+
         Object[] args = null;
         if (annoLog.enableSaveParma()) {
             // 获取访问的方法的参数
@@ -135,7 +138,7 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
         } finally {
             // 设置耗时
             long endNanos = System.nanoTime();
-            operationLog.setElapsedTime(toString(endNanos - startNanos));
+            operationLog.setElapsedTime(formatNnanos(endNanos - startNanos));
             operationLog.setEndTime(new Date(System.currentTimeMillis()));
 
             // 发布事件，日志交给监听者处理
@@ -169,14 +172,14 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
      *
      * @return
      */
-    protected abstract String getUsername();
+    protected abstract String getOperatorName();
 
     /**
      * 获取操作人 ID
      *
      * @return
      */
-    protected abstract String getUserId();
+    protected abstract String getOperatorId();
 
     private static String subString(String str, int maxLength) {
         if (str == null) {
@@ -186,7 +189,12 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
     }
 
     private static HttpServletRequest getRequest() {
-        return ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (requestAttributes != null) {
+            return requestAttributes.getRequest();
+        }
+        return null;
+
     }
 
     private static String getIpAddr(HttpServletRequest request) {
@@ -220,7 +228,7 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
         return ipAddress;
     }
 
-    private static String toString(long nanos) {
+    private static String formatNnanos(long nanos) {
         TimeUnit unit = chooseUnit(nanos);
         double value = (double)nanos / (double)TimeUnit.NANOSECONDS.convert(1L, unit);
         return formatCompact4Digits(value) + " " + abbreviate(unit);

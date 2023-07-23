@@ -1,0 +1,6 @@
+server:
+  port: 8084
+
+app:
+  log:
+    excludeProperties: phone,pwd

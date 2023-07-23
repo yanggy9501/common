@@ -1,13 +1,11 @@
 package com.freeing.common.log.config;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * @author yanggy
  */
-@ConfigurationProperties(prefix = "app.log.field")
-@ConditionalOnProperty(name = "app.log.enabled", havingValue = "true")
+@ConfigurationProperties(prefix = "app.log")
 public class OperationLogProperties {
 
     /**

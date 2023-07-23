@@ -37,7 +37,7 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
     /**
      * 排除敏感属性字段
      */
-    private static String[] EXCLUDE_PROPERTIES = {"password", "oldPassword", "newPassword"};
+    private static String[] EXCLUDE_PROPERTIES = {"password"};
 
     private ApplicationContext applicationContext;
 
@@ -138,7 +138,9 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
         } finally {
             // 设置耗时
             long endNanos = System.nanoTime();
-            operationLog.setElapsedTime(formatNnanos(endNanos - startNanos));
+            long elapsedNanos = endNanos - startNanos;
+            operationLog.setElapsedNanos(elapsedNanos);
+            operationLog.setElapsedTime(formatNnanos(elapsedNanos));
             operationLog.setEndTime(new Date(System.currentTimeMillis()));
 
             // 发布事件，日志交给监听者处理
@@ -163,7 +165,7 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
      * @param operationLog 日志实体类
      * @param result 目标方法返回结果
      */
-    private void afterProceed(OperationLog operationLog, Object result) {
+    protected void afterProceed(OperationLog operationLog, Object result) {
 
     }
 
@@ -279,7 +281,7 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
     /**
      * 忽略敏感属性
      */
-    public PropertyPreFilters.MySimplePropertyPreFilter excludePropertyFilter() {
+    protected PropertyPreFilters.MySimplePropertyPreFilter excludePropertyFilter() {
         return new PropertyPreFilters().addFilter().addExcludes(EXCLUDE_PROPERTIES);
     }
 }

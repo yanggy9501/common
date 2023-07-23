@@ -37,7 +37,6 @@ public class I18nUtils {
 
     @PostConstruct
     public void init() {
-        LOGGER.info("Load i18n files {}", messageSource.getBasenameSet());
         I18nUtils.customLocaleResolver = resolver;
         I18nUtils.customMessageSource = messageSource;
     }

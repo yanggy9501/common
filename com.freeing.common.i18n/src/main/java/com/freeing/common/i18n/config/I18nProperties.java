@@ -1,5 +1,7 @@
 package com.freeing.common.i18n.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanExpressionException;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -20,6 +22,7 @@ import java.util.List;
  */
 @ConfigurationProperties(prefix = "spring.messages")
 public class I18nProperties {
+    private static final Logger LOGGER = LoggerFactory.getLogger(I18nProperties.class);
 
     private List<String> basename;
 
@@ -28,6 +31,7 @@ public class I18nProperties {
         if (basename == null || basename.isEmpty()) {
             throw new BeanExpressionException("Do not config i18n value ${spring.messages.basename}");
         }
+        LOGGER.info("Config i18n base file name {}", basename);
     }
 
     public List<String> getBasename() {

@@ -97,6 +97,11 @@ public class OperationLog {
     private Date endTime;
 
     /**
+     * 消耗多少纳秒
+     */
+    private Long elapsedNanos;
+
+    /**
      * 消耗时间，如 15 ms
      */
     private String elapsedTime;
@@ -247,6 +252,14 @@ public class OperationLog {
         this.endTime = endTime;
     }
 
+    public Long getElapsedNanos() {
+        return elapsedNanos;
+    }
+
+    public void setElapsedNanos(Long elapsedNanos) {
+        this.elapsedNanos = elapsedNanos;
+    }
+
     public String getElapsedTime() {
         return elapsedTime;
     }
@@ -278,8 +291,8 @@ public class OperationLog {
             ", businessType='" + businessType + '\'' +
             ", description='" + description + '\'' +
             ", module='" + module + '\'' +
-            ", userId='" + operatorId + '\'' +
-            ", username='" + operatorName + '\'' +
+            ", operatorId='" + operatorId + '\'' +
+            ", operatorName='" + operatorName + '\'' +
             ", requestIp='" + requestIp + '\'' +
             ", classPath='" + classPath + '\'' +
             ", actionMethod='" + actionMethod + '\'' +
@@ -291,6 +304,7 @@ public class OperationLog {
             ", exDetail='" + exDetail + '\'' +
             ", startTime=" + startTime +
             ", endTime=" + endTime +
+            ", elapsedNanos=" + elapsedNanos +
             ", elapsedTime='" + elapsedTime + '\'' +
             ", status='" + status + '\'' +
             ", extra=" + extra +

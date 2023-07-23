@@ -9,9 +9,12 @@ import java.util.function.Consumer;
 /**
  * 操作日志的监听器，异步处理日志
  * ps: 外部引用时需要配置 consumer 并且交给 spring 管理
+ * 推荐实现 ApplicationListener<LogEvent> 接口，或者继承 BaseLogListener
+ * @see BaseLogListener
  *
  * @author yanggy
  */
+@Deprecated
 public class LogListener {
     /**
      * 消费者函数，日记记录的工作交给lambda表达式来完成

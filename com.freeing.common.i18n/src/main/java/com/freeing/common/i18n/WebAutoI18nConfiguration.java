@@ -2,7 +2,7 @@ package com.freeing.common.i18n;
 
 import com.freeing.common.i18n.config.I18nLocaleResolver;
 import com.freeing.common.i18n.config.I18nProperties;
-import com.freeing.common.i18n.util.I18Utils;
+import com.freeing.common.i18n.util.I18nUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -37,7 +37,7 @@ public class WebAutoI18nConfiguration {
     }
 
     @Bean
-    public I18Utils i18Utils(I18nLocaleResolver localeResolver, ResourceBundleMessageSource messageSource) {
-        return new I18Utils(localeResolver, messageSource);
+    public I18nUtils i18nUtils(I18nLocaleResolver localeResolver, ResourceBundleMessageSource messageSource) {
+        return new I18nUtils(localeResolver, messageSource);
     }
 }

@@ -12,8 +12,8 @@ import java.util.Locale;
 /**
  * @author yanggy
  */
-public class I18Utils {
-    private static final Logger LOGGER = LoggerFactory.getLogger(I18Utils.class);
+public class I18nUtils {
+    private static final Logger LOGGER = LoggerFactory.getLogger(I18nUtils.class);
 
     private final I18nLocaleResolver resolver;
 
@@ -23,7 +23,7 @@ public class I18Utils {
 
     private static ResourceBundleMessageSource customMessageSource;
 
-    public I18Utils(I18nLocaleResolver localeResolver, ResourceBundleMessageSource messageSource) {
+    public I18nUtils(I18nLocaleResolver localeResolver, ResourceBundleMessageSource messageSource) {
         this.resolver = localeResolver;
         this.messageSource = messageSource;
     }
@@ -31,8 +31,8 @@ public class I18Utils {
     @PostConstruct
     public void init() {
         LOGGER.info("Load i18n files [{}]", messageSource.getBasenameSet());
-        I18Utils.customLocaleResolver = resolver;
-        I18Utils.customMessageSource = messageSource;
+        I18nUtils.customLocaleResolver = resolver;
+        I18nUtils.customMessageSource = messageSource;
     }
 
     /**

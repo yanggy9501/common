@@ -85,6 +85,7 @@
 
     <build>
         <plugins>
+            <!-- 编译工具 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -95,6 +96,8 @@
                     <encoding>UTF-8</encoding><!-- 字符集编码 -->
                 </configuration>
             </plugin>
+
+            <!-- 打包源码插件 -->
             <plugin>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>3.2.0</version>

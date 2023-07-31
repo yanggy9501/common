@@ -31,7 +31,8 @@ public enum Direction {
         if (1 == value.length()) {
             if ("A".equalsIgnoreCase(value)) {
                 return ASC;
-            } else if ("D".equalsIgnoreCase(value)) {
+            }
+            if ("D".equalsIgnoreCase(value)) {
                 return DESC;
             }
         }

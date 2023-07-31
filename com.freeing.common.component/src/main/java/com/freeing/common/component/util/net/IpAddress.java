@@ -33,11 +33,38 @@ public class IpAddress {
      */
     private IpVersion version;
 
-    public IpAddress(String ip) {
+    /**
+     * 构建对象
+     *
+     * @param ip ip 如：127.0.0.1\24 或 127.0.0.1；a::1:1\124 或 a:: 若无掩码则默认 24 或 124
+     * @return
+     */
+    public static IpAddress build(String ip) {
+        return new IpAddress(ip);
+    }
+
+    /**
+     * 构建对象
+     *
+     * @param ipBigInteger ip 的十进制表示
+     * @param mark 掩码
+     * @param version ip 版本
+     * @return
+     */
+    public static IpAddress build(BigInteger ipBigInteger, int mark, IpVersion version) {
+        return new IpAddress(ipBigInteger, mark, version);
+    }
+
+    /**
+     * 构造方法
+     *
+     * @param ip 如：127.0.0.1\24 或 127.0.0.1；a::1:1\124 或 a:: 若无掩码则默认 24 或 124
+     */
+    private IpAddress(String ip) {
         parse(ip);
     }
 
-    public IpAddress(BigInteger ipBigInteger, int mark, IpVersion version) {
+    private IpAddress(BigInteger ipBigInteger, int mark, IpVersion version) {
         this.ipBigInteger = ipBigInteger;
         this.mark = mark;
         this.version = version;
@@ -45,7 +72,7 @@ public class IpAddress {
     }
 
     private void parse(String ip) {
-        // IP 格式: 127.0.0.1；127.0.0.1/24
+        // IP 格式: 127.0.0.1；127.0.0.1\24
         String[] ipAndMark = ip.split(StrPool.BACK_SLASH);
         if (ipAndMark.length > NumConstants.NUM_2) {
             throw new IllegalArgumentException("Illegal ip: " + ip);
@@ -66,7 +93,7 @@ public class IpAddress {
             this.version = IpVersion.IPV6;
             standardizeIpv6Address(ipStr);
         } else {
-            throw new IllegalArgumentException("Illegal IP: " + ipStr);
+            throw new IllegalArgumentException("Illegal ip '" + ipStr + "'");
         }
         this.ipBigInteger = ipAddressToBigInteger();
     }

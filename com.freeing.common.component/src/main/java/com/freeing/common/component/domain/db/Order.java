@@ -17,7 +17,7 @@ public class Order implements Serializable {
     private String field;
 
     /**
-     * 排序方式（正序还是反序）
+     * 排序方式（正序还是反序），默认升序
      */
     private Direction direction;
 
@@ -27,6 +27,7 @@ public class Order implements Serializable {
 
     public Order(String field) {
         this.field = field;
+        this.direction = Direction.ASC;
     }
 
     public Order(String field, Direction direction) {

@@ -61,7 +61,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      * @param strB
      * @return
      */
-    public static boolean isNotEquals(String strA, String strB) {
+    public static boolean notEquals(String strA, String strB) {
         return !equals(strA, strB);
     }
 
@@ -191,7 +191,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     public static boolean inString(String str, String... strs) {
         if (str != null && strs != null) {
             for (String s : strs) {
-                if (str.equals(trim(s))) {
+                if (str.equals(s)) {
                     return true;
                 }
             }

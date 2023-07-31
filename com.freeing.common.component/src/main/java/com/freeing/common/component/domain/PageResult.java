@@ -8,7 +8,7 @@ import java.util.List;
  *
  * @author yanggy
  */
-public class CommonPage implements Serializable {
+public class PageResult implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -24,7 +24,7 @@ public class CommonPage implements Serializable {
     /**
      * 总页数
      */
-    private long pageCount;
+    private long totalPage;
 
     /**
      * 总记录数
@@ -36,14 +36,14 @@ public class CommonPage implements Serializable {
      */
     private List<?> rows;
 
-    public CommonPage() {
+    public PageResult() {
 
     }
 
-    public CommonPage(long currentPage, long pageSize, long pageCount, long total, List<?> rows) {
+    public PageResult(long currentPage, long pageSize, long totalPage, long total, List<?> rows) {
         this.currentPage = currentPage;
         this.pageSize = pageSize;
-        this.pageCount = pageCount;
+        this.totalPage = totalPage;
         this.total = total;
         this.rows = rows;
     }
@@ -64,12 +64,12 @@ public class CommonPage implements Serializable {
         this.pageSize = pageSize;
     }
 
-    public long getPageCount() {
-        return pageCount;
+    public long getTotalPage() {
+        return totalPage;
     }
 
-    public void setPageCount(long pageCount) {
-        this.pageCount = pageCount;
+    public void setTotalPage(long totalPage) {
+        this.totalPage = totalPage;
     }
 
     public long getTotal() {
@@ -88,6 +88,17 @@ public class CommonPage implements Serializable {
         this.rows = rows;
     }
 
+    @Override
+    public String toString() {
+        return "PageResult{" +
+            "currentPage=" + currentPage +
+            ", pageSize=" + pageSize +
+            ", totalPage=" + totalPage +
+            ", total=" + total +
+            ", rows=" + rows +
+            '}';
+    }
+
     public static Builder builder() {
         return new Builder();
     }
@@ -96,7 +107,7 @@ public class CommonPage implements Serializable {
 
         private long pageSize;
 
-        private long pageCount;
+        private long totalPage;
 
         private long total;
 
@@ -112,8 +123,8 @@ public class CommonPage implements Serializable {
             return this;
         }
 
-        public Builder pageCount(long pageCount) {
-            this.pageCount = pageCount;
+        public Builder totalPage(long totalPage) {
+            this.totalPage = totalPage;
             return this;
         }
 
@@ -126,8 +137,8 @@ public class CommonPage implements Serializable {
             this.rows = rows;
             return this;
         }
-        public CommonPage build() {
-            return new CommonPage(currentPage, pageSize, pageCount, total, rows);
+        public PageResult build() {
+            return new PageResult(currentPage, pageSize, totalPage, total, rows);
         }
     }
 }

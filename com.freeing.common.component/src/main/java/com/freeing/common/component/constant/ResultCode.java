@@ -16,12 +16,12 @@ public enum ResultCode {
     /**
      * 操作失败
      */
-    FAIL(-1, "Operation fail"),
+    FAIL(20100, "Operation fail"),
 
     /**
      * 重复提交
      */
-    REPEAT_SUBMIT(20100, "Repeat submit"),
+    REPEAT_SUBMIT(20200, "Repeat submit"),
 
     /**
      * Exception

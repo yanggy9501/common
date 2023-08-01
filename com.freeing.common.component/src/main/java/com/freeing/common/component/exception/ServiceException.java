@@ -1,21 +1,33 @@
 package com.freeing.common.component.exception;
 
 /**
- * 基础异常
+ * 业务异常
  */
 public class ServiceException extends BaseException {
-    public ServiceException(String code, String msg, Object... args) {
+    /**
+     * 国际化标准
+     */
+    private boolean sourceMsg;
+
+    public ServiceException(String code, String msg, boolean isSourceMsg, Object... args) {
         super(code, msg, args);
+        this.sourceMsg = isSourceMsg;
     }
 
-    public ServiceException(String code, Object... args) {
-        super(code, args);
+    public ServiceException(String code, String msg, boolean isSourceMsg) {
+        super(code, msg);
+        this.sourceMsg = isSourceMsg;
     }
 
-    public ServiceException(String msg) {
-        super(msg);
+    public ServiceException(String code, String msg) {
+        super(code, msg);
     }
 
-    public ServiceException() {
+    public boolean isSourceMsg() {
+        return sourceMsg;
+    }
+
+    public void setSourceMsg(boolean sourceMsg) {
+        this.sourceMsg = sourceMsg;
     }
 }

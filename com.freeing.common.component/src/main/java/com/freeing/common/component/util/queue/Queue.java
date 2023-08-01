@@ -46,5 +46,5 @@ public interface Queue<T> {
      *
      * @return boolean true则队已满，否则队列非满
      */
-   boolean isFull();
+    boolean isFull();
 }

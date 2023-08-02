@@ -97,7 +97,7 @@ public class OperationLog {
     private Date endTime;
 
     /**
-     * 消耗多少纳秒
+     * 消耗时间，单位纳秒
      */
     private Long elapsedNanos;
 

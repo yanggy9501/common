@@ -92,8 +92,8 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
 
         // 获取 @Log 注解信息
         Log annoLog = executionMethod.getAnnotation(Log.class);
-        operationLog.setBusinessType(annoLog.businessType().getType());
-        operationLog.setDescription(annoLog.description());
+        operationLog.setBusinessType(annoLog.bizType().getType());
+        operationLog.setDescription(annoLog.desc());
         operationLog.setModule(annoLog.module());
 
         // 设置请求 Request 信息
@@ -104,7 +104,7 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
         }
 
         Object[] args = null;
-        if (annoLog.enableSaveParma()) {
+        if (annoLog.saveResult()) {
             // 获取访问的方法的参数
             args = pjp.getArgs();
             if (args != null && args.length > 0) {
@@ -120,7 +120,7 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
             //让代理方法执行
             beforeProceed(operationLog, args);
             result = pjp.proceed();
-            if (annoLog.enableSaveResult()) {
+            if (annoLog.saveResult()) {
                 // 获取访问的方法的请求参数
                 if (result != null) {
                     operationLog.setResult(subString(JSONArray.toJSONString(result, excludePropertyFilter()), 2048));

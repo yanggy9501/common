@@ -14,12 +14,12 @@ public @interface Log {
     /**
      * 操作类型
      */
-    BusinessType businessType() default BusinessType.OTHER;
+    BusinessType bizType() default BusinessType.OTHER;
 
     /**
      * 操作说明
      */
-    String description() default "";
+    String desc() default "";
 
     /**
      * 项目模块
@@ -29,10 +29,10 @@ public @interface Log {
     /**
      * 是否保存请求参数
      */
-    boolean enableSaveParma() default true;
+    boolean saveParma() default true;
 
     /**
      * 是否保存响应结果
      */
-    boolean enableSaveResult() default true;
+    boolean saveResult() default true;
 }

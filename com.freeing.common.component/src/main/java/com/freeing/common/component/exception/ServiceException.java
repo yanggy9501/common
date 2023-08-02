@@ -7,27 +7,27 @@ public class ServiceException extends BaseException {
     /**
      * 国际化标准
      */
-    private boolean sourceMsg;
+    private String msgId;
 
-    public ServiceException(String code, String msg, boolean isSourceMsg, Object... args) {
+    public ServiceException(String code, String msg, String msgId, Object... args) {
         super(code, msg, args);
-        this.sourceMsg = isSourceMsg;
+        this.msgId = msgId;
     }
 
-    public ServiceException(String code, String msg, boolean isSourceMsg) {
+    public ServiceException(String code, String msg, String msgId) {
         super(code, msg);
-        this.sourceMsg = isSourceMsg;
+        this.msgId = msgId;
     }
 
     public ServiceException(String code, String msg) {
         super(code, msg);
     }
 
-    public boolean isSourceMsg() {
-        return sourceMsg;
+    public String getMsgId() {
+        return msgId;
     }
 
-    public void setSourceMsg(boolean sourceMsg) {
-        this.sourceMsg = sourceMsg;
+    public void setMsgId(String msgId) {
+        this.msgId = msgId;
     }
 }

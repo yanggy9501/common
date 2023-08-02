@@ -1,4 +1,4 @@
-package com.freeing.common.component.domain.db;
+package com.freeing.common.component.object.db;
 
 import com.freeing.common.component.constant.Direction;
 

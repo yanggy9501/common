@@ -37,7 +37,7 @@ public class R extends HashMap<String, Object> implements Serializable {
     /**
      * 构造函数
      */
-    public R() {}
+    private R() {}
 
     /**
      * 返回数据和消息
@@ -153,16 +153,6 @@ public class R extends HashMap<String, Object> implements Serializable {
     }
 
     /**
-     * 返回异常数据
-     *
-     * @param data 数据对象
-     * @return 数据对象
-     */
-    public static R error(Object data) {
-        return R.error(ResultCode.ERROR.getCode(), ResultCode.ERROR.getMsg(), data);
-    }
-
-    /**
      * 返回失败数据
      *
      * @param msg 返回信息
@@ -213,6 +203,28 @@ public class R extends HashMap<String, Object> implements Serializable {
     }
 
     /**
+     * 设置状态码
+     *
+     * @param code 状态码
+     * @return R
+     */
+    public R code(String code) {
+        super.put(CODE, code);
+        return this;
+    }
+
+    /**
+     * 设置返回消息
+     *
+     * @param msg 消息
+     * @return R
+     */
+    public R msg(String msg) {
+        super.put(MSG, msg);
+        return this;
+    }
+
+    /**
      * 设置数据，如果 key=data 已经存在，再次调用抛出异常，所以 data方法仅能调用一次。
      *
      * @param data 数据对象
@@ -224,6 +236,30 @@ public class R extends HashMap<String, Object> implements Serializable {
             throw new RuntimeException("Wrong calling method R#data(Object data)");
         }
         super.put(DATA, data);
+        return this;
+    }
+
+    /**
+     * 设置错误消息
+     *
+     * @param errorMsg
+     * @return
+     */
+    public R errorMsg(String errorMsg) {
+        super.put(ERROR_MSG, errorMsg);
+        return this;
+    }
+
+    /**
+     * 自定义数据对象
+     *
+     * @param key 数据的key
+     * @param value 数据的值
+     * @return R
+     */
+    @Override
+    public R put (String key, Object value) {
+        super.put(key, value);
         return this;
     }
 
@@ -255,52 +291,6 @@ public class R extends HashMap<String, Object> implements Serializable {
             dataMapInstance.put(key,  value);
             this.data(dataMapInstance);
         }
-        return this;
-    }
-
-    /**
-     * 自定义数据对象
-     *
-     * @param key 数据的key
-     * @param value 数据的值
-     * @return R
-     */
-    @Override
-    public R put (String key, Object value) {
-        super.put(key, value);
-        return this;
-    }
-
-    /**
-     * 设置返回消息
-     *
-     * @param msg 消息
-     * @return R
-     */
-    public R msg(String msg) {
-        super.put(MSG, msg);
-        return this;
-    }
-
-    /**
-     * 设置错误消息
-     *
-     * @param errorMsg
-     * @return
-     */
-    public R errorMsg(String errorMsg) {
-        super.put(ERROR_MSG, errorMsg);
-        return this;
-    }
-
-    /**
-     * 设置状态码
-     *
-     * @param code 状态码
-     * @return R
-     */
-    public R code(String code) {
-        super.put(CODE, code);
         return this;
     }
 

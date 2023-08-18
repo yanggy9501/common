@@ -5,7 +5,7 @@ package com.freeing.common.component.domain;
  *
  * @author yanggy
  */
-public class BaseEntity {
+public abstract class BaseEntity {
 
     public void trim() {
 

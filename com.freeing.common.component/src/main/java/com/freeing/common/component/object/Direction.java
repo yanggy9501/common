@@ -1,4 +1,4 @@
-package com.freeing.common.component.constant;
+package com.freeing.common.component.object;
 
 import com.freeing.common.component.util.StringUtils;
 

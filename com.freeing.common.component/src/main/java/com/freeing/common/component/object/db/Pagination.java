@@ -3,6 +3,8 @@ package com.freeing.common.component.object.db;
 import java.io.Serializable;
 
 /**
+ * 分页
+ *
  * @author yanggy
  */
 public class Pagination implements Serializable {

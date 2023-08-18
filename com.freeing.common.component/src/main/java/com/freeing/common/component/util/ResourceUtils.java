@@ -1,7 +1,6 @@
 package com.freeing.common.component.util;
 
 import com.freeing.common.component.constant.StrPool;
-import com.freeing.common.component.exception.BaseException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -53,7 +52,7 @@ public class ResourceUtils {
      * @param resource 资源
      * @return 输入流
      */
-    public static String readAsString(ClassLoader classLoader, String resource) {
+    public static String readAsString(ClassLoader classLoader, String resource) throws IOException {
         InputStream inputStream = getResourceAsStream(resource, classLoader);
         if (inputStream == null) {
             return StrPool.EMPTY;
@@ -61,8 +60,6 @@ public class ResourceUtils {
         String res;
         try {
             res = IOUtils.toString(inputStream);
-        } catch (IOException e) {
-            throw new BaseException("Fail to read file of {" + resource  + "} as string");
         } finally {
             IOUtils.closeQuietly(inputStream);
         }
@@ -76,13 +73,11 @@ public class ResourceUtils {
      * @param resource 资源
      * @return 输入流
      */
-    public static Properties readAsProperties(ClassLoader classLoader, String resource) {
+    public static Properties readAsProperties(ClassLoader classLoader, String resource) throws IOException {
         Properties properties = new Properties();
         InputStream inputStream = getResourceAsStream(resource, classLoader);
         try {
             properties.load(inputStream);
-        } catch (IOException ignored) {
-            throw new BaseException("Fail to read file of {" + resource  + "} as properties");
         } finally {
             IOUtils.closeQuietly(inputStream);
         }

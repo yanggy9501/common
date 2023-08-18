@@ -17,7 +17,7 @@ public class Async {
      * 最大线程数：计算机内核数
      * 空闲时间：60s，超过60s超过核心线程数的空闲线程被杀死
      * 任务队列长度：MAX_VALUE
-     * 线程池工厂：使用了jdk默认工厂
+     * 线程池工厂：默认工厂
      * handler（队列满时的任务拒绝策略）：让提交任务的线程去执行
      */
     private static volatile ExecutorService COMMON_POOL;

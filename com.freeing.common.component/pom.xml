@@ -15,10 +15,12 @@
         <apach.commons.colletion.version>4.4</apach.commons.colletion.version>
         <apach.commons.io.version>1.3.2</apach.commons.io.version>
         <apach.commons.commons-compress.version>1.21</apach.commons.commons-compress.version>
+        <hutool.version>5.8.15</hutool.version>
         <reflections.io.version>0.10.2</reflections.io.version>
         <gauva.version>20.0</gauva.version>
         <vavr.version>0.10.3</vavr.version>
         <fastjson.version>1.2.79</fastjson.version>
+        <jpinyin.version>1.1.8</jpinyin.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -48,6 +50,13 @@
             <version>${apach.commons.commons-compress.version}</version>
         </dependency>
 
+        <!-- hutool 工具包 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
+
         <!-- json -->
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -73,6 +82,13 @@
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
             <version>${reflections.io.version}</version>
+        </dependency>
+
+        <!-- 汉字转 -> pinyin包 使用：看 PinyinHelper 类 -->
+        <dependency>
+            <groupId>com.github.stuxuhai</groupId>
+            <artifactId>jpinyin</artifactId>
+            <version>${jpinyin.version}</version>
         </dependency>
 
         <dependency>

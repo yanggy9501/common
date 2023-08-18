@@ -1,4 +1,4 @@
-package com.freeing.common.component.util;
+package com.freeing.common.component.util.date;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

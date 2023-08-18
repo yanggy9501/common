@@ -1,10 +1,12 @@
 package com.freeing.common.component.object.db;
 
-import com.freeing.common.component.constant.Direction;
+import com.freeing.common.component.object.Direction;
 
 import java.io.Serializable;
 
 /**
+ * 排序
+ *
  * @author yanggy
  */
 public class Order implements Serializable {

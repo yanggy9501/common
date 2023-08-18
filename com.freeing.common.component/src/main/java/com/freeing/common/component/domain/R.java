@@ -8,6 +8,14 @@ import java.util.HashMap;
 /**
  * 统一返回结果
  *
+ *  ps: dataM()，data()，put("data", obj) 不能混用
+ *  dataM 实现如下数据结构：
+ *  "data": {
+ *         "k1": "v1",
+ *         "k2": "v2"
+ *         "k3": {"k4": "v4"}
+ *     }
+ *
  * @author yanggy
  * @date 2021/10/9 23:36
  */
@@ -278,11 +286,11 @@ public class R extends HashMap<String, Object> implements Serializable {
      */
     public R dataM(String key, Object value) {
         if (containsKey(DATA)) {
-            try {
-                // 是否为DataMap类型，否则抛出异常
-                DataMap dataMap = (DataMap) super.get(DATA);
-                dataMap.put(key, value);
-            } catch (Exception e) {
+            // 是否为DataMap类型，否则抛出异常
+            Object dataMap = super.get(DATA);
+            if (dataMap instanceof DataMap) {
+                ((DataMap) dataMap).put(key, value);
+            } else {
                 throw new UnsupportedOperationException();
             }
         } else {
@@ -300,7 +308,7 @@ public class R extends HashMap<String, Object> implements Serializable {
      * @return code
      */
     public String getCode() {
-        return (String) super.get(CODE);
+        return super.get(CODE).toString();
     }
 
     /**

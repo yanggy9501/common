@@ -1,35 +1,30 @@
 package com.freeing.test.od;
 
-import java.util.Scanner;
+import java.util.Arrays;
+import java.util.PriorityQueue;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        while (in.hasNext()){
+        Class<Main> mainClass = Main.class;
+        System.out.println(mainClass.getName());
+        System.out.println(mainClass.getSimpleName());
+    }
 
-            int n = in.nextInt();
-            int m = in.nextInt();
-            int[] nums = new int[n];
-            for(int i=0; i<n; i++){
-                nums[i] = in.nextInt();
-            }
-
-            int sum_value = 0;
-            boolean flag = false;
-            int[] remainders = new int[m];
-            remainders[0] = 1;
-            for(int i=0; i<n; i++){
-                sum_value += nums[i];
-                sum_value %= m;
-                if(remainders[sum_value] != 0){
-                    flag = true;
-                    break;
+    public static int diskNum(int[] nums){
+        Arrays.sort(nums);
+        PriorityQueue<Integer> queue = new PriorityQueue<>();
+        for (int i = nums.length-1; i >= 0; i--) {
+            if (queue.isEmpty()){
+                queue.offer(nums[i]);
+            }else {
+                if ((500-queue.peek())>=nums[i]){
+                    int size = queue.poll();
+                    queue.offer(size+nums[i]);
+                }else {
+                    queue.offer(nums[i]);
                 }
-                remainders[sum_value] ++;
             }
-
-            System.out.println(flag ? 1 : 0);
         }
-        return;
+        return queue.size();
     }
 }

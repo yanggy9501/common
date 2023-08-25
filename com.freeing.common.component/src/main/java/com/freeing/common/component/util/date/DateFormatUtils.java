@@ -10,9 +10,27 @@ import java.util.Date;
  * 日期日历工具类
  */
 public class DateFormatUtils extends org.apache.commons.lang3.time.DateFormatUtils {
-    public final static String DEFAULT_YEAR_FORMAT = "yyyy";
+
+    public final static String FORMAT_yyyy = "yyyy";
+    public final static String FORMAT_MM = "MM";
+    public final static String FORMAT_dd = "dd";
+    public final static String FORMAT_yyyyMMdd = "yyyy-MM-dd";
+    public final static String FORMAT_yyyyMMdd_CH = "yyyy年MM月dd日";
+    public final static String FORMAT_HHmmss = "HH:mm:ss";
+    public final static String FORMAT_HHmm = "HH:mm";
+    public final static String FORMAT_yyyyMMddHHmmss = "yyyy-MM-dd HH:mm:ss";
+    public final static String FORMAT_yyyyMMddHHmmssSSS = "yyyy-MM-dd HH:mm:ss.SSS";
+    public final static String FORMAT_yyyyMMddHHmm = "yyyy-MM-dd HH:mm";
+
+    public final static String FORMAT_COMPACT_yyyyMMdd = "yyyyMMdd";
+    public final static String FORMAT_COMPACT_yyyyMM = "yyyyMM";
+    public final static String FORMAT_COMPACT_HHmmss = "HHmmss";
+    public final static String FORMAT_COMPACT_HHmm = "HHmm";
+    public final static String FORMAT_COMPACT_yyyyMMddHHmmss = "yyyyMMddHHmmss";
+    public final static String FORMAT_COMPACT_yyyyMMddHHmmssSSS = "yyyyMMddHHmmssSSS";
+
+
     public final static String DEFAULT_MONTH_FORMAT = "yyyy-MM";
-    public final static String DEFAULT_MONTH_FORMAT_SLASH = "yyyy/MM";
     public final static String DEFAULT_MONTH_FORMAT_EN = "yyyy年MM月";
     public final static String DEFAULT_WEEK_FORMAT = "yyyy-ww";
     public final static String DEFAULT_WEEK_FORMAT_EN = "yyyy年ww周";

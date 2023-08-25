@@ -22,17 +22,12 @@ public @interface Log {
     String desc() default "";
 
     /**
-     * 项目模块
-     */
-    String module() default "";
-
-    /**
      * 是否保存请求参数
      */
-    boolean saveParma() default true;
+    boolean isSaveP() default true;
 
     /**
      * 是否保存响应结果
      */
-    boolean saveResult() default true;
+    boolean isSaveR() default true;
 }

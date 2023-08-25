@@ -21,6 +21,7 @@
         <vavr.version>0.10.3</vavr.version>
         <fastjson.version>1.2.79</fastjson.version>
         <jpinyin.version>1.1.8</jpinyin.version>
+        <ical4j.version>3.0.9</ical4j.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -89,6 +90,13 @@
             <groupId>com.github.stuxuhai</groupId>
             <artifactId>jpinyin</artifactId>
             <version>${jpinyin.version}</version>
+        </dependency>
+
+        <!-- iCalendar，简称“iCal” 4j for java: 周期性日历工具类 -->
+        <dependency>
+            <groupId>org.mnode.ical4j</groupId>
+            <artifactId>ical4j</artifactId>
+            <version>${ical4j.version}</version>
         </dependency>
 
         <dependency>

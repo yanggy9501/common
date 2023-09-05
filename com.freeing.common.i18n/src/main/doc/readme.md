@@ -65,7 +65,7 @@
 
      3.   方式3：请求头切换，在请求头中添加 lang 请求头
 
-          ```header
+          ```headerDef
           lang=en_US
           ```
      4.   方式4：I18nUtils 指定语言

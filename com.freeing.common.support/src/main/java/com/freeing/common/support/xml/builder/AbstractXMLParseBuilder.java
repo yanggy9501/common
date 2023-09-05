@@ -20,7 +20,7 @@ public abstract class AbstractXMLParseBuilder<T> {
     /**
      * 是否已经解析标识
      */
-    protected boolean parsed;
+    protected volatile boolean parsed;
 
     /**
      * xml 的 XPath 解析器
@@ -33,8 +33,7 @@ public abstract class AbstractXMLParseBuilder<T> {
      * @param inputStream xml 文件的输入流
      */
     public AbstractXMLParseBuilder(InputStream inputStream) {
-        this.parsed = false;
-        this.parser = new XPathParser(inputStream, false);
+        this(inputStream, false);
     }
 
     /**

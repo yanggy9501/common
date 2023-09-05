@@ -48,6 +48,10 @@ public class XNode {
         this.xpathParser = xPathParser;
     }
 
+    public XNode evalNode(String expression) {
+        return xpathParser.evalNode(node, expression);
+    }
+
     private Properties parseAttributes(Node node) {
         Properties attributes = new Properties();
         NamedNodeMap attributeNodes = node.getAttributes();
@@ -81,10 +85,10 @@ public class XNode {
         return data;
     }
 
-    private String getBodyData(Node child) {
-        if (child.getNodeType() == Node.CDATA_SECTION_NODE
-            || child.getNodeType() == Node.TEXT_NODE) {
-            return ((CharacterData) child).getData();
+    private String getBodyData(Node node) {
+        if (node.getNodeType() == Node.CDATA_SECTION_NODE
+            || node.getNodeType() == Node.TEXT_NODE) {
+            return ((CharacterData) node).getData();
         }
         return null;
     }
@@ -126,24 +130,6 @@ public class XNode {
             }
         }
         return children;
-    }
-
-    /**
-     * 解析标签为 Properties
-     * 如：<property name="key" value="value"/>
-     *
-     * @return Properties
-     */
-    public Properties getChildrenAsProperties() {
-        Properties properties = new Properties();
-        for (XNode child : getChildren()) {
-            String name = child.getStringAttribute("name");
-            String value = child.getStringAttribute("value");
-            if (name != null && value != null) {
-                properties.setProperty(name, value);
-            }
-        }
-        return properties;
     }
 
     /**************************************** getter **************************************/

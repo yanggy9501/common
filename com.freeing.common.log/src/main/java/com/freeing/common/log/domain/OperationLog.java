@@ -1,6 +1,6 @@
 package com.freeing.common.log.domain;
 
-import com.freeing.common.log.enums.BusinessType;
+import com.freeing.common.log.enums.BizType;
 
 import java.util.Date;
 import java.util.Map;
@@ -17,7 +17,7 @@ public class OperationLog {
     private Long id;
 
     /**
-     * 业务类型 {@link BusinessType}
+     * 业务类型 {@link BizType}
      */
     private String businessType;
 

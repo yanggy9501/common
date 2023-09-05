@@ -7,7 +7,7 @@ import java.util.Objects;
  *
  * @author yanggy
  */
-public enum BusinessType {
+public enum BizType {
     /**
      * 新增
      */
@@ -44,6 +44,16 @@ public enum BusinessType {
     IMPORT(7, "import"),
 
     /**
+     * 下载
+     */
+    DOWNLOAD(8, "download"),
+
+    /**
+     * 上传
+     */
+    UPLOAD(9, "download"),
+
+    /**
      * 其它
      */
     OTHER(0, "other"),
@@ -60,7 +70,7 @@ public enum BusinessType {
      */
     private final Integer code;
 
-    BusinessType(Integer code, String type) {
+    BizType(Integer code, String type) {
         this.code = code;
         this.type = type;
     }
@@ -73,8 +83,8 @@ public enum BusinessType {
         return code;
     }
 
-    public static BusinessType match(String type) {
-        for (BusinessType value : BusinessType.values()) {
+    public static BizType match(String type) {
+        for (BizType value : BizType.values()) {
             if (Objects.equals(value.getType(), type)) {
                 return value;
             }
@@ -82,8 +92,8 @@ public enum BusinessType {
         return NULL;
     }
 
-    public static BusinessType match(Integer code) {
-        for (BusinessType value : BusinessType.values()) {
+    public static BizType match(Integer code) {
+        for (BizType value : BizType.values()) {
             if (Objects.equals(value.getCode(), code)) {
                 return value;
             }

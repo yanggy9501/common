@@ -82,15 +82,4 @@ public class SortUtils {
         array[0] = array[index];
         array[index] = temp;
     }
-
-    /**
-     * 归并排序
-     *
-     * @param array 待排序数组
-     * @param comparator 比较器
-     * @param <T> 泛型
-     */
-    public static <T> void mergeSort(T[] array, Comparator<T> comparator) {
-        
-    }
 }

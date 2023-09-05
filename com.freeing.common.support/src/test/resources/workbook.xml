@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<workbookDef id = "workbook_id1" fileName = "file_name">
+    <sheetDef sheetName = "sheetName1">
+        <tableDef id = "tb_user">
+            <title>一级标题</title>
+            <tableDef-body>
+                <columnDef field = "username"/>
+                <columnDef field = "gender"/>
+            </tableDef-body>
+        </tableDef>
+    </sheetDef>
+</workbookDef>

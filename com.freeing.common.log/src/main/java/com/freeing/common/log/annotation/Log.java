@@ -1,6 +1,6 @@
 package com.freeing.common.log.annotation;
 
-import com.freeing.common.log.enums.BusinessType;
+import com.freeing.common.log.enums.BizType;
 
 import java.lang.annotation.*;
 
@@ -14,7 +14,7 @@ public @interface Log {
     /**
      * 操作类型
      */
-    BusinessType bizType() default BusinessType.OTHER;
+    BizType bizType() default BizType.OTHER;
 
     /**
      * 操作说明

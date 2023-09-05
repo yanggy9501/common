@@ -2,11 +2,10 @@
 <configuration>
     <tableDefs>
         <!-- 表定义 id: 表的唯一性标识 -->
-        <tableDef id = "tb_user" class = "com.demo.entity.User">
+        <tableDef id = "tb_user" class = "com.freeing.common.support.reflection.User">
             <!-- name 表头名称；field 映射的对象字段； comment 表头注释； color 字体颜色-->
             <headerDef name = "姓名" mapperField = "username" comment = "用户姓名" />
-            <headerDef name = "年龄" mapperField = "age" comment = "用户年龄" />
-            <headerDef name = "生日" mapperField = "birthday" comment = "用户年龄" />
+            <headerDef name = "性别" mapperField = "gender" comment = "性别" />
         </tableDef>
     </tableDefs>
 

@@ -54,6 +54,16 @@ public enum BizType {
     UPLOAD(9, "download"),
 
     /**
+     * 登录
+     */
+    LOGIN(10,  "login"),
+
+    /**
+     * 退出
+     */
+    LOGOUT(10,  "logout"),
+
+    /**
      * 其它
      */
     OTHER(0, "other"),

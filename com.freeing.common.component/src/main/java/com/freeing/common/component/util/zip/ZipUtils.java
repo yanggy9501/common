@@ -10,16 +10,6 @@ import java.io.IOException;
  */
 public class ZipUtils {
     /**
-     * 解压
-     *
-     * @param srcFileOrDir 被解压文件
-     * @param destDir 解压后文件所在目标目录
-     */
-    public static void decompress(File srcFileOrDir, File destDir) {
-
-    }
-
-    /**
      * 压缩文件或目录
      *
      * @param srcFileOrDir 被压缩文件或目录

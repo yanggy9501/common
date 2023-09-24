@@ -15,20 +15,6 @@ import java.util.stream.Collectors;
  */
 public class NumberUtils extends org.apache.commons.lang3.math.NumberUtils {
     /**
-     * 判断两个整型是否相等
-     *
-     * @param number1 整数1
-     * @param number2 整数2
-     * @return boolean
-     */
-    public static <T extends Number> boolean equals(T number1, T number2) {
-        if (number1 == null && number2 == null) {
-            return true;
-        }
-        return number1 != null && number1.equals(number2);
-    }
-
-    /**
      * 获取值，若输入为 null，则输出默认值
      *
      * @param number 整数

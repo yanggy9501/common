@@ -11,23 +11,16 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Component
 public class MyLogAspect extends BaseLogAspect {
-    @Override
-    protected String getOperatorName() {
-        return "Operator";
-    }
 
     @Override
-    protected String getOperatorId() {
-        return "id:00000";
-    }
-
-    @Override
-    protected void beforeProceed(AuditLog auditLog, Object[] args) {
+    protected void beforeProceed(AuditLog auditLog) {
+        auditLog.setOperatorId("id:00000");
+        auditLog.setOperatorName("name:00000");
         System.out.println("扩展：目标方法执行之前");
     }
 
     @Override
-    protected void afterProceed(AuditLog auditLog, Object result) {
+    protected void afterProceed(AuditLog auditLog) {
         System.out.println("扩展：目标方法执行之后");
     }
 }

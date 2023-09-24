@@ -1,6 +1,6 @@
 package com.freeing.common.log.event;
 
-import com.freeing.common.log.domain.OperationLog;
+import com.freeing.common.log.model.AuditLog;
 import org.springframework.context.ApplicationEvent;
 
 /**
@@ -12,7 +12,7 @@ public class LogEvent extends ApplicationEvent {
     /**
      * 构造函数
      */
-    public LogEvent(OperationLog operationLog) {
-        super(operationLog);
+    public LogEvent(AuditLog auditLog) {
+        super(auditLog);
     }
 }

@@ -8,23 +8,23 @@ import java.util.*;
  * @author yanggy
  */
 public enum FieldType {
-    /* string */
+    /* String */
     STRING, STRING_LIST, STRING_MAP,
-    /* boolean */
+    /* Boolean */
     BOOLEAN, BOOLEAN_LIST, BOOLEAN_MAP,
-    /* integer */
+    /* Integer */
     INTEGER, INTEGER_LIST, INTEGER_MAP,
-    /* DOUBLE */
+    /* Double */
     DOUBLE, DOUBLE_LIST, DOUBLE_MAP,
-    /* LONG */
+    /* Long */
     LONG, LONG_LIST, LONG_MAP,
-    /* FLOAT */
+    /* Float */
     FLOAT, FLOAT_LIST, FLOAT_MAP,
-    /* DATE */
+    /* Date */
     DATE, DATE_LIST, DATE_MAP,
-    /* BYTE */
+    /* byte */
     BYTE_ARRAY,
-    /* ENUM */
+    /* enum */
     ENUM,
     ;
 
@@ -111,6 +111,6 @@ public enum FieldType {
         if (field.getType().isEnum()) {
             return FieldType.ENUM;
         }
-        throw new Exception("unknown filed type{name:" + field.getName() + "}");
+        throw new Exception("unknown filed type {name:" + field.getName() + "}");
     }
 }

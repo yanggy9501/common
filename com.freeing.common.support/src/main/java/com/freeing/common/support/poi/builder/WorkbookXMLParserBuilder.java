@@ -52,7 +52,7 @@ public class WorkbookXMLParserBuilder extends AbstractXMLParseBuilder<WorkbookDe
             SheetDef sheetDef = new SheetDef();
             String sheetName = sheetNode.getStringAttribute("sheetName");
             if (sheetName != null && !sheetName.isEmpty()) {
-                sheetDef.setName(sheetName);
+                sheetDef.setSheetName(sheetName);
             }
 
             List<XNode> tableNodeList = sheetNode.getChildren();
@@ -86,7 +86,7 @@ public class WorkbookXMLParserBuilder extends AbstractXMLParseBuilder<WorkbookDe
 
                     columnDefs.add(columnDef);
                 }
-                tableDef.setColumns(columnDefs);
+                tableDef.setColumnDefs(columnDefs);
             }
             data.getSheetDefs().add(sheetDef);
         }

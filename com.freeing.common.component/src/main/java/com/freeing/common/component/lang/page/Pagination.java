@@ -1,4 +1,6 @@
-package com.freeing.common.component.object.db;
+package com.freeing.common.component.lang.page;
+
+import com.freeing.common.component.lang.order.Order;
 
 import java.io.Serializable;
 
@@ -18,7 +20,7 @@ public class Pagination implements Serializable {
     private int pageNumber;
 
     /**
-     * 每页结果数
+     * 每页大小
      */
     private int pageSize;
 

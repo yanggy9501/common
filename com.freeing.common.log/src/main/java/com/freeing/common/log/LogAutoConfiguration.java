@@ -1,12 +1,12 @@
 package com.freeing.common.log;
 
-import com.freeing.common.log.config.OperationLogProperties;
+import com.freeing.common.log.config.AuditLogProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 /**
  * @author yanggy
  */
-@EnableConfigurationProperties(OperationLogProperties.class)
+@EnableConfigurationProperties(AuditLogProperties.class)
 public class LogAutoConfiguration {
 
 }

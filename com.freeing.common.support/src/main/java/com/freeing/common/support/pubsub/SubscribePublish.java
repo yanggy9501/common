@@ -130,7 +130,7 @@ public class SubscribePublish {
     }
 
     /**
-     * 生产异步消息P
+     * 生产异步消息
      *
      * @param messageType 消息类型
      * @param message     消息

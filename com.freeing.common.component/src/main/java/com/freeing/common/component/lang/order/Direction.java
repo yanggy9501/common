@@ -1,4 +1,4 @@
-package com.freeing.common.component.object;
+package com.freeing.common.component.lang.order;
 
 import com.freeing.common.component.util.StringUtils;
 
@@ -39,7 +39,8 @@ public enum Direction {
         try {
             return Direction.valueOf(value.toUpperCase());
         } catch (Exception e) {
-            throw new IllegalArgumentException("Invalid value [" + value + "] for orders given! Has to be either 'desc' or 'asc' (case insensitive).",  e);
+            throw new IllegalArgumentException("Invalid value [" + value + "] for orders given! " +
+                "Has to be either 'desc' or 'asc' (case insensitive).",  e);
         }
     }
 }

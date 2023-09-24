@@ -10,7 +10,7 @@ import java.lang.reflect.Field;
  *
  * @author yanggy
  */
-public class StringValuePersistChecker extends AbstractChecker{
+public class StringValuePersistChecker extends AbstractChecker {
     /**
      * check
      *

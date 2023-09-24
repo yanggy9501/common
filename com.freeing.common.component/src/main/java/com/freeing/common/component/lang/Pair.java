@@ -1,4 +1,4 @@
-package com.freeing.common.component.object;
+package com.freeing.common.component.lang;
 
 import java.io.Serializable;
 

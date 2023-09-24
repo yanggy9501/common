@@ -31,12 +31,12 @@
          }
      
          @Override
-         protected void beforeProceed(OperationLog operationLog, Object[] args) {
+         protected void beforeProceed(OperationLog auditLog, Object[] args) {
              System.out.println("扩展：目标方法执行之前");
          }
      
          @Override
-         protected void afterProceed(OperationLog operationLog, Object result) {
+         protected void afterProceed(OperationLog auditLog, Object result) {
              System.out.println("扩展：目标方法执行之后");
          }
      }
@@ -50,8 +50,8 @@
      @Component
      public class MyLogListener extends BaseLogListener {
          @Override
-         protected void apply(OperationLog operationLog) {
-             System.out.println(operationLog);
+         protected void apply(OperationLog auditLog) {
+             System.out.println(auditLog);
          }
      }
      ```

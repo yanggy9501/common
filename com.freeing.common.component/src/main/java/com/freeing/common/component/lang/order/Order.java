@@ -1,6 +1,6 @@
-package com.freeing.common.component.object.db;
+package com.freeing.common.component.lang.order;
 
-import com.freeing.common.component.object.Direction;
+import com.sun.istack.internal.NotNull;
 
 import java.io.Serializable;
 
@@ -32,7 +32,7 @@ public class Order implements Serializable {
         this.direction = Direction.ASC;
     }
 
-    public Order(String field, Direction direction) {
+    public Order(String field, @NotNull Direction direction) {
         this(field);
         this.direction = direction;
     }
@@ -63,7 +63,7 @@ public class Order implements Serializable {
      * 设置排序方向
      * @param direction 排序方向
      */
-    public void setDirection(Direction direction) {
+    public void setDirection(@NotNull Direction direction) {
         this.direction = direction;
     }
 

@@ -3,8 +3,8 @@ package com.freeing.common.log.aspect;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.support.spring.PropertyPreFilters;
 import com.freeing.common.log.annotation.Log;
-import com.freeing.common.log.config.OperationLogProperties;
-import com.freeing.common.log.domain.OperationLog;
+import com.freeing.common.log.config.AuditLogProperties;
+import com.freeing.common.log.model.AuditLog;
 import com.freeing.common.log.event.LogEvent;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -29,7 +29,7 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 操作日志基础切面类
+ * 操作日志基础切面类，提供两个扩展点，子类去实现这两个扩展点以完成操作人或者其他信息
  *
  * @author yanggy
  */
@@ -42,7 +42,7 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
     private ApplicationContext applicationContext;
 
     @Autowired
-    private OperationLogProperties operationLogProperties;
+    private AuditLogProperties auditLogProperties;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -51,7 +51,7 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
 
     @PostConstruct
     public void init() {
-        String excludeProperties = operationLogProperties.getExcludeProperties();
+        String excludeProperties = auditLogProperties.getExcludeProperties();
         ArrayList<String> list = new ArrayList<>();
         if (excludeProperties != null) {
             String[] excludeFields = excludeProperties.split(",");
@@ -73,79 +73,79 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
 
     @Around(value = "logPointcut()")
     public Object logAround(ProceedingJoinPoint pjp) throws Throwable {
-        OperationLog operationLog = new OperationLog();
+        AuditLog auditLog = new AuditLog();
 
         // 设置登录信息
-        operationLog.setOperatorName(getOperatorName());
-        operationLog.setOperatorId(getOperatorId());
+        // auditLog.setOperatorName(getOperatorName());
+        // auditLog.setOperatorId(getOperatorId());
 
         // 设置 class 信息
         MethodSignature methodSignature = (MethodSignature) pjp.getSignature();
         // 获取正在访问的类
         Class<?> executionClass = pjp.getTarget().getClass();
-        operationLog.setClassPath(executionClass.getCanonicalName());
+        auditLog.setClassPath(executionClass.getCanonicalName());
         // 获取正在访问的方法
         Method executionMethod = methodSignature.getMethod();
         // 获取访问的方法的名称
         String methodName = pjp.getSignature().getName();
-        operationLog.setActionMethod(methodName);
+        auditLog.setActionMethod(methodName);
 
         // 获取 @Log 注解信息
         Log annoLog = executionMethod.getAnnotation(Log.class);
-        operationLog.setBusinessType(annoLog.bizType().getType());
-        operationLog.setDescription(annoLog.desc());
+        auditLog.setBusinessType(annoLog.bizType().getType());
+        auditLog.setDescription(annoLog.desc());
         // module 信息通过 uri 映射
-        // operationLog.setModule();
+        // auditLog.setModule();
 
         // 设置请求 Request 信息
         if (getRequest() != null) {
-            operationLog.setHttpMethod(getRequest().getMethod());
-            operationLog.setRequestUri(getRequest().getRequestURI());
-            operationLog.setRequestIp(getIpAddr(getRequest()));
+            auditLog.setHttpMethod(getRequest().getMethod());
+            auditLog.setRequestUri(getRequest().getRequestURI());
+            auditLog.setRequestIp(getIpAddr(getRequest()));
         }
 
         Object[] args = null;
-        if (annoLog.isSaveP()) {
+        if (annoLog.isSaveIn()) {
             // 获取访问的方法的参数
             args = pjp.getArgs();
             if (args != null && args.length > 0) {
-                operationLog.setParams(subString(JSONArray.toJSONString(args, excludePropertyFilter()), 2048));
+                auditLog.setParams(subString(JSONArray.toJSONString(args, excludePropertyFilter()), 2048));
             }
         }
 
         long startNanos = System.nanoTime();
-        operationLog.setStartTime(new Date(System.currentTimeMillis()));
+        auditLog.setStartTime(new Date(System.currentTimeMillis()));
 
         Object result;
         try {
             //让代理方法执行
-            beforeProceed(operationLog, args);
+            beforeProceed(auditLog);
             result = pjp.proceed();
-            if (annoLog.isSaveR()) {
+            if (annoLog.isSaveOut()) {
                 // 获取访问的方法的请求参数
                 if (result != null) {
-                    operationLog.setResult(subString(JSONArray.toJSONString(result, excludePropertyFilter()), 2048));
+                    auditLog.setResult(subString(JSONArray.toJSONString(result, excludePropertyFilter()), 2048));
                 }
             }
-            afterProceed(operationLog, result);
-            operationLog.setStatus("1");
+            afterProceed(auditLog);
+            auditLog.setStatus("1");
         } catch (Throwable ex) {
             // 设置异常信息
-            operationLog.setStatus("0");
-            operationLog.setExDesc(subString(ex.getMessage(), 2048));
-            operationLog.setExDetail(subString(ex.toString(), 2048));
+            auditLog.setStatus("0");
+            auditLog.setExDesc(subString(ex.getMessage(), 2048));
+            auditLog.setExDetail(subString(ex.toString(), 2048));
             // 需要抛出异常，全局异常处理可能还需要进行处理
             throw ex;
         } finally {
             // 设置耗时
             long endNanos = System.nanoTime();
             long elapsedNanos = endNanos - startNanos;
-            operationLog.setElapsedNanos(elapsedNanos);
-            operationLog.setElapsedTime(formatNnanos(elapsedNanos));
-            operationLog.setEndTime(new Date(System.currentTimeMillis()));
+            auditLog.setElapsedNanos(elapsedNanos);
+            auditLog.setElapsedTime(formatNnanos(elapsedNanos));
+            auditLog.setEndTime(new Date(System.currentTimeMillis()));
 
             // 发布事件，日志交给监听者处理
-            applicationContext.publishEvent(new LogEvent(operationLog));
+            applicationContext.publishEvent(new LogEvent(auditLog));
         }
         return result;
     }
@@ -153,20 +153,18 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
     /**
      * 目标方法执行前
      *
-     * @param operationLog 日志实体类
-     * @param args 目标方法参数
+     * @param auditLog 日志实体类
      */
-    protected void beforeProceed(OperationLog operationLog, Object[] args) {
+    protected void beforeProceed(AuditLog auditLog) {
 
     }
 
     /**
      * 目标方法之后
      *
-     * @param operationLog 日志实体类
-     * @param result 目标方法返回结果
+     * @param auditLog 日志实体类
      */
-    protected void afterProceed(OperationLog operationLog, Object result) {
+    protected void afterProceed(AuditLog auditLog) {
 
     }
 
@@ -175,14 +173,14 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
      *
      * @return
      */
-    protected abstract String getOperatorName();
+    // protected abstract String getOperatorName();
 
     /**
      * 获取操作人 ID
      *
      * @return
      */
-    protected abstract String getOperatorId();
+    // protected abstract String getOperatorId();
 
     private static String subString(String str, int maxLength) {
         if (str == null) {

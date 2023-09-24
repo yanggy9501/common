@@ -1,4 +1,4 @@
-package com.freeing.common.component.domain;
+package com.freeing.common.component.model;
 
 import java.io.Serializable;
 import java.util.List;

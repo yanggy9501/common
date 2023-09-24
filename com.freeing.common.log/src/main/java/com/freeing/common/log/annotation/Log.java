@@ -17,17 +17,17 @@ public @interface Log {
     BizType bizType() default BizType.OTHER;
 
     /**
-     * 操作说明
+     * |操作说明
      */
     String desc() default "";
 
     /**
      * 是否保存请求参数
      */
-    boolean isSaveP() default true;
+    boolean isSaveIn() default true;
 
     /**
      * 是否保存响应结果
      */
-    boolean isSaveR() default true;
+    boolean isSaveOut() default true;
 }

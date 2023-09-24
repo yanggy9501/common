@@ -1,6 +1,6 @@
 package com.freeing.common.log.listener;
 
-import com.freeing.common.log.domain.OperationLog;
+import com.freeing.common.log.model.AuditLog;
 import com.freeing.common.log.event.LogEvent;
 import org.springframework.context.event.EventListener;
 
@@ -16,9 +16,9 @@ public abstract class LogListener {
 
     @EventListener(LogEvent.class)
     public void saveLog(LogEvent event) {
-        OperationLog operationLog = (OperationLog) event.getSource();
-        this.apply(operationLog);
+        AuditLog auditLog = (AuditLog) event.getSource();
+        this.apply(auditLog);
     }
 
-    protected abstract void apply(OperationLog operationLog);
+    protected abstract void apply(AuditLog auditLog);
 }

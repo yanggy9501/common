@@ -1,4 +1,4 @@
-package com.freeing.common.log.domain;
+package com.freeing.common.log.model;
 
 import com.freeing.common.log.enums.BizType;
 
@@ -10,11 +10,11 @@ import java.util.Map;
  *
  * @author yanggy
  */
-public class OperationLog {
+public class AuditLog {
     /**
      * 日志主键
      */
-    private Long id;
+    private String id;
 
     /**
      * 业务类型 {@link BizType}
@@ -116,11 +116,11 @@ public class OperationLog {
      */
     private Map<String, Object> extra;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -286,7 +286,7 @@ public class OperationLog {
 
     @Override
     public String toString() {
-        return "OperationLog{" +
+        return "AuditLog{" +
             "id=" + id +
             ", businessType='" + businessType + '\'' +
             ", description='" + description + '\'' +

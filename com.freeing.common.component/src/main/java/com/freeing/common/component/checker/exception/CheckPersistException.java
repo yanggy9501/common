@@ -3,7 +3,7 @@ package com.freeing.common.component.checker.exception;
 /**
  * @author yanggy
  */
-public class CheckPersistException extends RuntimeException{
+public class CheckPersistException extends RuntimeException {
     public CheckPersistException(String message) {
         super(message);
     }

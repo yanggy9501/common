@@ -26,8 +26,8 @@ public class I18nUtils {
      */
     private final ResourceBundleMessageSource messageSource;
 
+    /** static 变量，持有对应副本以提供静态方法的支持 */
     private static I18nLocaleResolver customLocaleResolver;
-
     private static ResourceBundleMessageSource customMessageSource;
 
     public I18nUtils(I18nLocaleResolver localeResolver, ResourceBundleMessageSource messageSource) {
@@ -92,7 +92,7 @@ public class I18nUtils {
      * @param args 占位符号对应参数
      * @return 国际化后内容信息
      */
-    public static String getMessage(@NotNull String code, @NotNull Object[] args) {
+    public static String getMessage(@NotNull String code, Object[] args) {
         return getMessage(code, args, code, null);
     }
 

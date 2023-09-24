@@ -2,8 +2,7 @@ package com.freeing.common.component.constant;
 
 /**
  * 返回状态码
- * 操作成功：1
- * 操作失败：-1
+ * 原则：2 + 3 位状态码，前 2 位代表模块，后 3 位代码具体“状态”
  *
  * @author yanggy
  */
@@ -11,12 +10,12 @@ public enum ResultCode {
     /**
      * 操作成功
      */
-    SUCCESS(20000, "Operation success"),
+    SUCCESS(1, "Operation success"),
 
     /**
      * 操作失败
      */
-    FAIL(20100, "Operation fail"),
+    FAIL(0, "Operation fail"),
 
     /**
      * 重复提交

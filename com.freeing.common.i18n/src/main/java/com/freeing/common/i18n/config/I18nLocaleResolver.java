@@ -8,9 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Locale;
 
-/**
- * @author yanggy
- */
 public class I18nLocaleResolver implements LocaleResolver {
 
     public String LANG_KEY = "lang";

@@ -44,18 +44,18 @@ public enum ResultCode {
 
     public static ResultCode get(Integer code) {
         for (ResultCode value : ResultCode.values()) {
-            if (value.getCode().equals(code)) {
+            if (value.code().equals(code)) {
                 return value;
             }
         }
         throw new IllegalArgumentException("Illegal R code '" + code + "'");
     }
 
-    public Integer getCode() {
+    public Integer code() {
         return code;
     }
 
-    public String getMsg() {
+    public String msg() {
         return msg;
     }
 

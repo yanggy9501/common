@@ -1,7 +1,6 @@
 package com.freeing.common.component.lang.order;
 
-import com.sun.istack.internal.NotNull;
-
+import javax.annotation.Nonnull;
 import java.io.Serializable;
 
 /**
@@ -27,12 +26,12 @@ public class Order implements Serializable {
 
     }
 
-    public Order(String field) {
+    public Order(@Nonnull String field) {
         this.field = field;
         this.direction = Direction.ASC;
     }
 
-    public Order(String field, @NotNull Direction direction) {
+    public Order(@Nonnull String field, @Nonnull Direction direction) {
         this(field);
         this.direction = direction;
     }
@@ -48,7 +47,7 @@ public class Order implements Serializable {
      * 设置排序字段
      * @param field 排序字段
      */
-    public void setField(String field) {
+    public void setField(@Nonnull String field) {
         this.field = field;
     }
 
@@ -63,7 +62,7 @@ public class Order implements Serializable {
      * 设置排序方向
      * @param direction 排序方向
      */
-    public void setDirection(@NotNull Direction direction) {
+    public void setDirection(@Nonnull Direction direction) {
         this.direction = direction;
     }
 

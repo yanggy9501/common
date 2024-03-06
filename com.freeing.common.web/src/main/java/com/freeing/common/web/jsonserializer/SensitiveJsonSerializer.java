@@ -28,7 +28,7 @@ public class SensitiveJsonSerializer extends JsonSerializer<String> implements C
     }
 
     /**
-     * 获取属性上的注解属性
+     * 获取属性上的注解属性，通过注解属性获取脱敏策略及其序列化器，否则通过默认
      */
     @Override
     public JsonSerializer<?> createContextual(SerializerProvider prov, BeanProperty property) throws JsonMappingException {

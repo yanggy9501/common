@@ -10,7 +10,7 @@ public interface Invoker {
     /**
      *
      * @param target 目标对象
-     * @param args 目标对象 Method 的入参，若没有参数则入参为 null
+     * @param args 目标对象 Method 的入参
      * @return
      * @throws IllegalAccessException
      * @throws InvocationTargetException

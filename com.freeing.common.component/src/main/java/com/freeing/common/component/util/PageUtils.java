@@ -1,6 +1,6 @@
 package com.freeing.common.component.util;
 
-import com.freeing.common.component.model.PageResult;
+import com.freeing.common.component.response.PageResult;
 
 import java.util.List;
 

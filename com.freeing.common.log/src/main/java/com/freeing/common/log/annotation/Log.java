@@ -17,7 +17,7 @@ public @interface Log {
     BizType bizType() default BizType.OTHER;
 
     /**
-     * |操作说明
+     * 操作说明
      */
     String desc() default "";
 

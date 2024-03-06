@@ -7,7 +7,6 @@ import java.lang.annotation.*;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-@Inherited
 public @interface CheckPersist {
     /**
      * 是否允许为 null

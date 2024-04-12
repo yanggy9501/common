@@ -10,9 +10,4 @@
 
     <version>1.0</version>
 
-    <description>mq 抽象模块</description>
-    <modules>
-        <module>com.freeing.common.ftp</module>
-    </modules>
-
 </project>

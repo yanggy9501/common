@@ -35,7 +35,7 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
     }
 
     @Override
-    void connectByPrk(String host, int port, String username, String privateKeyFile) {
+    protected void connectByPrk(String host, int port, String username, String privateKeyFile) {
         try {
             JSch jsch = new JSch();
             // 设置密钥
@@ -67,7 +67,7 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
     }
 
     @Override
-    void connectByPwd(String host, int port, String username, String password) {
+    protected void connectByPwd(String host, int port, String username, String password) {
         try {
             JSch jsch = new JSch();
             Session session = jsch.getSession(username, host, port);
@@ -180,7 +180,7 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
     }
 
     @Override
-    public void changeDirectory(String dirPath) {
+    protected void changeDirectory(String dirPath) {
         String standardPath = standardPath(dirPath);
         if (standardPath.isEmpty()) {
             throw new FtpException("Error dir path:" + "" + dirPath + "");

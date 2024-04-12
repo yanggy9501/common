@@ -20,7 +20,7 @@ public abstract class AbstractFtpClient<T> implements IFtpClient {
      * @param username       FTP连接用户名
      * @param privateKeyFile FTP密钥文件
      */
-    abstract void connectByPrk(String host, int port, String username, String privateKeyFile);
+    protected abstract void connectByPrk(String host, int port, String username, String privateKeyFile);
 
     /**
      * 创建连接
@@ -30,14 +30,14 @@ public abstract class AbstractFtpClient<T> implements IFtpClient {
      * @param username FTP连接用户名
      * @param password 密码
      */
-    abstract void connectByPwd(String host, int port, String username, String password);
+    protected abstract void connectByPwd(String host, int port, String username, String password);
 
     /**
      * 切换目录
      *
      * @param dirPath 目录
      */
-    abstract void changeDirectory(String dirPath);
+    protected abstract void changeDirectory(String dirPath);
 
     /**
      * 标准化路径

@@ -15,6 +15,8 @@ import java.util.*;
  */
 public class SftpClient extends AbstractFtpClient<ChannelSftp> {
 
+    private static final int DEFAULT_TIMEOUT = 30000;
+
     private FtpProperty ftpProperty;
 
     protected SftpClient(FtpProperty ftpProperty) {
@@ -46,16 +48,16 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
             session.setConfig("StrictHostKeyChecking", "no");
             // 配置属性
             Properties properties = new Properties();
-            // // 不校验域名
+            // 不校验域名
             properties.put("StrictHostKeyChecking", "no");
             session.setConfig(properties);
             // 使用会话开启连接
             if (!session.isConnected()) {
-                session.connect(ftpProperty.getTimeout() > 0 ? ftpProperty.getTimeout() : 30000);
+                session.connect(ftpProperty.getTimeout() > 0 ? ftpProperty.getTimeout() : DEFAULT_TIMEOUT);
             }
             Channel channel = session.openChannel("sftp");
             if (!channel.isConnected()) {
-                channel.connect(ftpProperty.getTimeout() > 0 ? ftpProperty.getTimeout() : 30000);
+                channel.connect(ftpProperty.getTimeout() > 0 ? ftpProperty.getTimeout() : DEFAULT_TIMEOUT);
             }
             client = (ChannelSftp) channel;
             // 记录根目录
@@ -78,12 +80,12 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
             // 默认情况下，JSch 库本身并没有会话超时时间。通常建议设置会话超时，（单位：毫秒）
             // 使用会话开启连接
             if (!session.isConnected()) {
-                session.connect(ftpProperty.getTimeout() > 0 ? ftpProperty.getTimeout() : 30000);
+                session.connect(ftpProperty.getTimeout() > 0 ? ftpProperty.getTimeout() : DEFAULT_TIMEOUT);
             }
 
             Channel channel = session.openChannel("sftp");
             if (!channel.isConnected()) {
-                channel.connect(ftpProperty.getTimeout() > 0 ? ftpProperty.getTimeout() : 30000);
+                channel.connect(ftpProperty.getTimeout() > 0 ? ftpProperty.getTimeout() : DEFAULT_TIMEOUT);
             }
 
             client = (ChannelSftp) channel;
@@ -284,12 +286,10 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
         } catch (Exception e) {
             throw new FtpException("Fila to upload", e);
         } finally {
-            if (uploadIn != null) {
-                try {
-                    uploadIn.close();
-                } catch (IOException ignored) {
+            try {
+                uploadIn.close();
+            } catch (IOException ignored) {
 
-                }
             }
         }
     }

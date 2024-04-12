@@ -75,12 +75,16 @@ public class FtpProperty {
         }
 
         public Builder password(String password) {
-            certificate = "pwd@" + password;
+            if (certificate != null && !certificate.isEmpty()) {
+                certificate = "pwd@" + password;
+            }
             return this;
         }
 
         public Builder privateKeyFile(String privateKeyFile) {
-            certificate = "pri@" + privateKeyFile;
+            if (certificate != null && !certificate.isEmpty()) {
+                certificate = "pri@" + privateKeyFile;
+            }
             return this;
         }
 

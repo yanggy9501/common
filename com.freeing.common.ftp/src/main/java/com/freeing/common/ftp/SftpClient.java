@@ -1,6 +1,5 @@
 package com.freeing.common.ftp;
 
-import com.freeing.common.ftp.attr.Attrs;
 import com.freeing.common.ftp.enums.FileType;
 import com.freeing.common.ftp.exception.FtpException;
 import com.jcraft.jsch.*;
@@ -122,7 +121,7 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
     }
 
     @Override
-    public List<Attrs> list(String dirPath) {
+    public List<FtpAttrs> list(String dirPath) {
         String standardDirPath = standardPath(dirPath);
         // check dir
         if (FileType.DIRECTORY != getType(standardDirPath)) {
@@ -132,34 +131,34 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
         try {
             final Vector<ChannelSftp.LsEntry> lists = (Vector<ChannelSftp.LsEntry>) getClient().ls(standardDirPath);
             // 排除特殊目录：当前目录（. ） 父目录（..）
-            ArrayList<Attrs> lsResult = new ArrayList<>();
+            ArrayList<FtpAttrs> lsResult = new ArrayList<>();
             for (ChannelSftp.LsEntry entry : lists) {
                 String filename = entry.getFilename();
                 if (".".equals(filename) || "..".equals(filename)) {
                     continue;
                 }
-                Attrs attrs = new Attrs();
-                attrs.setFilename(filename);
+                FtpAttrs ftpAttrs = new FtpAttrs();
+                ftpAttrs.setFilename(filename);
 
                 SftpATTRS sftpATTRS = entry.getAttrs();
-                attrs.setSize(sftpATTRS.getSize());
-                attrs.setParentPath(standardDirPath);
+                ftpAttrs.setSize(sftpATTRS.getSize());
+                ftpAttrs.setParentPath(standardDirPath);
 
                 Instant instant = Instant.ofEpochSecond(Integer.toUnsignedLong(sftpATTRS.getMTime()));
-                attrs.setLastUpdateTime(Date.from(instant));
+                ftpAttrs.setLastUpdateTime(Date.from(instant));
 
-                attrs.setType(getType(sftpATTRS));
+                ftpAttrs.setType(getType(sftpATTRS));
 
                 // 文件扩展名
-                if (attrs.getType() == FileType.FILE) {
+                if (ftpAttrs.getType() == FileType.FILE) {
                     // 获取扩展名
                     int lastIndexOf = filename.lastIndexOf(".");
                     if (lastIndexOf > 0) {
-                        attrs.setExtension(filename.substring(lastIndexOf));
+                        ftpAttrs.setExtension(filename.substring(lastIndexOf));
                     }
                 }
 
-                lsResult.add(attrs);
+                lsResult.add(ftpAttrs);
             }
             return lsResult;
         } catch (Exception e) {
@@ -284,6 +283,14 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
             client.put(uploadIn, filename);
         } catch (Exception e) {
             throw new FtpException("Fila to upload", e);
+        } finally {
+            if (uploadIn != null) {
+                try {
+                    uploadIn.close();
+                } catch (IOException ignored) {
+
+                }
+            }
         }
     }
 

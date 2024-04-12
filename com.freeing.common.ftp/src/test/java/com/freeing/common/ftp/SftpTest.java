@@ -1,7 +1,5 @@
 package com.freeing.common.ftp;
 
-import com.freeing.common.ftp.attr.Attrs;
-
 import java.util.List;
 
 /**
@@ -9,7 +7,7 @@ import java.util.List;
  */
 public class SftpTest {
     public static void main(String[] args) {
-
+        testHr();
     }
 
     public static void testHr() {
@@ -18,8 +16,8 @@ public class SftpTest {
             .timeout(30000)
             .build();
         IFtpClient ftpClient = FtpUtil.newClient(ftpProperty);
-        List<Attrs> list = ftpClient.list("/root");
-        for (Attrs attrs : list) {
+        List<FtpAttrs> list = ftpClient.list("/root");
+        for (FtpAttrs attrs : list) {
             System.out.println(attrs);
         }
 

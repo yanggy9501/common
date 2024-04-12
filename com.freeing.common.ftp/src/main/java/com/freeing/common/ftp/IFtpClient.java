@@ -1,6 +1,5 @@
 package com.freeing.common.ftp;
 
-import com.freeing.common.ftp.attr.Attrs;
 import com.freeing.common.ftp.enums.FileType;
 
 import java.io.InputStream;
@@ -32,7 +31,7 @@ public interface IFtpClient {
      * @param dirPath  目录名称
      * @return dirPath 目录名称列表
      */
-    List<Attrs> list(String dirPath);
+    List<FtpAttrs> list(String dirPath);
 
     /**
      * 断开连接

@@ -1,10 +1,10 @@
-package com.freeing.common.ftp.attr;
+package com.freeing.common.ftp;
 
 import com.freeing.common.ftp.enums.FileType;
 
 import java.util.Date;
 
-public class Attrs {
+public class FtpAttrs {
     /**
      * 文件名
      */
@@ -85,7 +85,7 @@ public class Attrs {
 
     @Override
     public String toString() {
-        return "Attrs{" +
+        return "FtpAttrs{" +
             "filename='" + filename + '\'' +
             ", parentPath='" + parentPath + '\'' +
             ", type=" + type +

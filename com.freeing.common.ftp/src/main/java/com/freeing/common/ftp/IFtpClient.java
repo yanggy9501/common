@@ -39,13 +39,6 @@ public interface IFtpClient {
     void disconnect();
 
     /**
-     * 切换目录
-     *
-     * @param dirPath 目录
-     */
-    void changeDirectory(String dirPath);
-
-    /**
      * 读取文件
      *
      * @param filePath 文件路径

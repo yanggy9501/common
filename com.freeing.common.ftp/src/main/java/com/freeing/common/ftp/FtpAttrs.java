@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class FtpAttrs {
     /**
-     * 文件名
+     * 文件、目录名
      */
     private String filename;
 
@@ -26,7 +26,7 @@ public class FtpAttrs {
     private String extension;
 
     /**
-     * 文件大小，单位：byte
+     * 文件大小，单位：byte，注意目录的大小不是其目录中所有文件大小之后，目录本身也是文件也是有大小的
      */
     private Long size;
 

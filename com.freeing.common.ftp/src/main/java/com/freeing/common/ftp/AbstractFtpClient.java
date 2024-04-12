@@ -33,6 +33,13 @@ public abstract class AbstractFtpClient<T> implements IFtpClient {
     abstract void connectByPwd(String host, int port, String username, String password);
 
     /**
+     * 切换目录
+     *
+     * @param dirPath 目录
+     */
+    abstract void changeDirectory(String dirPath);
+
+    /**
      * 标准化路径
      *
      * @param aPath 文件路径

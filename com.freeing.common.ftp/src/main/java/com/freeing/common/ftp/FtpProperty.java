@@ -83,7 +83,7 @@ public class FtpProperty {
 
         public Builder privateKeyFile(String privateKeyFile) {
             if (privateKeyFile != null && !privateKeyFile.isEmpty()) {
-                certificate = "pri@" + privateKeyFile;
+                certificate = "prk@" + privateKeyFile;
             }
             return this;
         }

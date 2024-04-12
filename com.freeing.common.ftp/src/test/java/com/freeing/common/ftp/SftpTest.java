@@ -7,12 +7,8 @@ import java.util.List;
  */
 public class SftpTest {
     public static void main(String[] args) {
-        testHr();
-    }
-
-    public static void testHr() {
-        FtpProperty ftpProperty = FtpProperty.builder("sftp", "dropzone.paypal.cn", 22, "batch_huarun_exchange")
-            .privateKeyFile("123456")
+        FtpProperty ftpProperty = FtpProperty.builder("sftp", "192.168.134.128", 22, "root")
+            .password("123456")
             .timeout(30000)
             .build();
         IFtpClient ftpClient = FtpUtil.newClient(ftpProperty);

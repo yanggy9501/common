@@ -143,7 +143,6 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
                 ftpAttrs.setFilename(filename);
 
                 SftpATTRS sftpATTRS = entry.getAttrs();
-                ftpAttrs.setSize(sftpATTRS.getSize());
                 ftpAttrs.setParentPath(standardDirPath);
 
                 Instant instant = Instant.ofEpochSecond(Integer.toUnsignedLong(sftpATTRS.getMTime()));
@@ -153,6 +152,7 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
 
                 // 文件扩展名
                 if (ftpAttrs.getType() == FileType.FILE) {
+                    ftpAttrs.setSize(sftpATTRS.getSize());
                     // 获取扩展名
                     int lastIndexOf = filename.lastIndexOf(".");
                     if (lastIndexOf > 0) {

@@ -4,7 +4,6 @@ package com.freeing.common.ftp.enums;
  * 文件类型
  */
 public enum FileType {
-
     NOT_EXIST,// 不存在
     FILE, // 普通文件
     DIRECTORY, // 目录

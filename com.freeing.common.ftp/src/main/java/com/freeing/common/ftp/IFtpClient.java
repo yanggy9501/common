@@ -58,7 +58,7 @@ public interface IFtpClient {
      * 上传文件
      *
      * @param uploadIn  文件输入流
-     * @param remoteDir 上传到FTP服务的所在目录
+     * @param remoteDir 上传到FTP服务的所在目录，不存在则创建
      * @param filename  存储的文件名
      */
     void upload(InputStream uploadIn, String remoteDir, String filename);

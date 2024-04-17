@@ -17,7 +17,7 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
 
     private static final int DEFAULT_TIMEOUT = 30000;
 
-    private FtpProperty ftpProperty;
+    private final FtpProperty ftpProperty;
 
     protected SftpClient(FtpProperty ftpProperty) {
         this.ftpProperty = ftpProperty;
@@ -195,6 +195,19 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
     }
 
     @Override
+    protected void makeDirectory(String dirPath) {
+        String standardPath = standardPath(dirPath);
+        if (getType(standardPath) == FileType.DIRECTORY) {
+            return;
+        }
+        try {
+            client.mkdir(standardPath);
+        } catch (SftpException e) {
+            throw new FtpException("Fail to mkdir");
+        }
+    }
+
+    @Override
     public byte[] readFile(String filePath) {
         InputStream inputStream = null;
         ByteArrayOutputStream outputStream; // 字节流不需要关闭
@@ -280,6 +293,7 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
             return;
         }
         try {
+            mkdirIfNotExist(remoteDir);
             // 切换到目标路径
             changeDirectory(remoteDir);
             client.put(uploadIn, filename);
@@ -292,6 +306,10 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
 
             }
         }
+    }
+
+    private void mkdirIfNotExist(String dirPath) {
+        makeDirectory(dirPath);
     }
 
     @Override

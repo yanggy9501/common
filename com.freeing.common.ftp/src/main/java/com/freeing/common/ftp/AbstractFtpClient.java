@@ -40,6 +40,13 @@ public abstract class AbstractFtpClient<T> implements IFtpClient {
     protected abstract void changeDirectory(String dirPath);
 
     /**
+     * 创建目录
+     *
+     * @param dirPath 目录
+     */
+    protected abstract void makeDirectory(String dirPath);
+
+    /**
      * 标准化路径
      *
      * @param aPath 文件路径

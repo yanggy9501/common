@@ -31,12 +31,17 @@ public class FtpClient extends AbstractFtpClient<ChannelSftp> {
     }
 
     @Override
+    protected void makeDirectory(String dirPath) {
+
+    }
+
+    @Override
     public FileType getType(String path) {
         return null;
     }
 
     @Override
-    public List<FtpAttrs> list(String dirPath) {
+    public List<FtpFileAttrs> list(String dirPath) {
         return null;
     }
 

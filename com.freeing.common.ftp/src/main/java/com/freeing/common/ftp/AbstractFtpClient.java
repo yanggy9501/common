@@ -41,6 +41,7 @@ public abstract class AbstractFtpClient<T> implements IFtpClient {
 
     /**
      * 创建目录
+     * 如果父级目录不存在则创建父级目录
      *
      * @param dirPath 目录
      */
@@ -75,6 +76,10 @@ public abstract class AbstractFtpClient<T> implements IFtpClient {
         return path;
     }
 
+    @Override
+    public void close() throws Exception {
+        disconnect();
+    }
 
     protected T getClient() {
         return client;

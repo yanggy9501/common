@@ -123,7 +123,7 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
     }
 
     @Override
-    public List<FtpAttrs> list(String dirPath) {
+    public List<FtpFileAttrs> list(String dirPath) {
         String standardDirPath = standardPath(dirPath);
         // check dir
         if (FileType.DIRECTORY != getType(standardDirPath)) {
@@ -133,34 +133,34 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
         try {
             final Vector<ChannelSftp.LsEntry> lists = (Vector<ChannelSftp.LsEntry>) getClient().ls(standardDirPath);
             // 排除特殊目录：当前目录（. ） 父目录（..）
-            ArrayList<FtpAttrs> lsResult = new ArrayList<>();
+            ArrayList<FtpFileAttrs> lsResult = new ArrayList<>();
             for (ChannelSftp.LsEntry entry : lists) {
                 String filename = entry.getFilename();
                 if (".".equals(filename) || "..".equals(filename)) {
                     continue;
                 }
-                FtpAttrs ftpAttrs = new FtpAttrs();
-                ftpAttrs.setFilename(filename);
+                FtpFileAttrs ftpFileAttrs = new FtpFileAttrs();
+                ftpFileAttrs.setFilename(filename);
 
                 SftpATTRS sftpATTRS = entry.getAttrs();
-                ftpAttrs.setParentPath(standardDirPath);
+                ftpFileAttrs.setParentPath(standardDirPath);
 
                 Instant instant = Instant.ofEpochSecond(Integer.toUnsignedLong(sftpATTRS.getMTime()));
-                ftpAttrs.setLastUpdateTime(Date.from(instant));
+                ftpFileAttrs.setLastUpdateTime(Date.from(instant));
 
-                ftpAttrs.setType(getType(sftpATTRS));
+                ftpFileAttrs.setType(getType(sftpATTRS));
 
                 // 文件扩展名
-                if (ftpAttrs.getType() == FileType.FILE) {
-                    ftpAttrs.setSize(sftpATTRS.getSize());
+                if (ftpFileAttrs.getType() == FileType.FILE) {
+                    ftpFileAttrs.setSize(sftpATTRS.getSize());
                     // 获取扩展名
                     int lastIndexOf = filename.lastIndexOf(".");
                     if (lastIndexOf > 0) {
-                        ftpAttrs.setExtension(filename.substring(lastIndexOf));
+                        ftpFileAttrs.setExtension(filename.substring(lastIndexOf));
                     }
                 }
 
-                lsResult.add(ftpAttrs);
+                lsResult.add(ftpFileAttrs);
             }
             return lsResult;
         } catch (Exception e) {
@@ -200,10 +200,24 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
         if (getType(standardPath) == FileType.DIRECTORY) {
             return;
         }
+        String parentDir;
         try {
-            client.mkdir(standardPath);
+            // 逐级创建目录
+            String[] split = standardPath.split("/");
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0, len = split.length; i < len; i++) {
+                if (split[i].isEmpty()) {
+                    continue;
+                }
+                sb.append("/").append(split[i]);
+                parentDir = sb.toString();
+                if (getType(parentDir) == FileType.DIRECTORY) {
+                    continue;
+                }
+                client.mkdir(parentDir);
+            }
         } catch (SftpException e) {
-            throw new FtpException("Fail to mkdir");
+            throw new FtpException("Fail to mkdir", e);
         }
     }
 
@@ -213,7 +227,7 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
         ByteArrayOutputStream outputStream; // 字节流不需要关闭
         String standardPath = standardPath(filePath);
         if (getType(standardPath) != FileType.FILE) {
-            throw new FtpException("This is not file, not support");
+            throw new FtpException("This is not file, No support");
         }
 
         String fileName;
@@ -223,7 +237,7 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
             if (standardPath.length() > 0) {
                 fileName = standardPath;
             } else {
-                throw new FtpException("没有输入文件路径");
+                throw new FtpException("File path is empty.");
             }
             parentDir = rootPath;
         } else {
@@ -243,7 +257,7 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
             }
             return outputStream.toByteArray();
         } catch (Exception e) {
-            throw new FtpException("Fail to read file.");
+            throw new FtpException("Fail to read file.", e);
         } finally {
             if (inputStream != null) {
                 try {
@@ -259,7 +273,7 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
     public InputStream getFile(String filePath) {
         String standardPath = standardPath(filePath);
         if (getType(standardPath) != FileType.FILE) {
-            throw new FtpException("This is not file, not support");
+            throw new FtpException("This is not file, No support");
         }
 
         String fileName;
@@ -316,7 +330,7 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
     public void deleteFile(String filePath) {
         String standardPath = standardPath(filePath);
         if (getType(standardPath) != FileType.FILE) {
-            throw new FtpException("This is not file, Not supported del");
+            throw new FtpException("This is not file, No support");
         }
         String fileName;
         int idx = standardPath.lastIndexOf("/");
@@ -336,7 +350,7 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
         try {
             client.rm(fileName);
         } catch (SftpException e) {
-            throw new FtpException("Fail to del file");
+            throw new FtpException("Fail to del file", e);
         }
     }
 }

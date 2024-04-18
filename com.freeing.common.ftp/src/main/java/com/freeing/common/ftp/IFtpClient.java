@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author yanggy
  */
-public interface IFtpClient {
+public interface IFtpClient extends AutoCloseable {
     /**
      * 获取FTP/SFTP所处根目录
      *
@@ -31,7 +31,7 @@ public interface IFtpClient {
      * @param dirPath  目录名称
      * @return dirPath 目录名称列表
      */
-    List<FtpAttrs> list(String dirPath);
+    List<FtpFileAttrs> list(String dirPath);
 
     /**
      * 断开连接

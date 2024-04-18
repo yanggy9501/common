@@ -10,7 +10,7 @@ public class FtpUtil {
             return new SftpClient(ftpProperty);
         }
         if ("ftp".equals(ftpProperty.getProtocol())) {
-
+            return new FtpClient();
         }
         return null;
     }

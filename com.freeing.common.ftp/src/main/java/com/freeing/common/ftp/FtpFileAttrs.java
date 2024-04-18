@@ -1,6 +1,6 @@
 package com.freeing.common.ftp;
 
-import com.freeing.common.ftp.enums.FileType;
+import com.freeing.common.ftp.enums.FType;
 
 import java.util.Date;
 
@@ -18,7 +18,7 @@ public class FtpFileAttrs {
     /**
      * 类型：普通文件、目录，超链接等等
      */
-    private FileType type;
+    private FType type;
 
     /**
      * 扩展名
@@ -51,11 +51,11 @@ public class FtpFileAttrs {
         this.parentPath = parentPath;
     }
 
-    public FileType getType() {
+    public FType getType() {
         return type;
     }
 
-    public void setType(FileType type) {
+    public void setType(FType type) {
         this.type = type;
     }
 

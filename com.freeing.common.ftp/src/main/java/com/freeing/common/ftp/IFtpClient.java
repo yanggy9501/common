@@ -1,6 +1,6 @@
 package com.freeing.common.ftp;
 
-import com.freeing.common.ftp.enums.FileType;
+import com.freeing.common.ftp.enums.FType;
 
 import java.io.InputStream;
 import java.util.List;
@@ -11,34 +11,6 @@ import java.util.List;
  * @author yanggy
  */
 public interface IFtpClient extends AutoCloseable {
-    /**
-     * 标准化路径
-     *
-     * @param aPath 文件路径
-     */
-    public static String standardPath(String aPath) {
-        String path = aPath == null ? "" : aPath.trim();
-        if (path.isEmpty()) {
-            return "";
-        }
-
-        if (path.equals("/")) {
-            return path;
-        }
-
-        // 反斜杠"\\"转正"/"
-        path = path.replaceAll("\\\\", "/");
-        // 双正斜杠"//"去重 "/"
-        while (path.contains("//")) {
-            path = path.replaceAll("//", "/");
-        }
-
-        // 去掉结尾 "/"
-        if (path.endsWith("/")) {
-            return path.substring(0, path.length() - 1);
-        }
-        return path;
-    }
 
     /**
      * 获取FTP/SFTP所处根目录
@@ -52,7 +24,7 @@ public interface IFtpClient extends AutoCloseable {
      *
      * @param path 文件或目录路径
      */
-    FileType getType(String path);
+    FType getType(String path);
 
     /**
      * 根据上级目录列出下级目录的名称列表

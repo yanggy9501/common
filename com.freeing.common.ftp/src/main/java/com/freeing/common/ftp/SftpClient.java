@@ -1,6 +1,6 @@
 package com.freeing.common.ftp;
 
-import com.freeing.common.ftp.enums.FileType;
+import com.freeing.common.ftp.enums.FType;
 import com.freeing.common.ftp.exception.FtpException;
 import com.jcraft.jsch.*;
 
@@ -97,7 +97,7 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
     }
 
     @Override
-    public FileType getType(String path) {
+    public FType getType(String path) {
         String standardPath = standardPath(path);
         try {
             // lstat()：方法遵循符号链接 link（即返回链接的属性而不是目标）
@@ -105,28 +105,28 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
             SftpATTRS attrs = client.lstat(standardPath);
             return getType(attrs);
         } catch (SftpException e) {
-            return FileType.NOT_EXIST;
+            return FType.NOT_EXIST;
         }
     }
 
-    private static FileType getType(SftpATTRS attrs) {
+    private static FType getType(SftpATTRS attrs) {
         if (attrs.isReg()) {
-            return FileType.FILE;
+            return FType.FILE;
         }
         if (attrs.isDir()) {
-            return FileType.DIRECTORY;
+            return FType.DIRECTORY;
         }
         if (attrs.isLink()) {
-            return FileType.LINK;
+            return FType.LINK;
         }
-        return FileType.OTHER;
+        return FType.OTHER;
     }
 
     @Override
     public List<FtpFileAttrs> list(String dirPath) {
         String standardDirPath = standardPath(dirPath);
         // check dir
-        if (FileType.DIRECTORY != getType(standardDirPath)) {
+        if (FType.DIRECTORY != getType(standardDirPath)) {
             throw new FtpException("This is not directory.");
         }
         // ls dir
@@ -151,7 +151,7 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
                 ftpFileAttrs.setType(getType(sftpATTRS));
 
                 // 文件扩展名
-                if (ftpFileAttrs.getType() == FileType.FILE) {
+                if (ftpFileAttrs.getType() == FType.FILE) {
                     ftpFileAttrs.setSize(sftpATTRS.getSize());
                     // 获取扩展名
                     int lastIndexOf = filename.lastIndexOf(".");
@@ -197,7 +197,7 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
     @Override
     protected void makeDirectory(String dirPath) {
         String standardPath = standardPath(dirPath);
-        if (getType(standardPath) == FileType.DIRECTORY) {
+        if (getType(standardPath) == FType.DIRECTORY) {
             return;
         }
         String parentDir;
@@ -211,7 +211,7 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
                 }
                 sb.append("/").append(split[i]);
                 parentDir = sb.toString();
-                if (getType(parentDir) == FileType.DIRECTORY) {
+                if (getType(parentDir) == FType.DIRECTORY) {
                     continue;
                 }
                 client.mkdir(parentDir);
@@ -226,7 +226,7 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
         InputStream inputStream = null;
         ByteArrayOutputStream outputStream; // 字节流不需要关闭
         String standardPath = standardPath(filePath);
-        if (getType(standardPath) != FileType.FILE) {
+        if (getType(standardPath) != FType.FILE) {
             throw new FtpException("This is not file, No support");
         }
 
@@ -272,7 +272,7 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
     @Override
     public InputStream getFile(String filePath) {
         String standardPath = standardPath(filePath);
-        if (getType(standardPath) != FileType.FILE) {
+        if (getType(standardPath) != FType.FILE) {
             throw new FtpException("This is not file, No support");
         }
 
@@ -329,7 +329,7 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
     @Override
     public void deleteFile(String filePath) {
         String standardPath = standardPath(filePath);
-        if (getType(standardPath) != FileType.FILE) {
+        if (getType(standardPath) != FType.FILE) {
             throw new FtpException("This is not file, No support");
         }
         String fileName;

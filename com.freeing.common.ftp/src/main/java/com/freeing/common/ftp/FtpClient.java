@@ -1,6 +1,6 @@
 package com.freeing.common.ftp;
 
-import com.freeing.common.ftp.enums.FileType;
+import com.freeing.common.ftp.enums.FType;
 import com.jcraft.jsch.ChannelSftp;
 
 import java.io.InputStream;
@@ -36,7 +36,7 @@ public class FtpClient extends AbstractFtpClient<ChannelSftp> {
     }
 
     @Override
-    public FileType getType(String path) {
+    public FType getType(String path) {
         return null;
     }
 

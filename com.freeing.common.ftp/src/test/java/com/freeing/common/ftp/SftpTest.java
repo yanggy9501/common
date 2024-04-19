@@ -12,7 +12,7 @@ public class SftpTest {
             .timeout(30000)
             .build();
 
-        IFtpClient ftpClient = FtpUtil.newClient(ftpProperty);
+        IFtpClient ftpClient = new FtpClientFactory(ftpProperty).newClient();
         System.out.println(ftpClient.getRootPath());
         List<FtpFileAttrs> list = ftpClient.list(ftpClient.getRootPath() + "/a/..");
         for (FtpFileAttrs attrs : list) {

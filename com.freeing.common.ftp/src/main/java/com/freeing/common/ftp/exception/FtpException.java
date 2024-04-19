@@ -1,8 +1,5 @@
 package com.freeing.common.ftp.exception;
 
-/**
- * @author yanggy
- */
 public class FtpException extends RuntimeException {
     public FtpException() {
     }

@@ -8,7 +8,7 @@ public abstract class AbstractFtpClient<T> implements IFtpClient {
     protected T client;
 
     /**
-     * 根目录
+     * 用户根目录
      */
     protected String rootPath;
 

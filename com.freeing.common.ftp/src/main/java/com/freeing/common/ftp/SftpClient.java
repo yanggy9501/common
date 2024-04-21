@@ -44,8 +44,6 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
             jsch.addIdentity(privateKeyFile);
             // 获取session
             Session session = jsch.getSession(username, host, port);
-            // 不校验域名
-            session.setConfig("StrictHostKeyChecking", "no");
             // 配置属性
             Properties properties = new Properties();
             // 不校验域名

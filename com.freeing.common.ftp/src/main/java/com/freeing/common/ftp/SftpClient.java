@@ -188,7 +188,7 @@ public class SftpClient extends AbstractFtpClient<ChannelSftp> {
         try {
             client.cd(standardPath);
         } catch (Exception e) {
-            throw new FtpException("Fail to cd to target directory");
+            throw new FtpException("Fail to cd to target directory", e);
         }
     }
 

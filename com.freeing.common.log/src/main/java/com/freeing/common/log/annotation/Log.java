@@ -19,7 +19,7 @@ public @interface Log {
     /**
      * 操作说明
      */
-    String desc() default "";
+    String description() default "";
 
     /**
      * 是否保存请求参数

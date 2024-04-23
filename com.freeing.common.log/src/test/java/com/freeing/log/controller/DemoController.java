@@ -15,19 +15,19 @@ import java.util.concurrent.TimeUnit;
 public class DemoController {
 
     @PostMapping("/v1")
-    @Log(bizType = BizType.QUERY, desc = "有参测试")
+    @Log(bizType = BizType.QUERY, description = "有参测试")
     public String log1(@RequestBody DataVo dataVo) {
         return "ok";
     }
 
     @PostMapping("/v2")
-    @Log(bizType = BizType.OTHER, desc = "无参测试")
+    @Log(bizType = BizType.OTHER, description = "无参测试")
     public String log2() {
         return "ok";
     }
 
     @PostMapping("/v3")
-    @Log(bizType = BizType.OTHER, desc = "无参测试")
+    @Log(bizType = BizType.OTHER, description = "无参测试")
     public String log3() throws InterruptedException {
         TimeUnit.SECONDS.sleep(1);
         return "ok";

@@ -93,7 +93,7 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
         // 获取 @Log 注解信息
         Log annoLog = executionMethod.getAnnotation(Log.class);
         auditLog.setBusinessType(annoLog.bizType().getType());
-        auditLog.setDescription(annoLog.desc());
+        auditLog.setDescription(annoLog.description());
         // module 信息通过 uri 映射
         // auditLog.setModule();
 

@@ -11,7 +11,6 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 
 /**
@@ -51,10 +50,10 @@ public class JwtUtils2 {
             throws NoSuchAlgorithmException, IOException, InvalidKeySpecException {
         return Jwts.builder()
                 .setHeader(HEADER)
-                // 过期时间
-                .setExpiration(new Date(System.currentTimeMillis() + expire))
                 // 自定义有效载荷
                 .setClaims(body)
+                // 过期时间，先调用setClaims，在调用setExpiration 否则过期时间会为null
+                .setExpiration(new Date(System.currentTimeMillis() + expire))
                 // 签名
                 .signWith(SignatureAlgorithm.RS256, RSA_KEY_HELPER.getPrivateKey(priKeyPath))
                 // 合成
@@ -70,14 +69,15 @@ public class JwtUtils2 {
      * @param pubKeyPath 公钥路径
      * @return claim值
      */
-    public static String getClaim(String token, String claim, String pubKeyPath)
-            throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
-        if (token == null || "".equals(token)) {
-            return "";
+    public static String getClaim(String token, String claim, String pubKeyPath) {
+        Jws<Claims> claimsJws;
+        try {
+            claimsJws = Jwts.parser()
+                .setSigningKey(RSA_KEY_HELPER.getPublicKey(pubKeyPath))
+                .parseClaimsJws(token);
+        } catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new RuntimeException(e);
         }
-        Jws<Claims> claimsJws = Jwts.parser()
-            .setSigningKey(RSA_KEY_HELPER.getPublicKey(pubKeyPath))
-            .parseClaimsJws(token);
         Claims body = claimsJws.getBody();
         return (String) body.get(claim);
     }
@@ -90,40 +90,15 @@ public class JwtUtils2 {
      * @param pubKeyPath 公钥路径
      * @return claim值
      */
-    public static Claims getClaims(String token, String pubKeyPath)
-            throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
-        Jws<Claims> claimsJws = Jwts.parser()
-            .setSigningKey(RSA_KEY_HELPER.getPublicKey(pubKeyPath))
-            .parseClaimsJws(token);
-        return claimsJws.getBody();
-    }
-
-    /**
-     * 判断 token 是否存在与有效
-     * 私钥用于签名、公钥用于验签
-     *
-     * @param pubKeyPath 公钥路径
-     * @return boolean
-     */
-    public static boolean checkToken(String token, String pubKeyPath) {
-        if(token == null || Objects.equals("", token)) {
-            return false;
-        }
+    public static Map<String, Object> getClaims(String token, String pubKeyPath) {
+        Jws<Claims> claimsJws;
         try {
-            Jwts.parser().setSigningKey(RSA_KEY_HELPER.getPublicKey(pubKeyPath)).parseClaimsJws(token);
-        } catch (Exception e) {
-            return false;
+            claimsJws = Jwts.parser()
+                .setSigningKey(RSA_KEY_HELPER.getPublicKey(pubKeyPath))
+                .parseClaimsJws(token);
+        } catch (IOException | InvalidKeySpecException | NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
         }
-        return true;
-    }
-
-    /**
-     * token 是否过期
-     *
-     * @param claims claims
-     * @return boolean
-     */
-    public static boolean isExpired(Claims claims) {
-        return claims.getExpiration().before(new Date(System.currentTimeMillis()));
+        return claimsJws.getBody();
     }
 }

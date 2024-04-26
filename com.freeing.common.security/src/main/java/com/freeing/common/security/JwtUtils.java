@@ -34,16 +34,16 @@ public class JwtUtils {
      *
      * @param body 自定义有效载荷
      * @param secret 密钥
-     * @param expire 过期时间
+     * @param expire 过期时间，单位秒
      * @return token
      */
     public static String generateToken(Map<String, Object> body, String secret, long expire) {
         return Jwts.builder()
                 .setHeader(HEADER)
-                // 过期时间
-                .setExpiration(new Date(System.currentTimeMillis() + expire))
                 // 自定义有效载荷
                 .setClaims(body)
+                // 过期时间，先调用setClaims，在调用setExpiration 否则过期时间会为null
+                .setExpiration(new Date(System.currentTimeMillis() + (expire * 1000)))
                 // 签名
                 .signWith(SignatureAlgorithm.HS256, secret.getBytes(StandardCharsets.UTF_8))
                 // 合成
@@ -57,11 +57,9 @@ public class JwtUtils {
      * @param claim claimName
      * @param secret 密钥
      * @return claim值
+     * @throws Exception|ExpiredJwtException 解析失败，token 过期
      */
     public static String getClaim(String token, String claim, String secret) {
-        if (token == null || "".equals(token)) {
-            return "";
-        }
         Jws<Claims> claimsJws = Jwts.parser()
             .setSigningKey(secret.getBytes(StandardCharsets.UTF_8))
             .parseClaimsJws(token);
@@ -74,9 +72,10 @@ public class JwtUtils {
      *
      * @param token jwt令牌
      * @param secret 密钥
-     * @return claim值
+     * @return Claims|Map<String, Object>
+     * @throws Exception|ExpiredJwtException 解析失败，token 过期
      */
-    public static Claims getClaims(String token, String secret) {
+    public static Map<String, Object> getClaims(String token, String secret) {
         Jws<Claims> claimsJws = Jwts.parser()
             .setSigningKey(secret.getBytes(StandardCharsets.UTF_8))
             .parseClaimsJws(token);
@@ -84,18 +83,19 @@ public class JwtUtils {
     }
 
     /**
-     * 判断 token 是否存在与有效
+     * 判断 token 是否有效，是否过期
      *
      * @param secret 密钥
      * @return boolean
      */
+    @Deprecated
     public static boolean checkToken(String token, String secret) {
         if(token == null || Objects.equals("", token)) {
             return false;
         }
         try {
             Jwts.parser().setSigningKey(secret.getBytes(StandardCharsets.UTF_8)).parseClaimsJws(token);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
             return false;
         }
         return true;
@@ -107,7 +107,13 @@ public class JwtUtils {
      * @param claims claims
      * @return boolean
      */
+    @Deprecated
     public static boolean isExpired(Claims claims) {
-        return claims.getExpiration().before(new Date(System.currentTimeMillis()));
+        Date expiration = claims.getExpiration();
+        // 设置过期时间则判断到期时间
+        if (expiration != null) {
+            return expiration.before(new Date(System.currentTimeMillis()));
+        }
+        return false;
     }
 }

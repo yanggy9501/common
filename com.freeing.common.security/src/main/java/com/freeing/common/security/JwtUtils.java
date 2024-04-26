@@ -1,9 +1,6 @@
 package com.freeing.common.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -45,6 +42,8 @@ public class JwtUtils {
                 .setExpiration(new Date(System.currentTimeMillis() + (expire * 1000)))
                 // 签名
                 .signWith(SignatureAlgorithm.HS256, secret.getBytes(StandardCharsets.UTF_8))
+                // 压缩
+                .compressWith(CompressionCodecs.GZIP)
                 // 合成
                 .compact();
     }

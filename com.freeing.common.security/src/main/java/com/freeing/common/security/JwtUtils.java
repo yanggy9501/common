@@ -9,7 +9,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 
 /**
@@ -80,40 +79,5 @@ public class JwtUtils {
             .setSigningKey(secret.getBytes(StandardCharsets.UTF_8))
             .parseClaimsJws(token);
         return claimsJws.getBody();
-    }
-
-    /**
-     * 判断 token 是否有效，是否过期
-     *
-     * @param secret 密钥
-     * @return boolean
-     */
-    @Deprecated
-    public static boolean checkToken(String token, String secret) {
-        if(token == null || Objects.equals("", token)) {
-            return false;
-        }
-        try {
-            Jwts.parser().setSigningKey(secret.getBytes(StandardCharsets.UTF_8)).parseClaimsJws(token);
-        } catch (Exception ignored) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * token 是否过期
-     *
-     * @param claims claims
-     * @return boolean
-     */
-    @Deprecated
-    public static boolean isExpired(Claims claims) {
-        Date expiration = claims.getExpiration();
-        // 设置过期时间则判断到期时间
-        if (expiration != null) {
-            return expiration.before(new Date(System.currentTimeMillis()));
-        }
-        return false;
     }
 }

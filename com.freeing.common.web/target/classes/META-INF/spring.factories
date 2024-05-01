@@ -1,3 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.freeing.common.web.utils.SpringUtils,\
-  com.freeing.common.web.configuration.WebAutoConfiguration

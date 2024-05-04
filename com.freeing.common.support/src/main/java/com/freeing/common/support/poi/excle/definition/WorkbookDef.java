@@ -25,9 +25,9 @@ public class WorkbookDef {
     /**
      * sheets
      */
-    private List<SheetDef> sheetDefs = new ArrayList<>();
+    private List<SheetX> sheetDefs = new ArrayList<>();
 
-    private Map<String, SheetDef> sheetDefMap = new HashMap<>();
+    private Map<String, SheetX> sheetDefMap = new HashMap<>();
 
     public String getId() {
         return id;
@@ -45,7 +45,7 @@ public class WorkbookDef {
         this.fileName = fileName;
     }
 
-    public List<SheetDef> getSheetDefs() {
+    public List<SheetX> getSheetDefs() {
         return sheetDefs;
     }
 }

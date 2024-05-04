@@ -6,16 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author yanggy
+ * 表
  */
-public class TableDef {
+public class TableX {
     /**
      * table ID
      */
     private String id;
 
     /**
-     * 映射 bean
+     * class 全限定名称
      */
     private String clazz;
 
@@ -25,19 +25,21 @@ public class TableDef {
     private Reflector reflector;
 
     /**
-     * 标题
+     * table 标题
      */
     private String title;
 
     /**
-     * 表头列
+     * 表头行
      */
-    private List<HeaderDef> headerDefs = new ArrayList<>();
+    private List<HeadX> heads = new ArrayList<>();
 
     /**
      * 数据列
      */
-    private List<ColumnDef> columnDefs = new ArrayList<>();
+    private List<ColumnX> columns = new ArrayList<>();
+
+
 
     public String getId() {
         return id;
@@ -71,19 +73,19 @@ public class TableDef {
         this.title = title;
     }
 
-    public List<HeaderDef> getHeaderDefs() {
-        return headerDefs;
+    public List<HeadX> getHeads() {
+        return heads;
     }
 
-    public void setHeaderDefs(List<HeaderDef> headerDefs) {
-        this.headerDefs = headerDefs;
+    public void setHeads(List<HeadX> heads) {
+        this.heads = heads;
     }
 
-    public List<ColumnDef> getColumnDefs() {
-        return columnDefs;
+    public List<ColumnX> getColumns() {
+        return columns;
     }
 
-    public void setColumnDefs(List<ColumnDef> columnDefs) {
-        this.columnDefs = columnDefs;
+    public void setColumns(List<ColumnX> columns) {
+        this.columns = columns;
     }
 }

@@ -1,6 +1,6 @@
 package com.freeing.common.support.poi.excle;
 
-import com.freeing.common.support.poi.excle.definition.TableDef;
+import com.freeing.common.support.poi.excle.definition.TableX;
 import com.freeing.common.support.poi.excle.definition.WorkbookDef;
 
 import java.util.HashMap;
@@ -19,9 +19,9 @@ public class Configuration {
 
     private final Map<String, WorkbookDef> WorkbookDefinitionMap = new HashMap<>();
 
-    private final Map<String, TableDef> tableDefinitionMap = new HashMap<>();
+    private final Map<String, TableX> tableDefinitionMap = new HashMap<>();
 
-    public Map<String, TableDef> getTableDefinitionMap() {
+    public Map<String, TableX> getTableDefinitionMap() {
         return tableDefinitionMap;
     }
 

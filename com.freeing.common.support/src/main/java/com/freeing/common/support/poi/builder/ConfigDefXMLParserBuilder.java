@@ -3,8 +3,8 @@ package com.freeing.common.support.poi.builder;
 import com.freeing.common.support.poi.Resources;
 import com.freeing.common.support.poi.exception.DefinitionException;
 import com.freeing.common.support.poi.excle.Configuration;
-import com.freeing.common.support.poi.excle.definition.HeaderDef;
-import com.freeing.common.support.poi.excle.definition.TableDef;
+import com.freeing.common.support.poi.excle.definition.HeadX;
+import com.freeing.common.support.poi.excle.definition.TableX;
 import com.freeing.common.support.poi.excle.definition.WorkbookDef;
 import com.freeing.common.support.reflection.Reflector;
 import com.freeing.common.support.xml.builder.AbstractXMLParseBuilder;
@@ -43,7 +43,7 @@ public class ConfigDefXMLParserBuilder extends AbstractXMLParseBuilder<Configura
             throw new DefinitionException("tables node cant not be empty.");
         }
         for (XNode tableNode : tableNodeList) {
-            TableDef tableDef = new TableDef();
+            TableX tableDef = new TableX();
             // 非空判断
             String id = tableNode.getStringAttribute("id");
             Objects.requireNonNull(id, "id can not be null.");
@@ -74,14 +74,14 @@ public class ConfigDefXMLParserBuilder extends AbstractXMLParseBuilder<Configura
      * @param tableDef
      * @param headerNodes
      */
-    private void parseTableHeader(TableDef tableDef, List<XNode> headerNodes) {
+    private void parseTableHeader(TableX tableDef, List<XNode> headerNodes) {
         if (headerNodes == null || headerNodes.isEmpty()) {
             throw new DefinitionException("Error definition, header node can not be empty, tableDef id="
                 + tableDef.getId());
         }
-        ArrayList<HeaderDef> headerDefs = new ArrayList<>();
+        ArrayList<HeadX> headerDefs = new ArrayList<>();
         for (XNode headerNode : headerNodes) {
-            HeaderDef headerDef = new HeaderDef();
+            HeadX headerDef = new HeadX();
 
             String name = headerNode.getStringAttribute("name");
             Objects.requireNonNull(name, "headerDef' name can not be null");
@@ -96,7 +96,7 @@ public class ConfigDefXMLParserBuilder extends AbstractXMLParseBuilder<Configura
 
             headerDefs.add(headerDef);
         }
-        tableDef.setHeaderDefs(headerDefs);
+//        tableDef.setHeaderDefs(headerDefs);
     }
 
     /**
@@ -106,27 +106,27 @@ public class ConfigDefXMLParserBuilder extends AbstractXMLParseBuilder<Configura
      * @throws FileNotFoundException
      */
     private void parseWorkbooks(XNode workbooksNode) {
-        List<XNode> workbookNodeList = workbooksNode.getChildren();
-        for (XNode workbookNode : workbookNodeList) {
-            String resource = workbookNode.getStringAttribute("resource");
-            InputStream inputStream = null;
-            try {
-                inputStream = Resources.getResourceAsStream(resource, this.getClass().getClassLoader());
-                WorkbookXMLParserBuilder workbookXMLParserBuilder = new WorkbookXMLParserBuilder(inputStream, data);
-                WorkbookDef workbookDef = workbookXMLParserBuilder.parse();
-                if (data.getWorkbookDefinitionMap().containsKey(workbookDef.getId())) {
-                    throw new DefinitionException("workbookDef " + workbookDef.getId() + "is exist already.");
-                }
-                data.getWorkbookDefinitionMap().put(workbookDef.getId(), workbookDef);
-            } finally {
-                if (inputStream != null) {
-                    try {
-                        inputStream.close();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-        }
+//        List<XNode> workbookNodeList = workbooksNode.getChildren();
+//        for (XNode workbookNode : workbookNodeList) {
+//            String resource = workbookNode.getStringAttribute("resource");
+//            InputStream inputStream = null;
+//            try {
+//                inputStream = Resources.getResourceAsStream(resource, this.getClass().getClassLoader());
+//                WorkbookXMLParserBuilder workbookXMLParserBuilder = new WorkbookXMLParserBuilder(inputStream, data);
+//                WorkbookDef workbookDef = workbookXMLParserBuilder.parse();
+//                if (data.getWorkbookDefinitionMap().containsKey(workbookDef.getId())) {
+//                    throw new DefinitionException("workbookDef " + workbookDef.getId() + "is exist already.");
+//                }
+//                data.getWorkbookDefinitionMap().put(workbookDef.getId(), workbookDef);
+//            } finally {
+//                if (inputStream != null) {
+//                    try {
+//                        inputStream.close();
+//                    } catch (IOException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                }
+//            }
+//        }
     }
 }

@@ -265,7 +265,7 @@ public class Reflector {
         return null;
     }
 
-    public boolean hasSetterMehtod(String propertyName) {
+    public boolean hasSetterMethod(String propertyName) {
         return setMethods.containsKey(propertyName);
     }
 
@@ -278,7 +278,7 @@ public class Reflector {
         return method;
     }
 
-    public boolean hasGettterMehtod(String propertyName) {
+    public boolean hasGetterMethod(String propertyName) {
         return getMethods.containsKey(propertyName);
     }
 
@@ -288,5 +288,9 @@ public class Reflector {
             throw new NullPointerException("There is no getter for property named '"
                 + propertyName + "' in '" + type + "'");        }
         return method;
+    }
+
+    public Class<?> getGetterType(String propertyName) {
+        return getTypes.get(propertyName);
     }
 }

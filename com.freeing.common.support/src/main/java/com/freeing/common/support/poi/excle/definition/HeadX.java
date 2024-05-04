@@ -1,11 +1,11 @@
 package com.freeing.common.support.poi.excle.definition;
 
+import com.freeing.common.support.poi.excle.convertor.Convertor;
+
 /**
  * 表头
- *
- * @author yanggy
  */
-public class HeaderDef {
+public class HeadX {
     /**
      * 表头名
      */
@@ -14,7 +14,9 @@ public class HeaderDef {
     /**
      * 映射字段
      */
-    private String mapperField;
+    private String field;
+
+    private Convertor<Object, Object> convertor;
 
     /**
      * 字段对应的类型
@@ -22,9 +24,18 @@ public class HeaderDef {
     private String type;
 
     /**
-     * 表头注释
+     * 批注
      */
     private String comment;
+
+    public HeadX() {
+
+    }
+
+    public HeadX(String name, String field) {
+        this.name = name;
+        this.field = field;
+    }
 
     public String getName() {
         return name;
@@ -34,12 +45,20 @@ public class HeaderDef {
         this.name = name;
     }
 
-    public String getMapperField() {
-        return mapperField;
+    public String getField() {
+        return field;
     }
 
-    public void setMapperField(String mapperField) {
-        this.mapperField = mapperField;
+    public void setField(String field) {
+        this.field = field;
+    }
+
+    public Convertor<Object, Object> getConvertor() {
+        return convertor;
+    }
+
+    public void setConvertor(Convertor<Object, Object> convertor) {
+        this.convertor = convertor;
     }
 
     public String getType() {

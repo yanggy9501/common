@@ -1,13 +1,17 @@
 package com.freeing.common.support.poi.excle.definition;
 
 /**
- * @author yanggy
+ * 数据列
  */
-public class ColumnDef {
+public class ColumnX {
     /**
      * 字段
      */
     private String field;
+
+    public ColumnX(String field) {
+        this.field = field;
+    }
 
     public String getField() {
         return field;

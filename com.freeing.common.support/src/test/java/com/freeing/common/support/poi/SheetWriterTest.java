@@ -1,11 +1,12 @@
 package com.freeing.common.support.poi;
 
-import com.freeing.common.support.poi.excle.ListDataSource;
+import com.freeing.common.support.poi.excle.datasoruce.ThreadLocalDataSource;
+import com.freeing.common.support.poi.excle.datasoruce.ThreadLocalDataSourceContext;
 import com.freeing.common.support.poi.excle.SheetWriter;
-import com.freeing.common.support.poi.excle.definition.ColumnX;
-import com.freeing.common.support.poi.excle.definition.HeadX;
-import com.freeing.common.support.poi.excle.definition.SheetX;
-import com.freeing.common.support.poi.excle.definition.TableX;
+import com.freeing.common.support.poi.excle.def.ColumnX;
+import com.freeing.common.support.poi.excle.def.HeadX;
+import com.freeing.common.support.poi.excle.def.SheetX;
+import com.freeing.common.support.poi.excle.def.TableX;
 import com.freeing.common.support.reflection.Reflector;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -18,16 +19,18 @@ import java.util.Date;
 public class SheetWriterTest {
     public static void main(String[] args) throws IOException {
         SheetWriter sheetWriter = new SheetWriter();
-        sheetWriter.setDataSources(Arrays.asList(
-            new ListDataSource("student1", Arrays.asList(
+        ThreadLocalDataSourceContext.add("level1",
+            Arrays.asList(
                 new Student("张三", "m", new Date()),
                 new Student("麻花", "f", new Date())
-                )),
-            new ListDataSource("student2", Arrays.asList(
+            ));
+
+        ThreadLocalDataSourceContext.add("level2",
+            Arrays.asList(
                 new Student("李四", "m", new Date()),
                 new Student("翠花", "f", new Date())
-            ))
-        ));
+            ));
+
         XSSFWorkbook workbook = new XSSFWorkbook();
         sheetWriter.writerSheet(sheetX(), workbook);
 
@@ -55,6 +58,7 @@ public class SheetWriterTest {
             new ColumnX("sex"),
             new ColumnX("birthday")
         ));
+        t1.setDataSource(new ThreadLocalDataSource("level1"));
 
         TableX t2 = new TableX();
         t2.setId("level2");
@@ -72,6 +76,7 @@ public class SheetWriterTest {
             new ColumnX("sex"),
             new ColumnX("birthday")
         ));
+        t2.setDataSource(new ThreadLocalDataSource("level2"));
 
         sheetX.setTables(Arrays.asList(
             t1,

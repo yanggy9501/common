@@ -1,9 +1,9 @@
 package com.freeing.common.support.poi.excle;
 
 import com.freeing.common.support.poi.exception.ExportException;
-import com.freeing.common.support.poi.excle.definition.HeadX;
-import com.freeing.common.support.poi.excle.definition.SheetX;
-import com.freeing.common.support.poi.excle.definition.TableX;
+import com.freeing.common.support.poi.excle.def.HeadX;
+import com.freeing.common.support.poi.excle.def.SheetX;
+import com.freeing.common.support.poi.excle.def.TableX;
 import com.freeing.common.support.reflection.Reflector;
 import com.freeing.common.support.reflection.invoker.Invoker;
 import org.apache.poi.ss.usermodel.CellType;
@@ -22,7 +22,6 @@ import java.util.List;
 public class SheetWriter {
     private int nextRow = 0;
     private XSSFSheet currentSheet;
-    private List<AbstractDataSource> dataSources;
 
     public void writerSheet(SheetX sheetX, XSSFWorkbook workbook) {
         // 获取 sheet 定义
@@ -36,9 +35,13 @@ public class SheetWriter {
             TableX table = tables.get(i);
             writerTableTitle(table);
             writerTableHead(table);
-            if (dataSources != null && !dataSources.isEmpty()) {
+            if (table.getDataSource() == null) {
+                continue;
+            }
+            List<Object> data = table.getDataSource().getData();
+            if (data != null && !data.isEmpty()) {
                 try {
-                    writerTableData(table, dataSources.get(i).getDataSource());
+                    writerTableData(table, data);
                 } catch (Exception e) {
                    throw new ExportException(e);
                 }
@@ -46,7 +49,6 @@ public class SheetWriter {
 
             nextRow();
         }
-
     }
 
     protected void writerTableTitle(TableX table) {
@@ -156,13 +158,5 @@ public class SheetWriter {
 
     protected int nextRow() {
         return nextRow++;
-    }
-
-    public List<AbstractDataSource> getDataSources() {
-        return dataSources;
-    }
-
-    public void setDataSources(List<AbstractDataSource> dataSources) {
-        this.dataSources = dataSources;
     }
 }

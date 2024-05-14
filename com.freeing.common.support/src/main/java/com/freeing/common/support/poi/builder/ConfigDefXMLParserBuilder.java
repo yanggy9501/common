@@ -1,17 +1,14 @@
 package com.freeing.common.support.poi.builder;
 
-import com.freeing.common.support.poi.Resources;
 import com.freeing.common.support.poi.exception.DefinitionException;
 import com.freeing.common.support.poi.excle.Configuration;
-import com.freeing.common.support.poi.excle.definition.HeadX;
-import com.freeing.common.support.poi.excle.definition.TableX;
-import com.freeing.common.support.poi.excle.definition.WorkbookDef;
+import com.freeing.common.support.poi.excle.def.HeadX;
+import com.freeing.common.support.poi.excle.def.TableX;
 import com.freeing.common.support.reflection.Reflector;
 import com.freeing.common.support.xml.builder.AbstractXMLParseBuilder;
 import com.freeing.common.support.xml.paser.XNode;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;

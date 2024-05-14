@@ -1,7 +1,7 @@
 package com.freeing.common.support.poi.excle;
 
-import com.freeing.common.support.poi.excle.definition.TableX;
-import com.freeing.common.support.poi.excle.definition.WorkbookDef;
+import com.freeing.common.support.poi.excle.def.TableX;
+import com.freeing.common.support.poi.excle.def.WorkbookX;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,7 +17,7 @@ public class Configuration {
 
     private final Set<String> workbookNamespanceSet = new HashSet<>();
 
-    private final Map<String, WorkbookDef> WorkbookDefinitionMap = new HashMap<>();
+    private final Map<String, WorkbookX> WorkbookDefinitionMap = new HashMap<>();
 
     private final Map<String, TableX> tableDefinitionMap = new HashMap<>();
 
@@ -25,7 +25,7 @@ public class Configuration {
         return tableDefinitionMap;
     }
 
-    public Map<String, WorkbookDef> getWorkbookDefinitionMap() {
+    public Map<String, WorkbookX> getWorkbookDefinitionMap() {
         return WorkbookDefinitionMap;
     }
 }

@@ -1,18 +1,6 @@
 package com.freeing.common.support.poi.builder;
 
-import com.freeing.common.support.poi.exception.DefinitionException;
 import com.freeing.common.support.poi.excle.Configuration;
-import com.freeing.common.support.poi.excle.definition.ColumnX;
-import com.freeing.common.support.poi.excle.definition.SheetX;
-import com.freeing.common.support.poi.excle.definition.TableX;
-import com.freeing.common.support.poi.excle.definition.WorkbookDef;
-import com.freeing.common.support.xml.builder.AbstractXMLParseBuilder;
-import com.freeing.common.support.xml.paser.XNode;
-
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * @author yanggy

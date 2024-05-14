@@ -1,5 +1,6 @@
-package com.freeing.common.support.poi.excle.definition;
+package com.freeing.common.support.poi.excle.def;
 
+import com.freeing.common.support.poi.excle.datasoruce.IDataSource;
 import com.freeing.common.support.reflection.Reflector;
 
 import java.util.ArrayList;
@@ -39,7 +40,10 @@ public class TableX {
      */
     private List<ColumnX> columns = new ArrayList<>();
 
-
+    /**
+     * 数据源
+     */
+    private IDataSource dataSource;
 
     public String getId() {
         return id;
@@ -87,5 +91,13 @@ public class TableX {
 
     public void setColumns(List<ColumnX> columns) {
         this.columns = columns;
+    }
+
+    public IDataSource getDataSource() {
+        return dataSource;
+    }
+
+    public void setDataSource(IDataSource dataSource) {
+        this.dataSource = dataSource;
     }
 }

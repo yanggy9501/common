@@ -1,17 +1,12 @@
-package com.freeing.common.support.poi.excle.definition;
-
-import lombok.Data;
+package com.freeing.common.support.poi.excle.def;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author yanggy
  */
-@Data
-public class WorkbookDef {
+public class WorkbookX {
     /**
      * 唯一标识
      */
@@ -25,9 +20,7 @@ public class WorkbookDef {
     /**
      * sheets
      */
-    private List<SheetX> sheetDefs = new ArrayList<>();
-
-    private Map<String, SheetX> sheetDefMap = new HashMap<>();
+    private List<SheetX> sheets = new ArrayList<>();
 
     public String getId() {
         return id;
@@ -45,7 +38,11 @@ public class WorkbookDef {
         this.fileName = fileName;
     }
 
-    public List<SheetX> getSheetDefs() {
-        return sheetDefs;
+    public List<SheetX> getSheets() {
+        return sheets;
+    }
+
+    public void setSheets(List<SheetX> sheets) {
+        this.sheets = sheets;
     }
 }

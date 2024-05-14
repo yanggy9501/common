@@ -1,4 +1,4 @@
-package com.freeing.common.support.poi.excle.definition;
+package com.freeing.common.support.poi.excle.def;
 
 /**
  * 数据列

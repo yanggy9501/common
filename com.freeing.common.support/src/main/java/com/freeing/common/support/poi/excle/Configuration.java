@@ -1,31 +1,30 @@
 package com.freeing.common.support.poi.excle;
 
-import com.freeing.common.support.poi.excle.def.TableX;
+import com.freeing.common.support.poi.exception.AlreadyExistException;
+import com.freeing.common.support.poi.exception.NotExistException;
 import com.freeing.common.support.poi.excle.def.WorkbookX;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Excel 配置
- *
- * @author yanggy
  */
 public class Configuration {
 
-    private final Set<String> workbookNamespanceSet = new HashSet<>();
+    private final Map<String, WorkbookX> workbookCache = new HashMap<>();
 
-    private final Map<String, WorkbookX> WorkbookDefinitionMap = new HashMap<>();
-
-    private final Map<String, TableX> tableDefinitionMap = new HashMap<>();
-
-    public Map<String, TableX> getTableDefinitionMap() {
-        return tableDefinitionMap;
+    public WorkbookX getWorkbook(String key) {
+        if (!workbookCache.containsKey(key)) {
+            throw new NotExistException("workbook definition is not exist.");
+        }
+        return workbookCache.get(key);
     }
 
-    public Map<String, WorkbookX> getWorkbookDefinitionMap() {
-        return WorkbookDefinitionMap;
+    public void addWorkbook(String key, WorkbookX workbookX) {
+        if (workbookCache.containsKey(key)) {
+            throw new AlreadyExistException("workbook is exist already.");
+        }
+        workbookCache.put(key, workbookX);
     }
 }

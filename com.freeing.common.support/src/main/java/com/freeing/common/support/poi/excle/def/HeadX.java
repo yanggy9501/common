@@ -16,6 +16,9 @@ public class HeadX {
      */
     private String field;
 
+    /**
+     * 数据转换器
+     */
     private Convertor<Object, Object> convertor;
 
     /**

@@ -6,9 +6,12 @@ import com.freeing.common.support.poi.excle.def.SheetX;
 import com.freeing.common.support.poi.excle.def.TableX;
 import com.freeing.common.support.reflection.Reflector;
 import com.freeing.common.support.reflection.invoker.Invoker;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.WorkbookUtil;
 import org.apache.poi.xssf.usermodel.*;
 
 import java.lang.reflect.InvocationTargetException;
@@ -22,10 +25,15 @@ import java.util.List;
 public class SheetWriter {
     private int nextRow = 0;
     private XSSFSheet currentSheet;
+    private XSSFWorkbook workbook;
 
     public void writerSheet(SheetX sheetX, XSSFWorkbook workbook) {
+        this.workbook = workbook;
+
         // 获取 sheet 定义
         String sheetName = sheetX.getName();
+        // sheet 名字有要求不能超过31个字符，而且不能有特殊字符，WorkbookUtil是一个可以帮助取名的工具类
+        sheetName = WorkbookUtil.createSafeSheetName(sheetName);
         // 创建 sheet
         currentSheet = workbook.createSheet(sheetName);
 
@@ -54,10 +62,29 @@ public class SheetWriter {
     protected void writerTableTitle(TableX table) {
         String title = table.getTitle();
         if (title != null && !title.isEmpty()) {
+            // 标题单元格样式
+            CellStyle cellStyle = workbook.createCellStyle();
+            // 标题字体样式
+            XSSFFont font = workbook.createFont();
+            // 设置字体
+            font.setFontName("Courier New");
+            // 斜体的
+            font.setItalic(true);
+            // 删除线
+            font.setStrikeout(true);
+            // 设置字体颜色
+            font.setColor(IndexedColors.RED.getIndex());
+
+            // 设置字体高度
+//            font.setFontHeight();
+            cellStyle.setFont(font);
+
             int titleRowIdx = nextRow();
             XSSFRow titleRow = currentSheet.createRow(titleRowIdx);
+
             // 填充 title
             XSSFCell titleCell = titleRow.createCell(0, CellType.STRING);
+            titleCell.setCellStyle(cellStyle);
             titleCell.setCellValue(title);
 
             int end = 0;

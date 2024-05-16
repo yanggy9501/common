@@ -54,7 +54,7 @@ public class TreeUtils {
                 children.set(root, childrenNodes);
                 children.setAccessible(false);
             } catch (Exception e) {
-                throw new ReflectionsException("构建该类型数据的树形机构时，此类必须包含一个List类型的children的成员属性");
+                throw new ReflectionsException("require a property named children.");
             }
         }
     }

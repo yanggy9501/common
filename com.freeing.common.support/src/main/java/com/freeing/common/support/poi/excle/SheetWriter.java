@@ -1,6 +1,7 @@
 package com.freeing.common.support.poi.excle;
 
 import com.freeing.common.support.poi.exception.ExportException;
+import com.freeing.common.support.poi.excle.builder.StyleBuilder;
 import com.freeing.common.support.poi.excle.def.HeadX;
 import com.freeing.common.support.poi.excle.def.SheetX;
 import com.freeing.common.support.poi.excle.def.TableX;
@@ -8,7 +9,6 @@ import com.freeing.common.support.reflection.Reflector;
 import com.freeing.common.support.reflection.invoker.Invoker;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.WorkbookUtil;
@@ -64,19 +64,9 @@ public class SheetWriter {
         if (title != null && !title.isEmpty()) {
             // 标题单元格样式
             CellStyle cellStyle = workbook.createCellStyle();
-            // 标题字体样式
-            XSSFFont font = workbook.createFont();
-            // 设置字体
-            font.setFontName("Courier New");
-            // 斜体的
-            font.setItalic(true);
-            // 删除线
-            font.setStrikeout(true);
-            // 设置字体颜色
-            font.setColor(IndexedColors.RED.getIndex());
 
-            // 设置字体高度
-//            font.setFontHeight();
+            // 标题字体样式
+            XSSFFont font = StyleBuilder.buildFont(workbook, table.getTitleFont());
             cellStyle.setFont(font);
 
             int titleRowIdx = nextRow();
@@ -93,8 +83,6 @@ public class SheetWriter {
             }
             // 合并单元格
             currentSheet.addMergedRegion(new CellRangeAddress(titleRowIdx, titleRowIdx,0, end));
-
-            // title 样式
         }
     }
 

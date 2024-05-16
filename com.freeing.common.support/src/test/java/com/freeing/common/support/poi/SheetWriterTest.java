@@ -8,6 +8,7 @@ import com.freeing.common.support.poi.excle.convertor.MappingConvertor;
 import com.freeing.common.support.poi.excle.datasoruce.ThreadLocalDataSource;
 import com.freeing.common.support.poi.excle.datasoruce.ThreadLocalDataSourceContext;
 import com.freeing.common.support.poi.excle.def.*;
+import com.freeing.common.support.poi.excle.def.style.FontX;
 import com.freeing.common.support.reflection.Reflector;
 
 import java.io.FileOutputStream;
@@ -105,6 +106,12 @@ public class SheetWriterTest {
         ));
         t1.setDataSource(new ThreadLocalDataSource("level1"));
 
+        FontX fontX = new FontX();
+        fontX.setFontHeight((short) 24);
+        fontX.setColor("255,255,5");
+        t1.setTitleFont(fontX);
+
+        // ---------------------------------------------------------------------------------
         TableX t2 = new TableX();
         t2.setId("level2");
         t2.setClazz(Student.class.getCanonicalName());

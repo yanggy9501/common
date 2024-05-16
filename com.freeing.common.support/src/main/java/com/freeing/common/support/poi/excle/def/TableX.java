@@ -1,6 +1,7 @@
 package com.freeing.common.support.poi.excle.def;
 
 import com.freeing.common.support.poi.excle.datasoruce.IDataSource;
+import com.freeing.common.support.poi.excle.def.style.FontX;
 import com.freeing.common.support.reflection.Reflector;
 
 import java.util.ArrayList;
@@ -29,6 +30,11 @@ public class TableX {
      * table 标题
      */
     private String title;
+
+    /**
+     * 标题样式
+     */
+    private FontX titleFont;
 
     /**
      * 表头行
@@ -71,6 +77,14 @@ public class TableX {
 
     public String getTitle() {
         return title;
+    }
+
+    public FontX getTitleFont() {
+        return titleFont;
+    }
+
+    public void setTitleFont(FontX titleFont) {
+        this.titleFont = titleFont;
     }
 
     public void setTitle(String title) {

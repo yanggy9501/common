@@ -69,7 +69,7 @@ public class SheetWriterTest {
         configuration.addWorkbook(workbookX.getId(), workbookX);
         WorkbookWriter workbookWriter = new WorkbookWriter(workbookX.getId(), workbookX.getFileName(), configuration);
 
-        OutputStream out = new FileOutputStream("D:\\tmp\\export.xlsx");
+        OutputStream out = new FileOutputStream("/Users/yangguangyin/MyDisk/volume/tmp/export.xlsx");
         workbookWriter.write(out);
         ThreadLocalDataSourceContext.clear();
     }
@@ -108,7 +108,7 @@ public class SheetWriterTest {
 
         FontX fontX = new FontX();
         fontX.setFontHeight((short) 24);
-        fontX.setColor("255,255,5");
+        fontX.setColor("255,5,5");
         t1.setTitleFont(fontX);
 
         // ---------------------------------------------------------------------------------

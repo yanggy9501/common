@@ -28,7 +28,7 @@ public class WorkbookWriter {
         List<SheetX> sheetXs = workbookX.getSheets();
         for (SheetX sheetX : sheetXs) {
             SheetWriter sheetWriter = new SheetWriter();
-            sheetWriter.writerSheet(sheetX, workbook);
+            sheetWriter.writeSheet(sheetX, workbook);
         }
         workbook.write(out);
         workbook.close();

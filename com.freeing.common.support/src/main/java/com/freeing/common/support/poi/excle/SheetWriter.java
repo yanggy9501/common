@@ -27,7 +27,7 @@ public class SheetWriter {
     private XSSFSheet currentSheet;
     private XSSFWorkbook workbook;
 
-    public void writerSheet(SheetX sheetX, XSSFWorkbook workbook) {
+    public void writeSheet(SheetX sheetX, XSSFWorkbook workbook) {
         this.workbook = workbook;
 
         // 获取 sheet 定义
@@ -42,14 +42,14 @@ public class SheetWriter {
         for (int i = 0, size = tables.size(); i < size; i++) {
             TableX table = tables.get(i);
             writerTableTitle(table);
-            writerTableHead(table);
+            writeTableHead(table);
             if (table.getDataSource() == null) {
                 continue;
             }
             List<Object> data = table.getDataSource().getData();
             if (data != null && !data.isEmpty()) {
                 try {
-                    writerTableData(table, data);
+                    writeTableData(table, data);
                 } catch (Exception e) {
                    throw new ExportException(e);
                 }
@@ -86,7 +86,7 @@ public class SheetWriter {
         }
     }
 
-    protected void writerTableHead(TableX table) {
+    protected void writeTableHead(TableX table) {
         // table 表头
         List<HeadX> heads = table.getHeads();
         XSSFRow headRow = currentSheet.createRow(nextRow());
@@ -105,7 +105,7 @@ public class SheetWriter {
         }
     }
 
-    protected void writerTableData(TableX table, List<Object> data)
+    protected void writeTableData(TableX table, List<Object> data)
             throws InvocationTargetException, IllegalAccessException {
         Reflector reflector = table.getReflector();
         XSSFRow dataRow;

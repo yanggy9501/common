@@ -7,8 +7,8 @@ import com.freeing.common.support.poi.excle.def.SheetX;
 import com.freeing.common.support.poi.excle.def.TableX;
 import com.freeing.common.support.reflection.Reflector;
 import com.freeing.common.support.reflection.invoker.Invoker;
-import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.WorkbookUtil;
@@ -63,7 +63,7 @@ public class SheetWriter {
         String title = table.getTitle();
         if (title != null && !title.isEmpty()) {
             // 标题单元格样式
-            CellStyle cellStyle = workbook.createCellStyle();
+            XSSFCellStyle cellStyle = workbook.createCellStyle();
 
             // 标题字体样式
             XSSFFont font = StyleBuilder.buildFont(workbook, table.getTitleFont());
@@ -74,7 +74,7 @@ public class SheetWriter {
 
             // 填充 title
             XSSFCell titleCell = titleRow.createCell(0, CellType.STRING);
-            titleCell.setCellStyle(cellStyle);
+
             titleCell.setCellValue(title);
 
             int end = 0;
@@ -83,6 +83,10 @@ public class SheetWriter {
             }
             // 合并单元格
             currentSheet.addMergedRegion(new CellRangeAddress(titleRowIdx, titleRowIdx,0, end));
+
+            cellStyle.setAlignment(HorizontalAlignment.CENTER);
+//            cellStyle.setFillBackgroundColor(new XSSFColor(new Color(0,0,0)));
+            titleCell.setCellStyle(cellStyle);
         }
     }
 

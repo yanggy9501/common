@@ -40,8 +40,9 @@ public class StyleBuilder {
             }
             if (colorArr.length == 3) {
                 font.setColor(new XSSFColor(new java.awt.Color((short) colorArr[0], (short) colorArr[1], (short) colorArr[2])));
+            } else {
+                font.setColor((short) colorArr[0]);
             }
-            font.setColor((short) colorArr[0]);
         }
 
         return font;

@@ -4,6 +4,7 @@ import com.freeing.common.support.poi.excle.convertor.Convertor;
 import com.freeing.common.support.poi.excle.def.style.CellStyleX;
 import com.freeing.common.support.poi.excle.def.style.FontX;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -38,7 +39,7 @@ public class HeadX {
     /**
      * 表头字体样式
      */
-    private Map<String, FontX> headFontMap;
+    private Map<String, FontX> headFontMap = new HashMap<>();
 
     private Map<String, CellStyleX> cellStyleMaps;
 
@@ -95,8 +96,8 @@ public class HeadX {
         return headFontMap;
     }
 
-    public void setHeadFontMap(Map<String, FontX> headFontMap) {
-        this.headFontMap = headFontMap;
+    public void addHeadFontMap(Map<String, FontX> headFontMap) {
+        this.headFontMap.putAll(headFontMap);
     }
 
     public Map<String, CellStyleX> getCellStyleMaps() {

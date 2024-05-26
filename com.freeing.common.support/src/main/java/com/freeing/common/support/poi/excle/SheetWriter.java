@@ -5,6 +5,7 @@ import com.freeing.common.support.poi.excle.builder.StyleBuilder;
 import com.freeing.common.support.poi.excle.def.HeadX;
 import com.freeing.common.support.poi.excle.def.SheetX;
 import com.freeing.common.support.poi.excle.def.TableX;
+import com.freeing.common.support.poi.excle.def.style.FontX;
 import com.freeing.common.support.reflection.Reflector;
 import com.freeing.common.support.reflection.invoker.Invoker;
 import org.apache.poi.ss.usermodel.CellType;
@@ -14,6 +15,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.WorkbookUtil;
 import org.apache.poi.xssf.usermodel.*;
 
+import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -85,7 +87,7 @@ public class SheetWriter {
             currentSheet.addMergedRegion(new CellRangeAddress(titleRowIdx, titleRowIdx,0, end));
 
             cellStyle.setAlignment(HorizontalAlignment.CENTER);
-//            cellStyle.setFillBackgroundColor(new XSSFColor(new Color(0,0,0)));
+            cellStyle.setFillBackgroundColor(new XSSFColor(new Color(0,0,0)));
             titleCell.setCellStyle(cellStyle);
         }
     }
@@ -98,7 +100,20 @@ public class SheetWriter {
         HeadX head;
         for (int i = 0, size = heads.size(); i < size; i++) {
             head = heads.get(i);
+
+            // 单元格样式
+            XSSFCellStyle cellStyle = workbook.createCellStyle();
+
+            // 表头字体样式
+            FontX fontX = head.getHeadFontMap().get(head.getField());
+            if (fontX != null) {
+                // 标题字体样式
+                XSSFFont font = StyleBuilder.buildFont(workbook, fontX);
+                cellStyle.setFont(font);
+            }
+
             headCell = headRow.createCell(i, CellType.STRING);
+
             // 设置单元格样式，列宽
 
             headCell.setCellValue(head.getName());
@@ -106,6 +121,7 @@ public class SheetWriter {
             if (head.getComment() != null && !head.getComment().isEmpty()) {
 
             }
+            headCell.setCellStyle(cellStyle);
         }
     }
 

@@ -1,6 +1,10 @@
 package com.freeing.common.support.poi.excle.def;
 
 import com.freeing.common.support.poi.excle.convertor.Convertor;
+import com.freeing.common.support.poi.excle.def.style.CellStyleX;
+import com.freeing.common.support.poi.excle.def.style.FontX;
+
+import java.util.Map;
 
 /**
  * 表头
@@ -30,6 +34,13 @@ public class HeadX {
      * 批注
      */
     private String comment;
+
+    /**
+     * 表头字体样式
+     */
+    private Map<String, FontX> headFontMap;
+
+    private Map<String, CellStyleX> cellStyleMaps;
 
     public HeadX() {
 
@@ -78,5 +89,21 @@ public class HeadX {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public Map<String, FontX> getHeadFontMap() {
+        return headFontMap;
+    }
+
+    public void setHeadFontMap(Map<String, FontX> headFontMap) {
+        this.headFontMap = headFontMap;
+    }
+
+    public Map<String, CellStyleX> getCellStyleMaps() {
+        return cellStyleMaps;
+    }
+
+    public void setCellStyleMaps(Map<String, CellStyleX> cellStyleMaps) {
+        this.cellStyleMaps = cellStyleMaps;
     }
 }

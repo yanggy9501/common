@@ -8,4 +8,5 @@ public class CellStyleX {
      * 水平对齐方式，left、center、right
      */
     private String hAlign;
+
 }

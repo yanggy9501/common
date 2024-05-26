@@ -3,7 +3,7 @@ package com.freeing.common.support.poi.excle.def.style;
 /**
  * 字体样式
  */
-public class FontX {
+public class Font_ {
     /**
      * 字体类型
      */

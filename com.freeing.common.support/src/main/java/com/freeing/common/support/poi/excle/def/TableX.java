@@ -1,7 +1,8 @@
 package com.freeing.common.support.poi.excle.def;
 
 import com.freeing.common.support.poi.excle.datasoruce.IDataSource;
-import com.freeing.common.support.poi.excle.def.style.FontX;
+import com.freeing.common.support.poi.excle.def.style.CellStyleX;
+import com.freeing.common.support.poi.excle.def.style.Font_;
 import com.freeing.common.support.reflection.Reflector;
 
 import java.util.ArrayList;
@@ -22,34 +23,30 @@ public class TableX {
     private String clazz;
 
     /**
-     * clazz 的反射器
+     * 反射器
      */
     private Reflector reflector;
 
     /**
-     * table 标题
+     * 标题
      */
     private String title;
 
     /**
      * 标题样式
      */
-    private FontX titleFont;
+    private Font_ titleFont;
 
-    /**
-     * 表头行
-     */
-    private List<HeadX> heads = new ArrayList<>();
+    private CellStyleX titleCellStyle;
 
-    /**
-     * 数据列
-     */
-    private List<ColumnX> columns = new ArrayList<>();
+    private List<Column_> columns = new ArrayList<>();
 
     /**
      * 数据源
      */
     private IDataSource dataSource;
+
+    private int sort;
 
     public String getId() {
         return id;
@@ -79,31 +76,31 @@ public class TableX {
         return title;
     }
 
-    public FontX getTitleFont() {
-        return titleFont;
-    }
-
-    public void setTitleFont(FontX titleFont) {
-        this.titleFont = titleFont;
-    }
-
     public void setTitle(String title) {
         this.title = title;
     }
 
-    public List<HeadX> getHeads() {
-        return heads;
+    public Font_ getTitleFont() {
+        return titleFont;
     }
 
-    public void setHeads(List<HeadX> heads) {
-        this.heads = heads;
+    public void setTitleFont(Font_ titleFont) {
+        this.titleFont = titleFont;
     }
 
-    public List<ColumnX> getColumns() {
+    public CellStyleX getTitleCellStyle() {
+        return titleCellStyle;
+    }
+
+    public void setTitleCellStyle(CellStyleX titleCellStyle) {
+        this.titleCellStyle = titleCellStyle;
+    }
+
+    public List<Column_> getColumns() {
         return columns;
     }
 
-    public void setColumns(List<ColumnX> columns) {
+    public void setColumns(List<Column_> columns) {
         this.columns = columns;
     }
 
@@ -113,5 +110,13 @@ public class TableX {
 
     public void setDataSource(IDataSource dataSource) {
         this.dataSource = dataSource;
+    }
+
+    public int getSort() {
+        return sort;
+    }
+
+    public void setSort(int sort) {
+        this.sort = sort;
     }
 }

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.support.spring.PropertyPreFilters;
 import com.freeing.common.log.annotation.Log;
 import com.freeing.common.log.config.AuditLogProperties;
+import com.freeing.common.log.context.LogContext;
 import com.freeing.common.log.event.LogEvent;
 import com.freeing.common.log.model.AuditLog;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -109,31 +110,36 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
 
         Object[] args = null;
         if (annoLog.isSaveIn()) {
-            // 获取访问的方法的参数
-            args = pjp.getArgs();
-            if (args != null && args.length > 0) {
-                ArrayList<Object> params = new ArrayList<>();
-                for (Object arg : args) {
-                    if (arg instanceof ServletRequest || arg instanceof ServletResponse) {
-                        continue;
-                    } else if (arg instanceof MultipartFile) {
-                        HashMap<String, Object> paramMap = new HashMap<>();
-                        MultipartFile file = (MultipartFile) arg;
-                        paramMap.put("name", file.getName());
-                        paramMap.put("originalFilename", file.getOriginalFilename());
-                        paramMap.put("contentType", file.getContentType());
-                        paramMap.put("size", file.getSize());
-                        HashMap<Object, Object> finalParamMap = new HashMap<>();
-                        finalParamMap.put("upload_", paramMap);
-                        params.add(finalParamMap);
-                    } else if (arg instanceof ModelAndView || arg instanceof Model || arg instanceof View) {
-                        continue;
+            String reqJson = LogContext.getLogRequestThreadLocal().get();
+            if (reqJson != null && !reqJson.isEmpty()) {
+                auditLog.setParams(subString(reqJson, 2048));
+            }
+            else {
+                // 获取访问的方法的参数
+                args = pjp.getArgs();
+                if (args != null && args.length > 0) {
+                    ArrayList<Object> params = new ArrayList<>();
+                    for (Object arg : args) {
+                        if (arg instanceof ServletRequest || arg instanceof ServletResponse) {
+                            continue;
+                        } else if (arg instanceof MultipartFile) {
+                            HashMap<String, Object> paramMap = new HashMap<>();
+                            MultipartFile file = (MultipartFile) arg;
+                            paramMap.put("name", file.getName());
+                            paramMap.put("originalFilename", file.getOriginalFilename());
+                            paramMap.put("contentType", file.getContentType());
+                            paramMap.put("size", file.getSize());
+                            HashMap<Object, Object> finalParamMap = new HashMap<>();
+                            finalParamMap.put("upload_", paramMap);
+                            params.add(finalParamMap);
+                        } else if (arg instanceof ModelAndView || arg instanceof Model || arg instanceof View) {
+                            continue;
+                        } else {
+                            params.add(arg);
+                        }
                     }
-                    else {
-                        params.add(arg);
-                    }
+                    auditLog.setParams(subString(JSONArray.toJSONString(params, excludePropertyFilter()), 2048));
                 }
-                auditLog.setParams(subString(JSONArray.toJSONString(params, excludePropertyFilter()), 2048));
             }
         }
 
@@ -168,6 +174,9 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
             auditLog.setElapsedTime(formatNnanos(elapsedNanos));
             auditLog.setEndTime(new Date(System.currentTimeMillis()));
 
+            LogContext.getLogResponseThreadLocal().remove();
+            LogContext.getLogRequestThreadLocal().remove();
+
             // 发布事件，日志交给监听者处理
             applicationContext.publishEvent(new LogEvent(auditLog));
         }
@@ -191,20 +200,6 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
     protected void afterProceed(AuditLog auditLog) {
 
     }
-
-    /**
-     * 获取操作人
-     *
-     * @return
-     */
-    // protected abstract String getOperatorName();
-
-    /**
-     * 获取操作人 ID
-     *
-     * @return
-     */
-    // protected abstract String getOperatorId();
 
     private static String subString(String str, int maxLength) {
         if (str == null) {

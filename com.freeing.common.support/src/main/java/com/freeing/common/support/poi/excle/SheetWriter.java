@@ -2,10 +2,10 @@ package com.freeing.common.support.poi.excle;
 
 import com.freeing.common.support.poi.exception.ExportException;
 import com.freeing.common.support.poi.excle.builder.StyleBuilder;
-import com.freeing.common.support.poi.excle.def.HeadX;
+import com.freeing.common.support.poi.excle.def.Column_;
 import com.freeing.common.support.poi.excle.def.SheetX;
 import com.freeing.common.support.poi.excle.def.TableX;
-import com.freeing.common.support.poi.excle.def.style.FontX;
+import com.freeing.common.support.poi.excle.def.style.Font_;
 import com.freeing.common.support.reflection.Reflector;
 import com.freeing.common.support.reflection.invoker.Invoker;
 import org.apache.poi.ss.usermodel.CellType;
@@ -15,7 +15,6 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.WorkbookUtil;
 import org.apache.poi.xssf.usermodel.*;
 
-import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -80,32 +79,31 @@ public class SheetWriter {
             titleCell.setCellValue(title);
 
             int end = 0;
-            if (table.getHeads() != null && !table.getHeads().isEmpty()) {
-                end = table.getHeads().size() - 1;
+            if (table.getColumns() != null && !table.getColumns().isEmpty()) {
+                end = table.getColumns().size() - 1;
             }
             // 合并单元格
             currentSheet.addMergedRegion(new CellRangeAddress(titleRowIdx, titleRowIdx,0, end));
 
             cellStyle.setAlignment(HorizontalAlignment.CENTER);
-            cellStyle.setFillBackgroundColor(new XSSFColor(new Color(0,0,0)));
             titleCell.setCellStyle(cellStyle);
         }
     }
 
     protected void writeTableHead(TableX table) {
         // table 表头
-        List<HeadX> heads = table.getHeads();
+        List<Column_> columns = table.getColumns();
         XSSFRow headRow = currentSheet.createRow(nextRow());
         XSSFCell headCell;
-        HeadX head;
-        for (int i = 0, size = heads.size(); i < size; i++) {
-            head = heads.get(i);
+        Column_ head;
+        for (int i = 0, size = columns.size(); i < size; i++) {
+            head = columns.get(i);
 
             // 单元格样式
             XSSFCellStyle cellStyle = workbook.createCellStyle();
 
             // 表头字体样式
-            FontX fontX = head.getHeadFontMap().get(head.getField());
+            Font_ fontX = head.getHeaderFont();
             if (fontX != null) {
                 // 标题字体样式
                 XSSFFont font = StyleBuilder.buildFont(workbook, fontX);
@@ -116,7 +114,7 @@ public class SheetWriter {
 
             // 设置单元格样式，列宽
 
-            headCell.setCellValue(head.getName());
+            headCell.setCellValue(head.getHeaderName());
             // 批注
             if (head.getComment() != null && !head.getComment().isEmpty()) {
 
@@ -136,17 +134,27 @@ public class SheetWriter {
                 continue;
             }
             int cellIdx = 0;
-            for (HeadX head : table.getHeads()) {
+            for (Column_ column : table.getColumns()) {
                 // 创建数据单元格
                 XSSFCell cell = dataRow.createCell(cellIdx++);
                 // 设置单元格样式
+                XSSFCellStyle cellStyle = workbook.createCellStyle();
 
-                Invoker invoker = reflector.getGetterInvoker(head.getField());
-                Object value = invoker.invoke(obj);
-                if (head.getConvertor() != null) {
-                    value = head.getConvertor().convert(value);
+                // 表头字体样式
+                Font_ fontX = column.getFiledFont();
+                if (fontX != null) {
+                    // 标题字体样式
+                    XSSFFont font = StyleBuilder.buildFont(workbook, fontX);
+                    cellStyle.setFont(font);
                 }
-                Class<?> getterType = reflector.getGetterType(head.getField());
+
+
+                Invoker invoker = reflector.getGetterInvoker(column.getFieldName());
+                Object value = invoker.invoke(obj);
+                if (column.getConvertor() != null) {
+                    value = column.getConvertor().convert(value);
+                }
+                Class<?> getterType = reflector.getGetterType(column.getFieldName());
                 if (value == null) {
                     // 值为空
                     continue;

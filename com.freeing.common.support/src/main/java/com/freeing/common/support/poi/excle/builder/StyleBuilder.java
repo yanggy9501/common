@@ -1,7 +1,7 @@
 package com.freeing.common.support.poi.excle.builder;
 
 import com.freeing.common.support.poi.exception.DefinitionException;
-import com.freeing.common.support.poi.excle.def.style.FontX;
+import com.freeing.common.support.poi.excle.def.style.Font_;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -13,7 +13,7 @@ import java.util.stream.Stream;
  */
 public class StyleBuilder {
 
-    public static XSSFFont buildFont(XSSFWorkbook workbook, FontX fontX) {
+    public static XSSFFont buildFont(XSSFWorkbook workbook, Font_ fontX) {
         if (fontX == null) {
             return null;
         }
@@ -40,8 +40,9 @@ public class StyleBuilder {
             }
             if (colorArr.length == 3) {
                 font.setColor(new XSSFColor(new java.awt.Color((short) colorArr[0], (short) colorArr[1], (short) colorArr[2])));
+            } else {
+                font.setColor((short) colorArr[0]);
             }
-            font.setColor((short) colorArr[0]);
         }
 
         return font;

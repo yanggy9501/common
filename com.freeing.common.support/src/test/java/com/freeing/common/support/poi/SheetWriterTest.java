@@ -69,7 +69,7 @@ public class SheetWriterTest {
         configuration.addWorkbook(workbookX.getId(), workbookX);
         WorkbookWriter workbookWriter = new WorkbookWriter(workbookX.getId(), workbookX.getFileName(), configuration);
 
-        OutputStream out = new FileOutputStream("D:\\tmp\\export.xlsx");
+        OutputStream out = new FileOutputStream("/Users/yangguangyin/MyDisk/volume/tmp/export.xlsx");
         workbookWriter.write(out);
         ThreadLocalDataSourceContext.clear();
     }
@@ -84,6 +84,12 @@ public class SheetWriterTest {
         t1.setTitle("一年级");
         t1.setReflector(new Reflector(Student.class));
         HeadX h3 = new HeadX("生日", "birthday");
+        FontX fontX1 = new FontX();
+        fontX1.setColor("255,0,0");
+        fontX1.setFontHeight((short) 5);
+        fontX1.setItalic(true);
+        fontX1.setFontName("宋体");
+        h3.getHeadFontMap().put("birthday", fontX1);
         Convertor convertor = new Date2StringConvertor("yyyy-MM-dd");
         h3.setConvertor(convertor);
 

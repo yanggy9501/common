@@ -4,7 +4,12 @@ import com.freeing.common.log.annotation.Log;
 import com.freeing.common.log.enums.BizType;
 import com.freeing.log.entity.DataVo;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -22,7 +27,8 @@ public class DemoController {
 
     @PostMapping("/v2")
     @Log(bizType = BizType.OTHER, description = "无参测试")
-    public String log2() {
+    public String log2(HttpServletRequest request, HttpServletResponse response, MultipartFile file) throws IOException {
+        response.getOutputStream().write("hello".getBytes(StandardCharsets.UTF_8));
         return "ok";
     }
 

@@ -4,8 +4,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.support.spring.PropertyPreFilters;
 import com.freeing.common.log.annotation.Log;
 import com.freeing.common.log.config.AuditLogProperties;
-import com.freeing.common.log.model.AuditLog;
 import com.freeing.common.log.event.LogEvent;
+import com.freeing.common.log.model.AuditLog;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Pointcut;
@@ -14,18 +14,21 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.ui.Model;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Locale;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -109,7 +112,28 @@ public abstract class BaseLogAspect implements ApplicationContextAware {
             // 获取访问的方法的参数
             args = pjp.getArgs();
             if (args != null && args.length > 0) {
-                auditLog.setParams(subString(JSONArray.toJSONString(args, excludePropertyFilter()), 2048));
+                ArrayList<Object> params = new ArrayList<>();
+                for (Object arg : args) {
+                    if (arg instanceof ServletRequest || arg instanceof ServletResponse) {
+                        continue;
+                    } else if (arg instanceof MultipartFile) {
+                        HashMap<String, Object> paramMap = new HashMap<>();
+                        MultipartFile file = (MultipartFile) arg;
+                        paramMap.put("name", file.getName());
+                        paramMap.put("originalFilename", file.getOriginalFilename());
+                        paramMap.put("contentType", file.getContentType());
+                        paramMap.put("size", file.getSize());
+                        HashMap<Object, Object> finalParamMap = new HashMap<>();
+                        finalParamMap.put("upload_", paramMap);
+                        params.add(finalParamMap);
+                    } else if (arg instanceof ModelAndView || arg instanceof Model || arg instanceof View) {
+                        continue;
+                    }
+                    else {
+                        params.add(arg);
+                    }
+                }
+                auditLog.setParams(subString(JSONArray.toJSONString(params, excludePropertyFilter()), 2048));
             }
         }
 

@@ -1,4 +1,4 @@
-package com.freeing.test.i18n;
+package com.freeing.test.swagger;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -8,7 +8,7 @@ import com.freeing.common.support.poi.excle.convertor.MappingConvertor;
 import com.freeing.common.support.poi.excle.datasoruce.ThreadLocalDataSource;
 import com.freeing.common.support.poi.excle.datasoruce.ThreadLocalDataSourceContext;
 import com.freeing.common.support.poi.excle.def.*;
-import com.freeing.common.support.poi.excle.def.style.FontX;
+import com.freeing.common.support.poi.excle.def.style.Font_;
 import com.freeing.common.support.reflection.Reflector;
 
 import java.io.FileOutputStream;
@@ -84,12 +84,12 @@ public class SheetWriterTest {
         t1.setTitle("一年级");
         t1.setReflector(new Reflector(Student.class));
         HeadX h3 = new HeadX("生日", "birthday");
-        FontX fontX1 = new FontX();
-        fontX1.setColor("255,0,0");
-        fontX1.setFontHeight((short) 5);
-        fontX1.setItalic(true);
-        fontX1.setFontName("宋体");
-        h3.getHeadFontMap().put("birthday", fontX1);
+        Font_ font1 = new Font_();
+        font1.setColor("255,0,0");
+        font1.setFontHeight((short) 5);
+        font1.setItalic(true);
+        font1.setFontName("宋体");
+        h3.getHeadFontMap().put("birthday", font1);
         Convertor convertor = new Date2StringConvertor("yyyy-MM-dd");
         h3.setConvertor(convertor);
 
@@ -106,16 +106,16 @@ public class SheetWriterTest {
         ));
 
         t1.setColumns(Arrays.asList(
-            new ColumnX("name"),
-            new ColumnX("sex"),
-            new ColumnX("birthday")
+            new Column_("name"),
+            new Column_("sex"),
+            new Column_("birthday")
         ));
         t1.setDataSource(new ThreadLocalDataSource("level1"));
 
-        FontX fontX = new FontX();
-        fontX.setFontHeight((short) 24);
-        fontX.setColor("8");
-        t1.setTitleFont(fontX);
+        Font_ font = new Font_();
+        font.setFontHeight((short) 24);
+        font.setColor("8");
+        t1.setTitleFont(font);
 
         // ---------------------------------------------------------------------------------
         TableX t2 = new TableX();
@@ -130,9 +130,9 @@ public class SheetWriterTest {
         ));
 
         t2.setColumns(Arrays.asList(
-            new ColumnX("name"),
-            new ColumnX("sex"),
-            new ColumnX("birthday")
+            new Column_("name"),
+            new Column_("sex"),
+            new Column_("birthday")
         ));
         t2.setDataSource(new ThreadLocalDataSource("level2"));
 
@@ -160,9 +160,9 @@ public class SheetWriterTest {
         ));
 
         t1.setColumns(Arrays.asList(
-            new ColumnX("name"),
-            new ColumnX("sex"),
-            new ColumnX("birthday")
+            new Column_("name"),
+            new Column_("sex"),
+            new Column_("birthday")
         ));
         t1.setDataSource(new ThreadLocalDataSource("level1"));
 
@@ -178,9 +178,9 @@ public class SheetWriterTest {
         ));
 
         t2.setColumns(Arrays.asList(
-            new ColumnX("name"),
-            new ColumnX("sex"),
-            new ColumnX("birthday")
+            new Column_("name"),
+            new Column_("sex"),
+            new Column_("birthday")
         ));
         t2.setDataSource(new ThreadLocalDataSource("level2"));
 

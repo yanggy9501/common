@@ -1,4 +1,4 @@
-package com.freeing.test.i18n.controller;
+package com.freeing.test.swagger.controller;
 
 import com.freeing.common.i18n.util.I18nUtils;
 import org.springframework.web.bind.annotation.GetMapping;

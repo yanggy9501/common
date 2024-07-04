@@ -1,7 +1,8 @@
-package com.freeing.common.knife.config;
+package com.freeing.common.swagger.config;
 
 import jdk.nashorn.internal.ir.annotations.Reference;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

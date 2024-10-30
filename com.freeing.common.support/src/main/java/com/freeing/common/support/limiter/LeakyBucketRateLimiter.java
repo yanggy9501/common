@@ -9,7 +9,7 @@ public class LeakyBucketRateLimiter {
     /**
      * 漏桶容量
      */
-    private int capicity;
+    private int capacity;
 
     /**
      * 桶中现有水量
@@ -26,8 +26,8 @@ public class LeakyBucketRateLimiter {
      */
     private int leakRate;
 
-    public LeakyBucketRateLimiter(int capicity, int leakRate) {
-        this.capicity = capicity;
+    public LeakyBucketRateLimiter(int capacity, int leakRate) {
+        this.capacity = capacity;
         this.leakRate = leakRate;
     }
 
@@ -36,7 +36,7 @@ public class LeakyBucketRateLimiter {
         if (water.get() == 0) {
             leakTimestamp = System.currentTimeMillis();
             water.incrementAndGet();
-            return water.get() <  capicity;
+            return water.get() <  capacity;
         }
         // 先漏水，计算剩余水量
         long currentTime = System.currentTimeMillis();
@@ -50,7 +50,7 @@ public class LeakyBucketRateLimiter {
             leakTimestamp = System.currentTimeMillis();
         }
 
-        if (water.get() < capicity) {
+        if (water.get() < capacity) {
             water.incrementAndGet();
             return true;
         } else {

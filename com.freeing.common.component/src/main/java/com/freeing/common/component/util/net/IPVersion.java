@@ -5,7 +5,7 @@ package com.freeing.common.component.util.net;
  *
  * @author yanggy
  */
-public enum IpVersion {
+public enum IPVersion {
     /**
      * ipv4
      */

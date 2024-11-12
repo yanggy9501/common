@@ -6,7 +6,7 @@ package com.freeing.common.component.constant;
  *
  * @author yanggy
  */
-public enum ResultCode {
+public enum ResponseCode {
     /**
      * 操作成功
      */
@@ -37,13 +37,13 @@ public enum ResultCode {
      */
     private final String msg;
 
-    ResultCode(Integer code, String msg ) {
+    ResponseCode(Integer code, String msg ) {
         this.code = code;
         this.msg = msg;
     }
 
-    public static ResultCode get(Integer code) {
-        for (ResultCode value : ResultCode.values()) {
+    public static ResponseCode get(Integer code) {
+        for (ResponseCode value : ResponseCode.values()) {
             if (value.code().equals(code)) {
                 return value;
             }

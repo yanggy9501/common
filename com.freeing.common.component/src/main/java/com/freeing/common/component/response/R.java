@@ -1,6 +1,6 @@
 package com.freeing.common.component.response;
 
-import com.freeing.common.component.constant.ResultCode;
+import com.freeing.common.component.constant.ResponseCode;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -56,9 +56,9 @@ public class R extends HashMap<String, Object> implements Serializable {
      */
     public static R success(String msg, Object data) {
         R r = new R();
-        r.put(CODE, ResultCode.SUCCESS.code());
+        r.put(CODE, ResponseCode.SUCCESS.code());
         if (msg == null || msg.isEmpty()) {
-            r.put(MSG, ResultCode.SUCCESS.msg());
+            r.put(MSG, ResponseCode.SUCCESS.msg());
         } else {
             r.put(MSG, msg);
         }
@@ -94,7 +94,7 @@ public class R extends HashMap<String, Object> implements Serializable {
      * @return 数据对象
      */
     public static R success(Object data) {
-        return R.success(ResultCode.SUCCESS.msg(), data);
+        return R.success(ResponseCode.SUCCESS.msg(), data);
     }
 
     /**
@@ -109,7 +109,7 @@ public class R extends HashMap<String, Object> implements Serializable {
         R r = new R();
         r.put(CODE, code);
         if (msg == null || msg.isEmpty()) {
-            r.put(MSG, ResultCode.ERROR.code());
+            r.put(MSG, ResponseCode.ERROR.code());
         } else {
             r.put(MSG, msg);
         }
@@ -127,7 +127,7 @@ public class R extends HashMap<String, Object> implements Serializable {
      * @return R
      */
     public static R error(String msg, Object data) {
-        return error(ResultCode.ERROR.code(), msg, data);
+        return error(ResponseCode.ERROR.code(), msg, data);
     }
 
     /**
@@ -147,7 +147,7 @@ public class R extends HashMap<String, Object> implements Serializable {
      * @return 消息
      */
     public static R error() {
-        return R.error(ResultCode.ERROR.code(), ResultCode.ERROR.msg(), null);
+        return R.error(ResponseCode.ERROR.code(), ResponseCode.ERROR.msg(), null);
     }
 
     /**
@@ -157,7 +157,7 @@ public class R extends HashMap<String, Object> implements Serializable {
      * @return R
      */
     public static R error(String msg) {
-        return R.error(ResultCode.ERROR.code(), msg, null);
+        return R.error(ResponseCode.ERROR.code(), msg, null);
     }
 
     /**
@@ -169,9 +169,9 @@ public class R extends HashMap<String, Object> implements Serializable {
      */
     public static R fail(String msg, Object data) {
         R r = new R();
-        r.put(CODE, ResultCode.FAIL.code());
+        r.put(CODE, ResponseCode.FAIL.code());
         if (msg == null || msg.isEmpty()) {
-            r.put(MSG, ResultCode.FAIL.code());
+            r.put(MSG, ResponseCode.FAIL.code());
         } else {
             r.put(MSG, msg);
         }
@@ -197,7 +197,7 @@ public class R extends HashMap<String, Object> implements Serializable {
      * @return R
      */
     public static R fail() {
-        return R.fail(ResultCode.FAIL.msg(), null);
+        return R.fail(ResponseCode.FAIL.msg(), null);
     }
 
     /**

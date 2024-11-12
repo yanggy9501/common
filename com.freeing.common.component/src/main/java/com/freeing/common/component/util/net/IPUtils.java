@@ -12,14 +12,14 @@ import java.util.Objects;
  *
  * @author yanggy
  */
-public class IpUtils {
+public class IPUtils {
     /**
      * 判断一字符串是否为IP地址
      *
      * @param ipStr IP地址
      * @return boolean
      */
-    public static boolean isIpAddress(String ipStr) {
+    public static boolean isIPAddress(String ipStr) {
         return isIpv4(ipStr) || isIpv6(ipStr);
     }
 
@@ -29,13 +29,13 @@ public class IpUtils {
      * @param ipStr IP地址
      * @return  Ip Version
      */
-    public static IpVersion getIpVersion(String ipStr) {
+    public static IPVersion getIPVersion(String ipStr) {
         if (isIpv4(ipStr)) {
-            return IpVersion.IPV4;
+            return IPVersion.IPV4;
         } else if (isIpv6(ipStr)) {
-            return IpVersion.IPV6;
+            return IPVersion.IPV6;
         } else {
-            return IpVersion.NULL;
+            return IPVersion.NULL;
         }
     }
 
@@ -106,7 +106,7 @@ public class IpUtils {
      * @param ipAddress IP
      * @return IP
      */
-    public static String nextIpAddress(IpAddress ipAddress) {
+    public static String nextIPAddress(IPAddress ipAddress) {
         return nextIpAddressOfStep(ipAddress, 1);
     }
 
@@ -117,7 +117,7 @@ public class IpUtils {
      * @param step 步长
      * @return IP
      */
-    public static String nextIpAddressOfStep(IpAddress ipAddress, int step) {
+    public static String nextIpAddressOfStep(IPAddress ipAddress, int step) {
         BigInteger bigInteger = ipAddress.getIpBigInteger();
         BigInteger next = bigInteger.add(BigInteger.valueOf(step));
         return bigIntegerToIpAddress(next, ipAddress.getVersion());
@@ -131,20 +131,19 @@ public class IpUtils {
      * @param ipB IP
      * @return true: 则两个 IP 地址冲突
      */
-    public static boolean checkIpConflict(IpAddress ipA, IpAddress ipB) {
+    public static boolean checkIpConflict(IPAddress ipA, IPAddress ipB) {
+        IPVersion iPVersionA = ipA.getVersion();
+        int markBitA = ipA.getMark();
 
-        IpVersion ipVersionA = ipA.getVersion();
-        int markbitA = ipA.getMark();
-
-        IpVersion ipVersionB = ipB.getVersion();
-        int markbitB = ipB.getMark();
+        IPVersion IPVersionB = ipB.getVersion();
+        int markBitB = ipB.getMark();
 
         // IP 版本不一样一定不冲突
-        if (ipVersionA != ipVersionB) {
+        if (iPVersionA != IPVersionB) {
             return false;
         }
 
-        int bitLength = ipVersionA == IpVersion.IPV4 ?
+        int bitLength = iPVersionA == IPVersion.IPV4 ?
             NumConstants.IPV4_BIT_LENGTH :  NumConstants.IPV6_BIT_LENGTH;
 
         BigInteger bigIntA = ipA.getIpBigInteger();
@@ -155,7 +154,7 @@ public class IpUtils {
             .leftPad(bigIntA.toString(NumConstants.RADIX_2), bitLength, StrPool.ZERO)
             .startsWith(StringUtils
                 .leftPad(bigIntB.toString(NumConstants.RADIX_2), bitLength, StrPool.ZERO)
-                .substring(0, Math.min(markbitA, markbitB))
+                .substring(0, Math.min(markBitA, markBitB))
             );
     }
 
@@ -166,15 +165,15 @@ public class IpUtils {
      * @param ipVersion IP 版本
      * @return IP 字符串
      */
-    public static String bigIntegerToIpAddress(BigInteger bigInteger, IpVersion ipVersion) {
+    public static String bigIntegerToIpAddress(BigInteger bigInteger, IPVersion ipVersion) {
         int radix;
         String separator;
         int totalSegment;
-        if (ipVersion.equals(IpVersion.IPV4)) {
+        if (ipVersion.equals(IPVersion.IPV4)) {
             radix = NumConstants.RADIX_2;
             totalSegment = NumConstants.NUM_4;
             separator = StrPool.DOT;
-        } else if (ipVersion.equals(IpVersion.IPV6)){
+        } else if (ipVersion.equals(IPVersion.IPV6)){
             radix = NumConstants.RADIX_16;
             totalSegment = NumConstants.NUM_8;
             separator = StrPool.COLON;
@@ -193,7 +192,7 @@ public class IpUtils {
         String[] ipSegmentArr = new String[totalSegment];
         for (int i = 0; i < totalSegment; i++) {
             // ipv4 32位2进制 4 段，每段 8个二进制；ipv6 32位16进制 8 段，每段 4 个16进制，totalSegment
-            if (ipVersion.equals(IpVersion.IPV4)) {
+            if (ipVersion.equals(IPVersion.IPV4)) {
                 String ipSegment = ipOfRadix.substring(i << 3, (i + 1)  << 3);
                 ipSegmentArr[i] = String.valueOf(Integer.parseInt(ipSegment, radix));
 

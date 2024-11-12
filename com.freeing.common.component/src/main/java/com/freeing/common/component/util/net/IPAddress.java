@@ -12,7 +12,7 @@ import java.math.BigInteger;
  *
  * @author yanggy
  */
-public class IpAddress {
+public class IPAddress {
     /**
      * IP 地址
      */
@@ -31,7 +31,7 @@ public class IpAddress {
     /**
      * IP 版本
      */
-    private IpVersion version;
+    private IPVersion version;
 
     /**
      * 构建对象
@@ -39,8 +39,8 @@ public class IpAddress {
      * @param ip ip 如：127.0.0.1\24 或 127.0.0.1；a::1:1\124 或 a:: 若无掩码则默认 24 或 124
      * @return
      */
-    public static IpAddress build(String ip) {
-        return new IpAddress(ip);
+    public static IPAddress build(String ip) {
+        return new IPAddress(ip);
     }
 
     /**
@@ -51,8 +51,8 @@ public class IpAddress {
      * @param version ip 版本
      * @return
      */
-    public static IpAddress build(BigInteger ipBigInteger, int mark, IpVersion version) {
-        return new IpAddress(ipBigInteger, mark, version);
+    public static IPAddress build(BigInteger ipBigInteger, int mark, IPVersion version) {
+        return new IPAddress(ipBigInteger, mark, version);
     }
 
     /**
@@ -60,15 +60,15 @@ public class IpAddress {
      *
      * @param ip 如：127.0.0.1\24 或 127.0.0.1；a::1:1\124 或 a:: 若无掩码则默认 24 或 124
      */
-    private IpAddress(String ip) {
+    private IPAddress(String ip) {
         parse(ip);
     }
 
-    private IpAddress(BigInteger ipBigInteger, int mark, IpVersion version) {
+    private IPAddress(BigInteger ipBigInteger, int mark, IPVersion version) {
         this.ipBigInteger = ipBigInteger;
         this.mark = mark;
         this.version = version;
-        ipAddress = IpUtils.bigIntegerToIpAddress(ipBigInteger, version);
+        ipAddress = IPUtils.bigIntegerToIpAddress(ipBigInteger, version);
     }
 
     private void parse(String ip) {
@@ -78,7 +78,7 @@ public class IpAddress {
             throw new IllegalArgumentException("Illegal ip: " + ip);
         }
         doParseIpAddress(ipAndMark[0]);
-        if (version == IpVersion.IPV4) {
+        if (version == IPVersion.IPV4) {
             mark = ipAndMark.length == 2 ? NumberUtils.parseInt(ipAndMark[1], 24) : 24;
         } else {
             mark = ipAndMark.length == 2 ? NumberUtils.parseInt(ipAndMark[1], 124) : 124;
@@ -86,11 +86,11 @@ public class IpAddress {
     }
 
     private void doParseIpAddress(String ipStr) {
-        if (IpUtils.isIpv4(ipStr)) {
-            this.version = IpVersion.IPV4;
+        if (IPUtils.isIpv4(ipStr)) {
+            this.version = IPVersion.IPV4;
             this.ipAddress = ipStr;
-        } else if (IpUtils.isIpv6(ipStr)) {
-            this.version = IpVersion.IPV6;
+        } else if (IPUtils.isIpv6(ipStr)) {
+            this.version = IPVersion.IPV6;
             standardizeIpv6Address(ipStr);
         } else {
             throw new IllegalArgumentException("Illegal ip '" + ipStr + "'");
@@ -106,7 +106,7 @@ public class IpAddress {
     private BigInteger ipAddressToBigInteger() {
         BigInteger ipBigInteger = new BigInteger(StrPool.ZERO);
         // ip 地址每小段的二进制位长度
-        boolean ipv4Flag = this.version == IpVersion.IPV4;
+        boolean ipv4Flag = this.version == IPVersion.IPV4;
         int segmentLength = ipv4Flag ?
             NumConstants.IPV4_SEGMENT_BIT_LENGTH : NumConstants.IPV6_SEGMENT_BIT_LENGTH;
         // ip 地址段的进制表示
@@ -170,7 +170,7 @@ public class IpAddress {
         return mark;
     }
 
-    public IpVersion getVersion() {
+    public IPVersion getVersion() {
         return version;
     }
 }

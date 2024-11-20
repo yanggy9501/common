@@ -3,6 +3,7 @@ package com.freeing.common.component.util;
 import com.freeing.common.component.constant.StrPool;
 import com.freeing.common.component.util.stack.CharStack;
 import com.freeing.common.component.util.stack.IntStack;
+import com.sun.xml.internal.ws.api.streaming.XMLStreamWriterFactory;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -21,7 +22,7 @@ public class NumberUtils extends org.apache.commons.lang3.math.NumberUtils {
      * @param defaultValue 默认值
      * @return boolean
      */
-    public static <T extends Number> T getOfDefualt(T number, T defaultValue) {
+    public static <T extends Number> T getOfDefault(T number, T defaultValue) {
         if (number != null) {
             return number;
         }

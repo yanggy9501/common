@@ -139,10 +139,9 @@ public class WorkerWrapper<T, V> {
         // 将自己也存放到被使用的 WorkerWrapper 集合中
         forAllUsedWrappers.put(id, this);
         // 判断是否超时，若超时则快速失败，进行下一个（下一个自己快速失败）
-        // 多线程执行的，假设该任务由 a 线程执行并且快成功了，b 线程刚进来并且判断超时，会怎样
         long now = System.currentTimeMillis();
         if (remainTime <= 0) {
-            fastFail(INIT, null);
+            fastFail(INIT, null);// 多线程执行的，假设该任务由 a 线程执行并且快成功了，b 线程刚进来并且判断超时，会怎样，因为已经不是 INIT 状态，return
             beginNext(executorService, now, remainTime);
             return;
         }
@@ -250,6 +249,7 @@ public class WorkerWrapper<T, V> {
             fire();
             beginNext(executorService, now, remainTime);
         }
+        // else 等最后一个完成的依赖来执行
     }
 
     private void doDependOneJob(DependWrapper dependWrapper) {
@@ -295,7 +295,7 @@ public class WorkerWrapper<T, V> {
         // 超时等待
         try {
             CompletableFuture.allOf(futures).get(remainTime - costTime, TimeUnit.MILLISECONDS);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
     }

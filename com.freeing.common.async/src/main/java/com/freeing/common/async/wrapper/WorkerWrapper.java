@@ -56,6 +56,9 @@ public class WorkerWrapper<T, V> {
      */
     private final AtomicInteger state = new AtomicInteger(0);
 
+    /**
+     * 【注意】A ---> B，A执行完，则到B，你 A 的 nextWrapper 有 B，但是不意味着 B 的 dependWrapper 就有 A
+     */
 
     /**
      * 在自己后面的wrapper，如果没有，自己就是末尾；如果有一个，就是串行；如果有多个，有几个就需要开几个线程

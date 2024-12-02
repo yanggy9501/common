@@ -34,13 +34,19 @@ public class TestSequential {
                 .next(workerWrapper2)
                 .build();
 
+        WorkerWrapper<String, String> workerWrapper11 =  new WorkerWrapper.Builder<String, String>()
+            .worker(w1)
+            .callback(w1)
+            .param("11")
+            .build();
+
         WorkerWrapper<String, String> workerWrapper =  new WorkerWrapper.Builder<String, String>()
                 .worker(w)
                 .callback(w)
                 .param("0")
+                .depend(workerWrapper11)
                 .next(workerWrapper1)
                 .build();
-
 
         testGroupTimeout(workerWrapper);
     }

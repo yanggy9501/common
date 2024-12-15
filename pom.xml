@@ -9,5 +9,8 @@
     <packaging>pom</packaging>
 
     <version>1.0</version>
+    <modules>
+        <module>com.freeing.common.test</module>
+    </modules>
 
 </project>

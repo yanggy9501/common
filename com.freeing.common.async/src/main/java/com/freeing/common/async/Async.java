@@ -37,6 +37,7 @@ public class Async {
         }
 
         try {
+            // 调用线程等待-层级为1的线程执行完成，最多等待 timeout 毫秒，主线程停止等待
             CompletableFuture.allOf(futures).get(timeout, TimeUnit.MILLISECONDS);
             return true;
         } catch (TimeoutException ignored) {

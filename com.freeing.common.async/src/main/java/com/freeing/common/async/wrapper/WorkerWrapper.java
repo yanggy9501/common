@@ -297,6 +297,8 @@ public class WorkerWrapper<T, V> {
         }
         // 超时等待
         try {
+            // 【很重要CompletableFuture#get(超时时间)】线程池中的某个线程在阻塞等待线程池中的其他线程执行玩其他任务，若线程数已经被
+            // 阻塞等待的线程占完了，这里就会无限阻塞下去，所有要设置超时时间
             CompletableFuture.allOf(futures).get(remainTime - costTime, TimeUnit.MILLISECONDS);
         } catch (Exception ignored) {
 

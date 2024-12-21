@@ -2,6 +2,7 @@ package com.freeing.common.async;
 
 import com.freeing.common.async.wrapper.WorkerWrapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
@@ -35,7 +36,8 @@ public class Async {
             futures[i] = CompletableFuture.runAsync(() ->
                 workerWrapper.work(executorService, timeout, forAllUsedWrappers), executorService);
         }
-
+        int size = workerWrappers.size();
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(size);
         try {
             // 调用线程等待-层级为1的线程执行完成，最多等待 timeout 毫秒，主线程停止等待
             CompletableFuture.allOf(futures).get(timeout, TimeUnit.MILLISECONDS);

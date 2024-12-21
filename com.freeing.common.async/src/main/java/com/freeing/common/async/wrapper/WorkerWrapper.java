@@ -282,7 +282,7 @@ public class WorkerWrapper<T, V> {
         }
         // 花费的时间
         long costTime = System.currentTimeMillis() - now;
-        // 只有一个将要执行的任务时，用当前线程执行（本任务已经执行完成了，可以用于执行下一个）
+        // 只有一个将要执行的任务时，【用当前线程执行，本任务已经执行完成了，可以用于执行下一个】
         if (nextWrappers.size() == 1) {
             nextWrappers
                 .get(0).work(executorService, this,  remainTime - costTime, forAllUsedWrappers);
@@ -295,10 +295,10 @@ public class WorkerWrapper<T, V> {
                 .work(executorService, WorkerWrapper.this, remainTime - costTime, forAllUsedWrappers),
             executorService);
         }
-        // 超时等待
+        // 【任务超时时间结束的关键，CompletableFuture.allOf(futures).get 实现任务超时结束功能，但是也存在一些问题】 超时等待【这里存在任务阻塞的情况】
         try {
-            // 【很重要CompletableFuture#get(超时时间)】线程池中的某个线程在阻塞等待线程池中的其他线程执行玩其他任务，若线程数已经被
-            // 阻塞等待的线程占完了，这里就会无限阻塞下去，所有要设置超时时间
+            // 【很重要CompletableFuture#get(超时时间)】线程池中的某个线程在阻塞等待线程池中的其他线程执行完其他任务，若线程数已经被
+            // 阻塞等待的线程占完了（A --> B, A --> C, 线程池中的线程只有一个，就会存在阻塞，任务无法执行的情况），这里就会无限阻塞下去，所有要设置超时时间
             CompletableFuture.allOf(futures).get(remainTime - costTime, TimeUnit.MILLISECONDS);
         } catch (Exception ignored) {
 

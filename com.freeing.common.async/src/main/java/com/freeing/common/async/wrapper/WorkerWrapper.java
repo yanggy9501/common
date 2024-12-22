@@ -32,6 +32,7 @@ public class WorkerWrapper<T, V> {
 
     /**
      * worker将来要处理的param，即入参
+     * 【注意】：若入参是 WorkerWrapper 的返回结果，则可能存在可见性问题，
      */
     private final T param;
 
@@ -73,6 +74,7 @@ public class WorkerWrapper<T, V> {
 
     /**
      * 该 map存放所有wrapper的 id 和 wrapper映射，该 map 是惰性性的，一开始并不会所有任务组合中的 WorkerWrapper 都放进来.
+     * 同一个任务组中 forAllUsedWrappers 都是同一个 ConcurrentHashMap，如果前置依赖是 isMust 的，则下游读取没有可见性问题，因为状态不会在改变
      */
     private Map<String, WorkerWrapper<?, ?>> forAllUsedWrappers;
 

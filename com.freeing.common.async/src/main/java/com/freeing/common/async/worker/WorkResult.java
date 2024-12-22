@@ -9,17 +9,17 @@ public class WorkResult<V> {
     /**
      * 执行的结果
      */
-    private volatile V result;
+    private V result;
 
     /**
      * 结果状态
      */
-    private volatile ResultState resultState;
+    private ResultState resultState;
 
     /**
      * 异常信息
      */
-    private volatile Exception ex;
+    private Exception ex;
 
     public WorkResult(V result, ResultState resultState) {
         this(result, resultState, null);

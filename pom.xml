@@ -11,6 +11,8 @@
     <version>1.0</version>
     <modules>
         <module>com.freeing.common.test</module>
+        <module>com.freeing.common.double-write</module>
+        <module>com.freeing.common.batch</module>
     </modules>
 
 </project>

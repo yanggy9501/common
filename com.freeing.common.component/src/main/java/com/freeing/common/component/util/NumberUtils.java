@@ -3,7 +3,6 @@ package com.freeing.common.component.util;
 import com.freeing.common.component.constant.StrPool;
 import com.freeing.common.component.util.stack.CharStack;
 import com.freeing.common.component.util.stack.IntStack;
-import com.sun.xml.internal.ws.api.streaming.XMLStreamWriterFactory;
 
 import java.math.BigDecimal;
 import java.util.*;

@@ -61,7 +61,7 @@ public enum BizType {
     /**
      * 退出
      */
-    LOGOUT(10,  "logout"),
+    LOGOUT(11,  "logout"),
 
     /**
      * 其它

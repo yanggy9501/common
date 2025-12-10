@@ -14,8 +14,8 @@ public class SftpTest {
 
         IFtpClient ftpClient = new FtpClientFactory(ftpProperty).newClient();
         System.out.println(ftpClient.getRootPath());
-        List<FtpFileAttrs> list = ftpClient.list(ftpClient.getRootPath() + "/a/..");
-        for (FtpFileAttrs attrs : list) {
+        List<FileAttrs> list = ftpClient.list(ftpClient.getRootPath() + "/a/..");
+        for (FileAttrs attrs : list) {
             System.out.println(attrs);
         }
 //        ftpClient.deleteFile(ftpClient.getRootPath() + "/a/b/c.txt");

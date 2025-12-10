@@ -5,9 +5,6 @@ import com.freeing.common.ftp.exception.FtpException;
 import com.freeing.common.ftp.factory.FtpsFileStorageClientFactory;
 import com.freeing.common.ftp.ftp.Ftps;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.function.Consumer;
 
@@ -23,6 +20,7 @@ public class FtpsFileStorage implements FileStorage {
     /**
      * 获取 Client ，使用完后需要归还
      */
+    @Override
     public Ftps getClient() {
         return clientFactory.getClient();
     }
@@ -30,19 +28,23 @@ public class FtpsFileStorage implements FileStorage {
     /**
      * 归还 Client
      */
+    @Override
     public void returnClient(Ftps client) {
         clientFactory.returnClient(client);
     }
 
+    @Override
     public void close() {
         clientFactory.close();
     }
 
+    @Override
     public String getAbsolutePath(String path) {
         return basePath + path;
     }
 
-    public void upload(String parentPath, String fileName, InputStream in) throws IOException {
+    @Override
+    public void upload(String parentPath, String fileName, InputStream in) {
         Ftps ftps = getClient();
         String absolutePath = getAbsolutePath(parentPath);
         try {
@@ -50,12 +52,15 @@ public class FtpsFileStorage implements FileStorage {
             if (!upload) {
                 throw new FtpException("Upload file failed");
             }
+        } catch (Exception e) {
+            throw new FtpException("Upload file error",  e);
         } finally {
             returnClient(ftps);
         }
     }
 
-    public void upload(String parentPath, String fileName, String localFile) throws Exception {
+    @Override
+    public void upload(String parentPath, String fileName, String localFile) {
         Ftps ftps = getClient();
         String absolutePath = getAbsolutePath(parentPath);
         try {
@@ -63,11 +68,14 @@ public class FtpsFileStorage implements FileStorage {
             if (!upload) {
                 throw new FtpException("Upload file failed");
             }
+        } catch (Exception e) {
+            throw new FtpException("Upload file error",  e);
         } finally {
             returnClient(ftps);
         }
     }
 
+    @Override
     public void download(String remoteFile, String localFile) {
         Ftps ftps = getClient();
         String absolutePath = getAbsolutePath(remoteFile);
@@ -81,6 +89,7 @@ public class FtpsFileStorage implements FileStorage {
         }
     }
 
+    @Override
     public void download(String remoteFile, Consumer<InputStream> consumer) {
         Ftps ftps = getClient();
         String absolutePath = getAbsolutePath(remoteFile);
@@ -109,11 +118,8 @@ public class FtpsFileStorage implements FileStorage {
 
         FtpsFileStorage ftpsFileStorage = new FtpsFileStorage(ftpsConfig.getBasePath(), client);
 
-        FileInputStream fileInputStream = new FileInputStream(new File("E:\\重试.txt"));
+//        ftpsFileStorage.upload("/", "test.txt", "E:\\settings.xml");
 
-        ftpsFileStorage.upload("/", "test2.txt", fileInputStream);
-        ftpsFileStorage.upload("/", "test.txt", "E:\\settings.xml");
-        fileInputStream.close();
-
+        ftpsFileStorage.download("/test.txt", "E:\\test1111.txt");
     }
 }

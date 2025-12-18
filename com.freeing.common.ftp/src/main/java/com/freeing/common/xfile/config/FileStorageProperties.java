@@ -1,4 +1,4 @@
-package com.freeing.common.ftp.config;
+package com.freeing.common.xfile.config;
 
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
@@ -9,6 +9,16 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class FileStorageProperties {
+
+    private FtpsConfig ftps;
+
+    public FtpsConfig getFtps() {
+        return ftps;
+    }
+
+    public void setFtps(FtpsConfig ftps) {
+        this.ftps = ftps;
+    }
 
     public static class FtpsConfig {
         private String protocol = "TLS";

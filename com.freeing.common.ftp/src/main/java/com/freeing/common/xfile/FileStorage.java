@@ -1,24 +1,27 @@
-package com.freeing.common.ftp;
+package com.freeing.common.xfile;
 
-import com.freeing.common.ftp.ftp.Ftps;
+import com.freeing.common.xfile.bean.RemoteFile;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.function.Consumer;
 
-public interface FileStorage {
+public interface FileStorage<T> {
     /**
      * 获取 Client ，使用完后需要归还
      */
-    Ftps getClient();
+    T getClient();
 
     /**
      * 归还 Client
      */
-    void returnClient(Ftps client);
+    void returnClient(T client);
 
     void close();
 
-    String getAbsolutePath(String path);
+    String getAbsolutePath(String basePath, String path);
+
+    List<RemoteFile> listFiles(String parentPath);
 
     void upload(String parentPath, String fileName, InputStream in);
 

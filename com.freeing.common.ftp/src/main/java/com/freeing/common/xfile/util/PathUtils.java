@@ -1,4 +1,4 @@
-package com.freeing.common.ftp.util;
+package com.freeing.common.xfile.util;
 
 public class PathUtils {
     /**

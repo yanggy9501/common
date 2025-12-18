@@ -1,8 +1,8 @@
-package com.freeing.common.ftp.factory;
+package com.freeing.common.xfile.factory;
 
-import com.freeing.common.ftp.config.FileStorageProperties.FtpsConfig;
-import com.freeing.common.ftp.exception.FtpException;
-import com.freeing.common.ftp.ftp.Ftps;
+import com.freeing.common.xfile.config.FileStorageProperties.FtpsConfig;
+import com.freeing.common.xfile.exception.FtpException;
+import com.freeing.common.xfile.ftp.Ftps;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.commons.net.ftp.FTPSClient;
@@ -14,9 +14,9 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
+import java.io.IOException;
 import java.nio.charset.Charset;
+import java.time.Duration;
 
 public class FtpsFileStorageClientFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(FtpsFileStorageClientFactory.class);
@@ -25,6 +25,7 @@ public class FtpsFileStorageClientFactory {
     private final Integer port;
     private final String user;
     private final String password;
+    private final String basePath;
     private final Charset charset;
     private final Integer connectionTimeout;
     private final boolean isImplicit;
@@ -41,6 +42,7 @@ public class FtpsFileStorageClientFactory {
         this.connectionTimeout = config.getConnectionTimeout();
         this.isImplicit = config.isImplicit();
         this.poolConfig = config.getPool().toGenericObjectPoolConfig();
+        this.basePath = config.getBasePath();
     }
 
     public Ftps getClient() {
@@ -54,7 +56,7 @@ public class FtpsFileStorageClientFactory {
             }
             return pool.borrowObject();
         } catch (Exception e) {
-            throw new FtpException("Get SFTP Client failed", e);
+            throw new FtpException("Get FTPS Client failed", e);
         }
     }
 
@@ -93,6 +95,10 @@ public class FtpsFileStorageClientFactory {
         return password;
     }
 
+    public String getBasePath() {
+        return basePath;
+    }
+
     public Charset getCharset() {
         return charset;
     }
@@ -125,8 +131,6 @@ public class FtpsFileStorageClientFactory {
             // Explicit 模式（推荐）
             FTPSClient ftpsClient = new FTPSClient(factory.getProtocol(), factory.isImplicit());
             // 证书验证
-            trustCertifications(ftpsClient);
-
             ftpsClient.connect(factory.getHost(), factory.getPort());
             int replyCode = ftpsClient.getReplyCode();
             if (!FTPReply.isPositiveCompletion(replyCode)) {
@@ -145,6 +149,10 @@ public class FtpsFileStorageClientFactory {
             // 二进制模式(适用文件下载和上传)
             ftpsClient.setFileType(FTP.BINARY_FILE_TYPE);
 
+            ftpsClient.setDataTimeout(Duration.ofSeconds(300));
+            ftpsClient.setConnectTimeout(factory.getConnectionTimeout());
+            ftpsClient.setDefaultTimeout(factory.getConnectionTimeout());
+
             ftpsClient.setControlEncoding("UTF-8");
             return new Ftps(ftpsClient);
         }
@@ -155,11 +163,22 @@ public class FtpsFileStorageClientFactory {
         }
 
         @Override
+        public void activateObject(PooledObject<Ftps> p) throws Exception {
+            FTPSClient client = p.getObject().client();
+            // 统一工作目录
+            client.changeWorkingDirectory(factory.getBasePath());
+            // 强制二进制模式
+            client.setFileType(FTP.BINARY_FILE_TYPE);
+            // 强制被动模式
+            client.enterLocalPassiveMode();
+        }
+
+        @Override
         public boolean validateObject(PooledObject<Ftps> p) {
+            FTPSClient ftpsClient = p.getObject().client();
             try {
-                p.getObject().cd(".");
-                return true;
-            } catch (FtpException e) {
+                return ftpsClient.isConnected() && ftpsClient.sendNoOp();
+            } catch (IOException e) {
                 LOGGER.warn("Validate Ftps object failed", e);
                 return false;
             }
@@ -167,26 +186,19 @@ public class FtpsFileStorageClientFactory {
 
         @Override
         public void destroyObject(PooledObject<Ftps> p) {
+            FTPSClient ftpsClient = p.getObject().client();
             try {
-                p.getObject().close();
+                if (ftpsClient.isConnected()) {
+                    try {
+                        ftpsClient.logout();
+                    } catch (Exception ignore) {
+
+                    }
+                    ftpsClient.disconnect();
+                }
             } catch (Exception e) {
-                throw new FtpException("Destroy pooled object failed", e);
+                LOGGER.warn("Error destroying FTPSClient", e);
             }
         }
-    }
-
-    private static void trustCertifications(FTPSClient ftpsClient) {
-        TrustManager[] trustManager = new TrustManager[]{new X509TrustManager() {
-            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                return null;
-            }
-
-            public void checkClientTrusted(java.security.cert.X509Certificate[] certs, String authType) {
-            }
-
-            public void checkServerTrusted(java.security.cert.X509Certificate[] certs, String authType) {
-            }
-        }};
-        ftpsClient.setTrustManager(trustManager[0]);
     }
 }

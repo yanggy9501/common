@@ -1,4 +1,4 @@
-package com.freeing.common.ftp;
+package com.freeing.common.xfile;
 
 
 import java.util.Date;

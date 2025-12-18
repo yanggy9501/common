@@ -1,17 +1,20 @@
-package com.freeing.common.ftp.ftp;
+package com.freeing.common.xfile.ftp;
 
-import com.freeing.common.ftp.exception.FtpException;
-import com.freeing.common.ftp.util.PathUtils;
+import com.freeing.common.xfile.exception.FtpException;
+import com.freeing.common.xfile.util.PathUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPSClient;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Consumer;
 
 public record Ftps(FTPSClient client) {
 
-    synchronized public boolean cd(String directory) {
+    public synchronized boolean cd(String directory) {
         if (StringUtils.isBlank(directory)) {
             return true;
         }
@@ -30,6 +33,18 @@ public record Ftps(FTPSClient client) {
             }
         } catch (IOException ignored) {
 
+        }
+    }
+
+    public List<FTPFile> ls(String path) {
+        try {
+            FTPFile[] files = client.listFiles(path);
+            if (files == null || files.length == 0) {
+                return new ArrayList<>();
+            }
+            return new ArrayList<>(Arrays.asList(files));
+        } catch (IOException e) {
+            throw new FtpException("Error dir path:" + path, e);
         }
     }
 
@@ -71,7 +86,6 @@ public record Ftps(FTPSClient client) {
         }
     }
 
-
     public boolean download(String remoteFile, String localFile) {
         try (FileOutputStream fos = new FileOutputStream(localFile)) {
             return client.retrieveFile(remoteFile, fos);
@@ -80,21 +94,16 @@ public record Ftps(FTPSClient client) {
         }
     }
 
-    public boolean download(String remoteFile, Consumer<InputStream> consumer) {
-        InputStream in;
-        try {
-            in = client.retrieveFileStream(remoteFile);
+    public void download(String remoteFile, Consumer<InputStream> consumer) {
+        try (InputStream in = client.retrieveFileStream(remoteFile);) {
+            try {
+                consumer.accept(in);
+            } finally {
+                // retrieveFileStream 是“半条命令”， 需要 completePendingCommand 客户端确认并清理状态
+                client.completePendingCommand();
+            }
         } catch (IOException e) {
-            throw new FtpException("Download file failed", e);
-        }
-        consumer.accept(in);
-        return true;
-    }
-
-    public void listFiles(String remotePath) throws Exception {
-        FTPFile[] files = client.listFiles(remotePath);
-        for (FTPFile file : files) {
-            System.out.println(file);
+            throw new FtpException("Download file error", e);
         }
     }
 }

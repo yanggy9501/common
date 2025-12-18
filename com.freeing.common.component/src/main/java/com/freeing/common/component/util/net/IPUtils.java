@@ -14,7 +14,7 @@ import java.util.Objects;
  */
 public class IPUtils {
     /**
-     * 判断一字符串是否为IP地址
+     * 判断字符串是否为IP地址
      *
      * @param ipStr IP地址
      * @return boolean

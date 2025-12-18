@@ -1,4 +1,4 @@
-package com.freeing.common.ftp.exception;
+package com.freeing.common.xfile.exception;
 
 public class FtpException extends RuntimeException {
     public FtpException() {

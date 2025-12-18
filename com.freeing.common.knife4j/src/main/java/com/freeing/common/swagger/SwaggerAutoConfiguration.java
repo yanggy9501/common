@@ -59,7 +59,6 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
 
     private BeanFactory beanFactory;
 
-
     @Autowired
     SwaggerProperties swaggerProperties;
 

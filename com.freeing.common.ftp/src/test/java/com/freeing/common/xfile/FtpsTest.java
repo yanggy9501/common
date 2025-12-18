@@ -1,5 +1,6 @@
 package com.freeing.common.xfile;
 
+import com.freeing.common.xfile.bean.RemoteFile;
 import com.freeing.common.xfile.config.FileStorageProperties;
 import com.freeing.common.xfile.exception.FtpException;
 import com.freeing.common.xfile.factory.FtpsFileStorageClientFactory;
@@ -41,14 +42,14 @@ public class FtpsTest {
         FtpsFileStorage ftpsFileStorage = new FtpsFileStorage(ftpsConfig.getBasePath(), clientFactory);
 
         for (int i = 0; i < 2; i++) {
-            List<FTPFile> ftpFiles1 = ftpsFileStorage.listFiles("/ftps-test/aml");
+            List<RemoteFile> ftpFiles1 = ftpsFileStorage.listFiles("/ftps-test/aml");
             System.out.println("ftpFiles1(/ftps-test/aml): " + ftpFiles1.size());
         }
 
-        List<FTPFile> ftpFiles = ftpsFileStorage.listFiles("/ftps-test");
+        List<RemoteFile> ftpFiles = ftpsFileStorage.listFiles("/ftps-test");
         System.out.println("ftpFiles: " + ftpFiles.size());
         System.out.println(ftpFiles);
-        for (FTPFile ftpFile : ftpFiles) {
+        for (RemoteFile ftpFile : ftpFiles) {
             System.out.println(ftpFile.getName());
             ftpsFileStorage.download("/ftps-test/" + ftpFile.getName(), (in) -> {
                 try {
@@ -65,13 +66,13 @@ public class FtpsTest {
         Thread.sleep(2000);
 
         for (int i = 0; i < 2; i++) {
-            List<FTPFile> ftpFiles2 = ftpsFileStorage.listFiles("/ftps-test/aml");
-            System.out.println("ftpFiles1(/ftps-test/aml): " + ftpFiles2.size());
+            List<RemoteFile> ftpFiles2 = ftpsFileStorage.listFiles("/ftps-test/aml");
+            System.out.println("ftpFiles2(/ftps-test/aml): " + ftpFiles2.size());
         }
 
         for (int i = 0; i < 2; i++) {
-            List<FTPFile> ftpFiles3 = ftpsFileStorage.listFiles("/ftps-test/aml");
-            System.out.println("ftpFiles1(/ftps-test/aml): " + ftpFiles3.size());
+            List<RemoteFile> ftpFiles3 = ftpsFileStorage.listFiles("/ftps-test/aml");
+            System.out.println("ftpFiles3(/ftps-test/aml): " + ftpFiles3.size());
         }
 
 //        new Thread(() -> {

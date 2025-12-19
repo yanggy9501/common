@@ -4,9 +4,7 @@ import com.freeing.common.xfile.bean.RemoteFile;
 import com.freeing.common.xfile.config.FileStorageProperties;
 import com.freeing.common.xfile.exception.FtpException;
 import com.freeing.common.xfile.factory.FtpsFileStorageClientFactory;
-import org.apache.commons.net.ftp.FTPFile;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -50,11 +48,11 @@ public class FtpsTest {
         System.out.println("ftpFiles: " + ftpFiles.size());
         System.out.println(ftpFiles);
         for (RemoteFile ftpFile : ftpFiles) {
-            System.out.println(ftpFile.getName());
-            ftpsFileStorage.download("/ftps-test/" + ftpFile.getName(), (in) -> {
+            System.out.println(ftpFile.name());
+            ftpsFileStorage.download("/ftps-test/" + ftpFile.name(), (in) -> {
                 try {
                     System.out.println("download");
-                    Files.copy(in, Path.of("E:\\" + ftpFile.getName()), StandardCopyOption.REPLACE_EXISTING);
+                    Files.copy(in, Path.of("E:\\" + ftpFile.name()), StandardCopyOption.REPLACE_EXISTING);
                 } catch (IOException e) {
                     throw new FtpException("Download file failed", e);
                 }

@@ -4,10 +4,11 @@ public class PathUtils {
     /**
      * 标准化路径
      *
-     * @param aPath 文件路径
+     * @param path 文件路径
+     * @return 标准路径，如：/a/b/c 或 a/b/c
      */
-    public static String standardPath(String aPath) {
-        String path = aPath == null ? "" : aPath.trim();
+    public static String standardPath(String path) {
+        path = path == null ? "" : path.trim();
         if (path.isEmpty()) {
             return "";
         }

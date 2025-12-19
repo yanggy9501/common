@@ -21,7 +21,9 @@ public interface FileStorage<T> {
 
     String getAbsolutePath(String basePath, String path);
 
-    List<RemoteFile> listFiles(String parentPath);
+    List<RemoteFile> listFiles(String path);
+
+    List<RemoteFile> listDirs(String path);
 
     void upload(String parentPath, String fileName, InputStream in);
 

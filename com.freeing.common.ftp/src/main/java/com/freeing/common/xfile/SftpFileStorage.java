@@ -1,6 +1,5 @@
 package com.freeing.common.xfile;
 
-import com.freeing.common.constants.StrPool;
 import com.freeing.common.xfile.bean.RemoteFile;
 import com.freeing.common.xfile.enums.FileType;
 import com.freeing.common.xfile.exception.FtpException;
@@ -14,11 +13,11 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class FtpsFileStorage implements FileStorage<Ftps> {
+public class SftpFileStorage implements FileStorage<Ftps> {
     private final String basePath;
     private final FtpsFileStorageClientFactory clientFactory;
 
-    public FtpsFileStorage(String basePath, FtpsFileStorageClientFactory clientFactory) {
+    public SftpFileStorage(String basePath, FtpsFileStorageClientFactory clientFactory) {
         this.basePath = basePath;
         this.clientFactory = clientFactory;
     }
@@ -46,7 +45,7 @@ public class FtpsFileStorage implements FileStorage<Ftps> {
 
     @Override
     public String getAbsolutePath(String basePath, String path) {
-        return PathUtils.standardPath(basePath + StrPool.FILE_SEPARATOR + path);
+        return PathUtils.standardPath(basePath + "/" + path);
     }
 
     private <T> T executeWithClient(Function<Ftps, T> operation) {

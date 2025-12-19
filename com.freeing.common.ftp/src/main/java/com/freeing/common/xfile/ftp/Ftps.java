@@ -20,6 +20,10 @@ public class Ftps extends AbstractClient {
         this.client = client;
     }
 
+    public FTPSClient client() {
+        return client;
+    }
+
     @Override
     public boolean cd(String directory) {
         synchronized (client) {

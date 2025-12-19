@@ -2,6 +2,7 @@ package com.freeing.common.xfile;
 
 import com.freeing.common.xfile.bean.RemoteFile;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 import java.util.function.Consumer;
@@ -25,11 +26,11 @@ public interface FileStorage<T> {
 
     List<RemoteFile> listDirs(String path);
 
-    void upload(String parentPath, String fileName, InputStream in);
+    void upload(String destPath, InputStream in);
 
-    void upload(String parentPath, String fileName, String localFile);
+    void upload(String destPath, File file);
 
-    void download(String remoteFile, String localFile);
+    void download(String destPath, File file);
 
-    void download(String remoteFile, Consumer<InputStream> consumer);
+    void download(String destPath, Consumer<InputStream> consumer);
 }

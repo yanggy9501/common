@@ -160,17 +160,4 @@ public class Ftps extends AbstractClient {
             throw new FtpException("Error dir path:" + path, e);
         }
     }
-
-    public boolean isDirExist(String remoteDir) {
-        // 保存当前工作目录
-        String currentDir = pwd();
-        try {
-            // 尝试切换目录
-            return cd(remoteDir);
-        } catch (Exception e) {
-            throw new FtpException("Error dir path:" + remoteDir, e);
-        } finally {
-            cd(currentDir);
-        }
-    }
 }

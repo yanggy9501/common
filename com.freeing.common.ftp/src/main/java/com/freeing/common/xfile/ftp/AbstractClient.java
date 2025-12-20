@@ -42,7 +42,7 @@ public abstract class AbstractClient implements Closeable {
      * 判断给定路径是否为目录
      *
      * @param dir 被判断的路径
-     * @return 是否为目录
+     * @return 是否为目录: false-目录不存在或无法访问
      */
     public boolean isDir(String dir) {
         final String workDir = pwd();

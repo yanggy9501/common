@@ -9,6 +9,7 @@ import com.freeing.common.xfile.ftp.Ftps;
 import com.freeing.common.xfile.util.PathUtils;
 import org.apache.commons.net.ftp.FTPFile;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 import java.util.function.Consumer;
@@ -73,7 +74,7 @@ public class FtpsFileStorage implements FileStorage<Ftps> {
     public List<RemoteFile> listFiles(String path) {
         String absolutePath = getAbsolutePath(this.basePath, path);
         return executeWithClient(ftps ->
-            ftps.ls(absolutePath).stream()
+            ftps.ll(absolutePath).stream()
                 .filter(FTPFile::isFile)
                 .map(ftpFile -> new RemoteFile(FileType.FILE.name(), ftpFile.getName(), path, absolutePath))
                 .toList()
@@ -84,18 +85,18 @@ public class FtpsFileStorage implements FileStorage<Ftps> {
     public List<RemoteFile> listDirs(String path) {
         String absolutePath = getAbsolutePath(this.basePath, path);
         return executeWithClient(ftps ->
-            ftps.ls(absolutePath).stream()
+            ftps.ll(absolutePath).stream()
                 .filter(FTPFile::isDirectory)
                 .map(ftpFile -> new RemoteFile(FileType.DIR.name(), ftpFile.getName(), path, absolutePath))
                 .toList());
     }
 
     @Override
-    public void upload(String parentPath, String fileName, InputStream in) {
+    public void upload(String destPath, InputStream in) {
         executeWithClient(ftps -> {
-            String absolutePath = getAbsolutePath(this.basePath, parentPath);
+            String absolutePath = getAbsolutePath(this.basePath, destPath);
             try {
-                boolean upload = ftps.upload(absolutePath, fileName, in);
+                boolean upload = ftps.upload(absolutePath, in);
                 if (!upload) {
                     throw new FtpException("Upload file failed");
                 }
@@ -108,11 +109,11 @@ public class FtpsFileStorage implements FileStorage<Ftps> {
     }
 
     @Override
-    public void upload(String parentPath, String fileName, String localFile) {
+    public void upload(String destPath, File file) {
         executeWithClient(ftps -> {
-            String absolutePath = getAbsolutePath(this.basePath, parentPath);
+            String absolutePath = getAbsolutePath(this.basePath, destPath);
             try {
-                boolean upload = ftps.upload(absolutePath, fileName, localFile);
+                boolean upload = ftps.upload(absolutePath , file);
                 if (!upload) {
                     throw new FtpException("Upload file failed");
                 }
@@ -124,14 +125,11 @@ public class FtpsFileStorage implements FileStorage<Ftps> {
     }
 
     @Override
-    public void download(String remoteFile, String localFile) {
+    public void download(String remoteFile, File outFile) {
         Ftps ftps = getClient();
         String absolutePath = getAbsolutePath(this.basePath, remoteFile);
         try {
-            boolean download = ftps.download(absolutePath, localFile);
-            if (!download) {
-                throw new FtpException("Download file failed");
-            }
+            ftps.download(absolutePath, outFile);
         } finally {
             returnClient(ftps);
         }

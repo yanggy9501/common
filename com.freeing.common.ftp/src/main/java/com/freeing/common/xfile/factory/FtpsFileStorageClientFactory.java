@@ -130,7 +130,9 @@ public class FtpsFileStorageClientFactory {
         public Ftps create() throws Exception {
             // Explicit 模式（推荐）
             FTPSClient ftpsClient = new FTPSClient(factory.getProtocol(), factory.isImplicit());
-            // 证书验证
+            // 一定要在 connect() 之前设置，解决中文路径
+            ftpsClient.setControlEncoding("UTF-8");
+
             ftpsClient.connect(factory.getHost(), factory.getPort());
             int replyCode = ftpsClient.getReplyCode();
             if (!FTPReply.isPositiveCompletion(replyCode)) {
@@ -153,7 +155,6 @@ public class FtpsFileStorageClientFactory {
             ftpsClient.setConnectTimeout(factory.getConnectionTimeout());
             ftpsClient.setDefaultTimeout(factory.getConnectionTimeout());
 
-            ftpsClient.setControlEncoding("UTF-8");
             return new Ftps(ftpsClient);
         }
 

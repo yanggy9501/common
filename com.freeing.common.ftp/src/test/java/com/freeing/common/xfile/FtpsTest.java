@@ -2,18 +2,21 @@ package com.freeing.common.xfile;
 
 import com.freeing.common.xfile.bean.RemoteFile;
 import com.freeing.common.xfile.config.FileStorageProperties;
-import com.freeing.common.xfile.exception.FtpException;
 import com.freeing.common.xfile.factory.FtpsFileStorageClientFactory;
+import com.freeing.common.xfile.util.PathUtils;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
+import java.io.File;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class FtpsTest {
-
-    public static void main(String[] args) throws InterruptedException {
+    static FtpsFileStorage ftpsFileStorage = null;
+    static {
         FileStorageProperties storageProperties = new FileStorageProperties();
         FileStorageProperties.FtpsConfig ftpsConfig = new FileStorageProperties.FtpsConfig();
         ftpsConfig.setHost("192.168.134.128");
@@ -29,61 +32,91 @@ public class FtpsTest {
         FileStorageProperties.CommonClientPoolConfig poolConfig = new FileStorageProperties.CommonClientPoolConfig();
         poolConfig.setTestOnBorrow( true);
         poolConfig.setTestWhileIdle(true);
-        poolConfig.setMaxIdle(1);
-        poolConfig.setMinIdle(1);
-        poolConfig.setMaxTotal(1);
+        poolConfig.setMaxIdle(10);
+        poolConfig.setMinIdle(10);
+        poolConfig.setMaxTotal(10);
 
         ftpsConfig.setPool(poolConfig);
 
         FtpsFileStorageClientFactory clientFactory = new FtpsFileStorageClientFactory(ftpsConfig);
 
-        FtpsFileStorage ftpsFileStorage = new FtpsFileStorage(ftpsConfig.getBasePath(), clientFactory);
+        ftpsFileStorage = new FtpsFileStorage(ftpsConfig.getBasePath(), clientFactory);
+    }
 
-        for (int i = 0; i < 2; i++) {
-            List<RemoteFile> ftpFiles1 = ftpsFileStorage.listFiles("/ftps-test/aml");
-            System.out.println("ftpFiles1(/ftps-test/aml): " + ftpFiles1.size());
+    public static void main(String[] args) throws InterruptedException {
+
+        LinkedList<String> dirList = new LinkedList<>();
+
+        dirList.add("flinkcdc");
+        while (!dirList.isEmpty()) {
+            String id = UUID.randomUUID().toString();
+            // 查文件夹
+            String dir = dirList.removeFirst();
+            // 该目录中子目录
+            List<RemoteFile> nextDirs = ftpsFileStorage.listDirs(dir);
+            List<String> toAddDirs = nextDirs.stream().map(f -> f.basePath() + "/" + f.name()).toList();
+            dirList.addAll(toAddDirs);
+
+            System.out.println(id + " ==== " + dir + " dir size: " + dirList.size());
+            // 处理该目录中的文件
+            // 总共执行：retryThreshold + 1 次
+            SendWithRetryTask task = new SendWithRetryTask(id, dir, 6, 10);
+            task.run();
+        }
+    }
+
+
+    static ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
+
+    public static class SendWithRetryTask implements Runnable {
+        final String id;
+        final String dir;
+        final int retryThreshold; // 重试次数
+        // volatile 保证其他线程执行时可见（下次执行可能不是当前线程）
+        volatile AtomicInteger retryCount; // curr次数
+        final long interval;
+
+        public SendWithRetryTask(String id, String dir, int retryThreshold, long interval) {
+            this.id = id;
+            this.dir = dir;
+            this.retryThreshold = retryThreshold;
+            this.retryCount = new AtomicInteger(0);
+            this.interval = interval;
         }
 
-        List<RemoteFile> ftpFiles = ftpsFileStorage.listFiles("/ftps-test");
-        System.out.println("ftpFiles: " + ftpFiles.size());
-        System.out.println(ftpFiles);
-        for (RemoteFile ftpFile : ftpFiles) {
-            System.out.println(ftpFile.name());
-            ftpsFileStorage.download("/ftps-test/" + ftpFile.name(), (in) -> {
-                try {
-                    System.out.println("download");
-                    Files.copy(in, Path.of("E:\\" + ftpFile.name()), StandardCopyOption.REPLACE_EXISTING);
-                } catch (IOException e) {
-                    throw new FtpException("Download file failed", e);
+        @Override
+        public void run() {
+            List<RemoteFile> remoteFiles = ftpsFileStorage.listFiles(dir);
+            System.out.println(id + " ==== " + dir + " file size: " + remoteFiles.size());
+            if (remoteFiles.isEmpty()) {
+                // 重试
+                retryCount.incrementAndGet();
+                mayRetry(this);
+            }
+            else {
+                // 下载备份
+                for (RemoteFile remoteFile : remoteFiles) {
+                    File file = new File(PathUtils.standardPath("E:/tmp/ftps/" + remoteFile.basePath() + "/" + remoteFile.name()));
+                    File parentFile = file.getParentFile();
+                    if (!parentFile.exists()) {
+                        parentFile.mkdirs();
+                    }
+                    ftpsFileStorage.download(remoteFile.basePath() + "/" + remoteFile.name(), file);
+
+                    // 发送
                 }
-            });
+
+            }
         }
+    }
 
-        System.out.println("==========================================================");
-
-        Thread.sleep(2000);
-
-        for (int i = 0; i < 2; i++) {
-            List<RemoteFile> ftpFiles2 = ftpsFileStorage.listFiles("/ftps-test/aml");
-            System.out.println("ftpFiles2(/ftps-test/aml): " + ftpFiles2.size());
+    public static void mayRetry(SendWithRetryTask task) {
+        if (task.retryCount.get() > task.retryThreshold) {
+            System.out.println(task.id + " ==== " + task.dir + " 重试结束");
+            return;
         }
-
-        for (int i = 0; i < 2; i++) {
-            List<RemoteFile> ftpFiles3 = ftpsFileStorage.listFiles("/ftps-test/aml");
-            System.out.println("ftpFiles3(/ftps-test/aml): " + ftpFiles3.size());
-        }
-
-//        new Thread(() -> {
-//            System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-//            List<FTPFile> ftpFiles2 = ftpsFileStorage.listFiles("/ftps-test/aml");
-//            System.out.println("ftpFiles2: " + ftpFiles2.size());
-//            System.out.println(ftpFiles2);
-//            for (FTPFile ftpFile : ftpFiles2) {
-//                System.out.println(ftpFile.getName());
-//                ftpsFileStorage.download("/ftps-test/aml" + ftpFile.getName(), "E:\\" + ftpFile.getName());
-//            }
-////        }).start();
-
+        System.out.println(task.id + " ==== " + task.dir + " 第几次重试：" + task.retryCount);
+        scheduledExecutorService.schedule(task, task.interval, TimeUnit.SECONDS);
     }
 
 }

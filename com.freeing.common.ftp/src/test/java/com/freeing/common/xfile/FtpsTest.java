@@ -6,6 +6,8 @@ import com.freeing.common.xfile.factory.FtpsFileStorageClientFactory;
 import com.freeing.common.xfile.util.PathUtils;
 
 import java.io.File;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -16,6 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class FtpsTest {
     static FtpsFileStorage ftpsFileStorage = null;
+
     static {
         FileStorageProperties storageProperties = new FileStorageProperties();
         FileStorageProperties.FtpsConfig ftpsConfig = new FileStorageProperties.FtpsConfig();
@@ -30,7 +33,7 @@ public class FtpsTest {
         ftpsConfig.setPool(new FileStorageProperties.CommonClientPoolConfig());
 
         FileStorageProperties.CommonClientPoolConfig poolConfig = new FileStorageProperties.CommonClientPoolConfig();
-        poolConfig.setTestOnBorrow( true);
+        poolConfig.setTestOnBorrow(true);
         poolConfig.setTestWhileIdle(true);
         poolConfig.setMaxIdle(10);
         poolConfig.setMinIdle(10);
@@ -47,13 +50,14 @@ public class FtpsTest {
 
         LinkedList<String> dirList = new LinkedList<>();
 
-        dirList.add("flinkcdc");
+        dirList.add(inputPath);
         while (!dirList.isEmpty()) {
-            String id = UUID.randomUUID().toString();
+            String id = UUID.randomUUID().toString().replaceAll("-", "");
             // 查文件夹
             String dir = dirList.removeFirst();
-            // 该目录中子目录
+            // 该目录中子目录: listChildrenDirIfNeedScanned(dir);
             List<RemoteFile> nextDirs = ftpsFileStorage.listDirs(dir);
+            // basePath = dirList.removeFirst()
             List<String> toAddDirs = nextDirs.stream().map(f -> f.basePath() + "/" + f.name()).toList();
             dirList.addAll(toAddDirs);
 
@@ -61,10 +65,11 @@ public class FtpsTest {
             // 处理该目录中的文件
             // 总共执行：retryThreshold + 1 次
             SendWithRetryTask task = new SendWithRetryTask(id, dir, 6, 10);
-            task.run();
+            scheduledExecutorService.execute(task);
         }
     }
 
+    static String inputPath = "ftps-test/flinkcdc";
 
     static ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
 
@@ -92,11 +97,12 @@ public class FtpsTest {
                 // 重试
                 retryCount.incrementAndGet();
                 mayRetry(this);
-            }
-            else {
+            } else {
                 // 下载备份
                 for (RemoteFile remoteFile : remoteFiles) {
-                    File file = new File(PathUtils.standardPath("E:/tmp/ftps/" + remoteFile.basePath() + "/" + remoteFile.name()));
+                    File file = new File(PathUtils.standardPath("E:/tmp/ftps/"
+                        + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHH"))
+                        + "/" + PathUtils.getRelativePath(inputPath, dir) + "/" + remoteFile.name()));
                     File parentFile = file.getParentFile();
                     if (!parentFile.exists()) {
                         parentFile.mkdirs();
@@ -115,8 +121,15 @@ public class FtpsTest {
             System.out.println(task.id + " ==== " + task.dir + " 重试结束");
             return;
         }
+        if (!isRequestRetry(task.dir)) {
+            System.out.println(task.id + " ==== " + task.dir + " 无需重试");
+            return;
+        }
         System.out.println(task.id + " ==== " + task.dir + " 第几次重试：" + task.retryCount);
         scheduledExecutorService.schedule(task, task.interval, TimeUnit.SECONDS);
     }
 
+    public static boolean isRequestRetry(String dir) {
+        return inputPath.equals(dir);
+    }
 }

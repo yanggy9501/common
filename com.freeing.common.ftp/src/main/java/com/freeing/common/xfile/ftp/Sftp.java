@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 
 public class Sftp extends AbstractClient {
     private Session session;
-    private ChannelSftp channel;
+    private ChannelSftp client;
 
     public Sftp(Session session, int timeout, Charset charset) {
         init(session, timeout, charset);
@@ -35,7 +35,7 @@ public class Sftp extends AbstractClient {
             throw new FtpException(e);
         }
         channel.setFilenameEncoding(charset);
-        this.channel = channel;
+        this.client = channel;
     }
 
     @Override
@@ -78,7 +78,12 @@ public class Sftp extends AbstractClient {
 
     @Override
     public boolean delFile(String path) {
-        return false;
+        try {
+            getClient().rm(path);
+            return true;
+        } catch (SftpException e) {
+            throw new FtpException(e);
+        }
     }
 
     @Override
@@ -112,6 +117,6 @@ public class Sftp extends AbstractClient {
      * @return 通道客户端
      */
     public ChannelSftp getClient() {
-        return this.channel;
+        return this.client;
     }
 }

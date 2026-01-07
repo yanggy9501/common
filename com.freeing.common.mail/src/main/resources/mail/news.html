@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+</head>
+<body>
+
+<h3>今日新闻列表</h3>
+
+<table border="1" cellpadding="8" cellspacing="0"
+       style="border-collapse:collapse; width:100%;">
+  <thead>
+  <tr>
+    <th>标题</th>
+    <th>作者</th>
+    <th>分类</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="news : ${newsList}">
+    <td th:text="${news.title}"/>
+    <td th:text="${news.author}"/>
+    <td th:text="${news.category}"/>
+  </tr>
+  </tbody>
+</table>
+
+</body>
+</html>

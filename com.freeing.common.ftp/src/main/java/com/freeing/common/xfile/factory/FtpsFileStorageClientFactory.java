@@ -3,6 +3,9 @@ package com.freeing.common.xfile.factory;
 import com.freeing.common.xfile.config.FileStorageProperties.FtpsConfig;
 import com.freeing.common.xfile.exception.FtpException;
 import com.freeing.common.xfile.ftp.Ftps;
+import com.freeing.common.xfile.ftp.ext.FTPSClientWithResumeBC;
+import org.apache.commons.net.ProtocolCommandEvent;
+import org.apache.commons.net.ProtocolCommandListener;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.commons.net.ftp.FTPSClient;
@@ -128,8 +131,9 @@ public class FtpsFileStorageClientFactory {
 
         @Override
         public Ftps create() throws Exception {
-            // Explicit 模式（推荐）
-            FTPSClient ftpsClient = new FTPSClient(factory.getProtocol(), factory.isImplicit());
+            // 可选：禁用 EMS 以提升兼容性（如果服务器不支持）
+            System.setProperty("jdk.tls.useExtendedMasterSecret", "false");
+            FTPSClient ftpsClient = new FTPSClientWithResumeBC();
             // 一定要在 connect() 之前设置，解决中文路径
             ftpsClient.setControlEncoding("UTF-8");
 
@@ -154,7 +158,7 @@ public class FtpsFileStorageClientFactory {
             ftpsClient.setDataTimeout(Duration.ofSeconds(300));
             ftpsClient.setConnectTimeout(factory.getConnectionTimeout());
             ftpsClient.setDefaultTimeout(factory.getConnectionTimeout());
-
+//            ftpsClient.addProtocolCommandListener(new ProtocolCommandLoggingListener());
             return new Ftps(ftpsClient);
         }
 
@@ -200,6 +204,18 @@ public class FtpsFileStorageClientFactory {
             } catch (Exception e) {
                 LOGGER.warn("Error destroying FTPSClient", e);
             }
+        }
+    }
+
+    public static class ProtocolCommandLoggingListener implements ProtocolCommandListener {
+        @Override
+        public void protocolCommandSent(ProtocolCommandEvent protocolCommandEvent) {
+            LOGGER.info("S {}", protocolCommandEvent.getMessage());
+        }
+
+        @Override
+        public void protocolReplyReceived(ProtocolCommandEvent protocolCommandEvent) {
+            LOGGER.info("R [{}] {}", + protocolCommandEvent.getReplyCode(), protocolCommandEvent.getMessage());
         }
     }
 }

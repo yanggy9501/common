@@ -58,10 +58,10 @@ public class FtpsTest {
             // 该目录中子目录: listChildrenDirIfNeedScanned(dir);
             List<RemoteFile> nextDirs = ftpsFileStorage.listDirs(dir);
             // basePath = dirList.removeFirst()
-            List<String> toAddDirs = nextDirs.stream().map(f -> f.basePath() + "/" + f.name()).toList();
+            List<String> toAddDirs = nextDirs.stream().map(f -> PathUtils.standardPath(f.basePath() + "/" + f.name())).toList();
             dirList.addAll(toAddDirs);
 
-            System.out.println(id + " ==== " + dir + " dir size: " + dirList.size());
+            System.out.println(id + " List dir ==== " + dir + " dir size: " + toAddDirs.size());
             // 处理该目录中的文件
             // 总共执行：retryThreshold + 1 次
             SendWithRetryTask task = new SendWithRetryTask(id, dir, 6, 10);
@@ -69,7 +69,7 @@ public class FtpsTest {
         }
     }
 
-    static String inputPath = "ftps-test/flinkcdc";
+    static String inputPath = "/";
 
     static ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
 
@@ -92,11 +92,11 @@ public class FtpsTest {
         @Override
         public void run() {
             List<RemoteFile> remoteFiles = ftpsFileStorage.listFiles(dir);
-            System.out.println(id + " ==== " + dir + " file size: " + remoteFiles.size());
+            System.out.println(id + " List file ==== " + dir + " file size: " + remoteFiles.size());
             if (remoteFiles.isEmpty()) {
                 // 重试
-                retryCount.incrementAndGet();
-                mayRetry(this);
+//                retryCount.incrementAndGet();
+//                mayRetry(this);
             } else {
                 // 下载备份
                 for (RemoteFile remoteFile : remoteFiles) {
@@ -107,7 +107,7 @@ public class FtpsTest {
                     if (!parentFile.exists()) {
                         parentFile.mkdirs();
                     }
-                    ftpsFileStorage.download(remoteFile.basePath() + "/" + remoteFile.name(), file);
+//                    ftpsFileStorage.download(remoteFile.basePath() + "/" + remoteFile.name(), file);
 
                     // 发送
                 }

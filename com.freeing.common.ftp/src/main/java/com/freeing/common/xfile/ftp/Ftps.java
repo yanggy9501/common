@@ -106,14 +106,18 @@ public class Ftps extends AbstractClient {
 
     @Override
     public void download(String remoteFile, Consumer<InputStream> consumer) {
+        boolean isSuccess = false;
         try (InputStream in = client.retrieveFileStream(remoteFile);) {
             consumer.accept(in);
+            isSuccess = true;
         } catch (IOException e) {
             throw new FtpException(e);
         } finally {
             try {
-                // retrieveFileStream 是“半条命令”， 需要 completePendingCommand 确认并清理状态
-                client.completePendingCommand();
+                if (isSuccess) {
+                    // retrieveFileStream 是“半条命令”， 需要 completePendingCommand 确认并清理状态
+                    client.completePendingCommand();
+                }
             } catch (IOException ignored) {
             }
         }

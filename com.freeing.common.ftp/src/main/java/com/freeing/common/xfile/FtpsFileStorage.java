@@ -113,7 +113,7 @@ public class FtpsFileStorage implements FileStorage<Ftps> {
         executeWithClient(ftps -> {
             String absolutePath = getAbsolutePath(this.basePath, destPath);
             try {
-                boolean upload = ftps.upload(absolutePath , file);
+                boolean upload = ftps.upload(absolutePath, file);
                 if (!upload) {
                     throw new FtpException("Upload file failed");
                 }

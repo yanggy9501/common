@@ -1,5 +1,6 @@
 package com.freeing.common.xfile.ftp.ext;
 
+import com.freeing.common.xfile.exception.FtpException;
 import org.apache.commons.net.ftp.FTPSClient;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.jsse.BCExtendedSSLSession;
@@ -57,7 +58,7 @@ public class FTPSClientWithResumeBC extends FTPSClient {
             sslContext.init(null, null, new SecureRandom());
             return sslContext;
         } catch (NoSuchAlgorithmException | NoSuchProviderException | KeyManagementException e) {
-            throw new RuntimeException("无法创建 SSL 上下文: " + e.getMessage(), e);
+            throw new FtpException("无法创建 SSL 上下文: " + e.getMessage(), e);
         }
     }
 

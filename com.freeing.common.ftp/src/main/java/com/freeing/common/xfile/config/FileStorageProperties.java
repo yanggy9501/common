@@ -1,5 +1,7 @@
 package com.freeing.common.xfile.config;
 
+import org.apache.commons.pool2.PooledObject;
+import org.apache.commons.pool2.PooledObjectFactory;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
 import java.nio.charset.Charset;
@@ -299,13 +301,23 @@ public class FileStorageProperties {
     public static class CommonClientPoolConfig {
         /**
          * 取出对象前进行校验，默认开启
+         * @see PooledObjectFactory#validateObject(PooledObject)
+         * 执行时间 pool.borrowObject();
          */
         private Boolean testOnBorrow = true;
 
         /**
-         * 空闲检测，默认开启
+         * 空闲检测，默认开启:对 象闲着的时候，由“后台线程”定期检查并清理
+         * 不是你代码触发，而是 Evictor（驱逐线程）
+         * 每 1 分钟
+         *   ↓
+         * 扫描 idle 对象
+         *   ↓
+         * validateObject()
+         *   ↓
+         * 失败 → destroyObject()
          */
-        private Boolean testWhileIdle = true;
+        private Boolean testWhileIdle = false;
 
         /**
          * 最大总数量，超过此数量会进行阻塞等待，默认 16
@@ -323,12 +335,15 @@ public class FileStorageProperties {
         private Integer minIdle = 1;
 
         /**
-         * 空闲对象逐出（销毁）运行间隔时间，默认 30 秒
+         * 空闲对象逐出（销毁）运行间隔时间，默认 60 秒 Evictor 线程执行一次
+         * 扫描 idle 对象
+         * 根据规则校验 / 驱逐
          */
-        private Duration timeBetweenEvictionRuns = Duration.ofSeconds(30);
+        private Duration timeBetweenEvictionRuns = Duration.ofSeconds(60);
 
         /**
          * 对象空闲超过此时间将逐出（销毁），为负数则关闭此功能，默认 -1
+         * Evictor 执行时如果如果 idle 时间大于 minEvictableIdleDuration 则逐出
          */
         private Duration minEvictableIdleDuration = Duration.ofMillis(-1);
 
@@ -344,6 +359,7 @@ public class FileStorageProperties {
             config.setMaxTotal(maxTotal);
             config.setMinIdle(minIdle);
             config.setMaxIdle(maxIdle);
+            config.setNumTestsPerEvictionRun(10); // Evictor 一次会检查多少个对象？
             config.setTimeBetweenEvictionRuns(timeBetweenEvictionRuns);
             config.setMinEvictableIdleDuration(minEvictableIdleDuration);
             config.setSoftMinEvictableIdleDuration(softMinEvictableIdleDuration);

@@ -33,11 +33,11 @@ public class FtpsTest {
         ftpsConfig.setPool(new FileStorageProperties.CommonClientPoolConfig());
 
         FileStorageProperties.CommonClientPoolConfig poolConfig = new FileStorageProperties.CommonClientPoolConfig();
-        poolConfig.setTestOnBorrow(true);
-        poolConfig.setTestWhileIdle(true);
-        poolConfig.setMaxIdle(10);
-        poolConfig.setMinIdle(10);
-        poolConfig.setMaxTotal(10);
+        poolConfig.setTestOnBorrow(false);
+        poolConfig.setTestWhileIdle(false);
+        poolConfig.setMaxIdle(1);
+        poolConfig.setMinIdle(1);
+        poolConfig.setMaxTotal(1);
 
         ftpsConfig.setPool(poolConfig);
 

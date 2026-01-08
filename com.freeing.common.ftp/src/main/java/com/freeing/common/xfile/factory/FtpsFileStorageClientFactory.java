@@ -21,6 +21,17 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.time.Duration;
 
+/**
+ * create → wrap
+ *    ↓
+ * idle → borrow → activateObject -> setTestOnBorrow(true) ? -> validateObject()
+ *    ↓
+ * 使用中
+ *    ↓
+ * return → passivateObject → idle
+ *    ↓
+ * validate / destroy
+ */
 public class FtpsFileStorageClientFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(FtpsFileStorageClientFactory.class);
     private final String protocol;
@@ -170,12 +181,17 @@ public class FtpsFileStorageClientFactory {
         @Override
         public void activateObject(PooledObject<Ftps> p) throws Exception {
             FTPSClient client = p.getObject().client();
-            // 统一工作目录
-            client.changeWorkingDirectory(factory.getBasePath());
             // 强制二进制模式
             client.setFileType(FTP.BINARY_FILE_TYPE);
             // 强制被动模式
             client.enterLocalPassiveMode();
+        }
+
+        @Override
+        public void passivateObject(PooledObject<Ftps> p) throws Exception {
+            FTPSClient client = p.getObject().client();
+            // 统一工作目录
+            client.changeWorkingDirectory(factory.getBasePath());
         }
 
         @Override

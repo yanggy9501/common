@@ -3,7 +3,7 @@ package com.freeing.common.xfile.factory;
 import com.freeing.common.xfile.config.FileStorageProperties.FtpsConfig;
 import com.freeing.common.xfile.exception.FtpException;
 import com.freeing.common.xfile.ftp.Ftps;
-import com.freeing.common.xfile.ftp.ext.FTPSClientWithResumeBC;
+import com.freeing.common.xfile.ftp.wrapper.FTPSClientWithResumeBC;
 import org.apache.commons.net.ProtocolCommandEvent;
 import org.apache.commons.net.ProtocolCommandListener;
 import org.apache.commons.net.ftp.FTP;
@@ -142,8 +142,6 @@ public class FtpsFileStorageClientFactory {
 
         @Override
         public Ftps create() throws Exception {
-            // 可选：禁用 EMS 以提升兼容性（如果服务器不支持）
-            System.setProperty("jdk.tls.useExtendedMasterSecret", "false");
             FTPSClient ftpsClient = new FTPSClientWithResumeBC();
             // 一定要在 connect() 之前设置，解决中文路径
             ftpsClient.setControlEncoding("UTF-8");

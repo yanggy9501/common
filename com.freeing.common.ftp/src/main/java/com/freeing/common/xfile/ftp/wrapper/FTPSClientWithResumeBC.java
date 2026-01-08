@@ -1,4 +1,4 @@
-package com.freeing.common.xfile.ftp.ext;
+package com.freeing.common.xfile.ftp.wrapper;
 
 import com.freeing.common.xfile.exception.FtpException;
 import org.apache.commons.net.ftp.FTPSClient;

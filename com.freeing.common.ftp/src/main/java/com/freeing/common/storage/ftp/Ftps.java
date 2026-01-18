@@ -1,7 +1,7 @@
-package com.freeing.common.xfile.ftp;
+package com.freeing.common.storage.ftp;
 
-import com.freeing.common.xfile.exception.FtpException;
-import com.freeing.common.xfile.util.PathUtils;
+import com.freeing.common.storage.exception.FtpException;
+import com.freeing.common.storage.util.PathUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPSClient;

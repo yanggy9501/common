@@ -1,10 +1,8 @@
-package com.freeing.common.xfile.ftp;
+package com.freeing.common.storage.ftp;
 
 import com.freeing.common.constants.StrPool;
-import com.freeing.common.xfile.bean.FileAttrs;
-import com.freeing.common.xfile.bean.RemoteFile;
-import com.freeing.common.xfile.exception.FtpException;
-import com.freeing.common.xfile.util.PathUtils;
+import com.freeing.common.storage.exception.FtpException;
+import com.freeing.common.storage.util.PathUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Closeable;

@@ -1,6 +1,6 @@
-package com.freeing.common.xfile.ftp;
+package com.freeing.common.storage.ftp;
 
-import com.freeing.common.xfile.exception.FtpException;
+import com.freeing.common.storage.exception.FtpException;
 import com.jcraft.jsch.*;
 
 import java.io.File;

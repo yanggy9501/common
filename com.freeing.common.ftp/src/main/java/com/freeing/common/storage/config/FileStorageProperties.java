@@ -1,4 +1,4 @@
-package com.freeing.common.xfile.config;
+package com.freeing.common.storage.config;
 
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.PooledObjectFactory;

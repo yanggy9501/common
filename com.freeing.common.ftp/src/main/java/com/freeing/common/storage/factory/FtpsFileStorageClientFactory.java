@@ -1,9 +1,9 @@
-package com.freeing.common.xfile.factory;
+package com.freeing.common.storage.factory;
 
-import com.freeing.common.xfile.config.FileStorageProperties.FtpsConfig;
-import com.freeing.common.xfile.exception.FtpException;
-import com.freeing.common.xfile.ftp.Ftps;
-import com.freeing.common.xfile.ftp.wrapper.FTPSClientWithResumeBC;
+import com.freeing.common.storage.config.FileStorageProperties.FtpsConfig;
+import com.freeing.common.storage.exception.FtpException;
+import com.freeing.common.storage.ftp.Ftps;
+import com.freeing.common.storage.ftp.wrapper.FTPSClientWithResumeBC;
 import org.apache.commons.net.ProtocolCommandEvent;
 import org.apache.commons.net.ProtocolCommandListener;
 import org.apache.commons.net.ftp.FTP;

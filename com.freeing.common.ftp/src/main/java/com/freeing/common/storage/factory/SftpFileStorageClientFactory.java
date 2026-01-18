@@ -1,4 +1,4 @@
-package com.freeing.common.xfile.factory;
+package com.freeing.common.storage.factory;
 
 public class SftpFileStorageClientFactory {
 

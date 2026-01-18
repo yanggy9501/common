@@ -1,9 +1,9 @@
-package com.freeing.common.xfile;
+package com.freeing.common.storage;
 
-import com.freeing.common.xfile.bean.RemoteFile;
-import com.freeing.common.xfile.factory.SftpFileStorageClientFactory;
-import com.freeing.common.xfile.ftp.Sftp;
-import com.freeing.common.xfile.util.PathUtils;
+import com.freeing.common.storage.bean.RemoteFile;
+import com.freeing.common.storage.factory.SftpFileStorageClientFactory;
+import com.freeing.common.storage.ftp.Sftp;
+import com.freeing.common.storage.util.PathUtils;
 
 import java.io.File;
 import java.io.InputStream;

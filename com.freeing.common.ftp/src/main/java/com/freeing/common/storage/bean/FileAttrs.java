@@ -1,4 +1,4 @@
-package com.freeing.common.xfile.bean;
+package com.freeing.common.storage.bean;
 
 
 import java.util.Date;

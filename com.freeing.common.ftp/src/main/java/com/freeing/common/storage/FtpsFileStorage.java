@@ -1,12 +1,12 @@
-package com.freeing.common.xfile;
+package com.freeing.common.storage;
 
 import com.freeing.common.constants.StrPool;
-import com.freeing.common.xfile.bean.RemoteFile;
-import com.freeing.common.xfile.enums.FileType;
-import com.freeing.common.xfile.exception.FtpException;
-import com.freeing.common.xfile.factory.FtpsFileStorageClientFactory;
-import com.freeing.common.xfile.ftp.Ftps;
-import com.freeing.common.xfile.util.PathUtils;
+import com.freeing.common.storage.bean.RemoteFile;
+import com.freeing.common.storage.enums.FileType;
+import com.freeing.common.storage.exception.FtpException;
+import com.freeing.common.storage.factory.FtpsFileStorageClientFactory;
+import com.freeing.common.storage.ftp.Ftps;
+import com.freeing.common.storage.util.PathUtils;
 import org.apache.commons.net.ftp.FTPFile;
 
 import java.io.File;

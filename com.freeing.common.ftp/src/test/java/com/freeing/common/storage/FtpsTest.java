@@ -1,9 +1,9 @@
-package com.freeing.common.xfile;
+package com.freeing.common.storage;
 
-import com.freeing.common.xfile.bean.RemoteFile;
-import com.freeing.common.xfile.config.FileStorageProperties;
-import com.freeing.common.xfile.factory.FtpsFileStorageClientFactory;
-import com.freeing.common.xfile.util.PathUtils;
+import com.freeing.common.storage.bean.RemoteFile;
+import com.freeing.common.storage.config.FileStorageProperties;
+import com.freeing.common.storage.factory.FtpsFileStorageClientFactory;
+import com.freeing.common.storage.util.PathUtils;
 
 import java.io.File;
 import java.time.LocalDateTime;

@@ -1,4 +1,4 @@
-package com.freeing.common.xfile.enums;
+package com.freeing.common.storage.enums;
 
 public enum FileType {
     DIR,

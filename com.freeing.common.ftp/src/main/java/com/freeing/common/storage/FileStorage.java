@@ -1,6 +1,6 @@
-package com.freeing.common.xfile;
+package com.freeing.common.storage;
 
-import com.freeing.common.xfile.bean.RemoteFile;
+import com.freeing.common.storage.bean.RemoteFile;
 
 import java.io.File;
 import java.io.InputStream;

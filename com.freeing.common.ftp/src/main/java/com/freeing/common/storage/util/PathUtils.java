@@ -1,4 +1,4 @@
-package com.freeing.common.xfile.util;
+package com.freeing.common.storage.util;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

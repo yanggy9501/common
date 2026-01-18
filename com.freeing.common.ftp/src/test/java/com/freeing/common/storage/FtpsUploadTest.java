@@ -1,13 +1,10 @@
-package com.freeing.common.xfile;
+package com.freeing.common.storage;
 
-import com.freeing.common.xfile.config.FileStorageProperties;
-import com.freeing.common.xfile.factory.FtpsFileStorageClientFactory;
-import org.apache.commons.net.ftp.FTPSClient;
+import com.freeing.common.storage.config.FileStorageProperties;
+import com.freeing.common.storage.factory.FtpsFileStorageClientFactory;
 
 import java.io.*;
 import java.nio.file.Path;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class FtpsUploadTest {
     static FtpsFileStorage ftpsFileStorage = null;

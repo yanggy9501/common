@@ -11,11 +11,11 @@ import java.util.Map;
  */
 public class ChainContext<T> {
 
-    private T data;
+    private final T data;
 
     private boolean stop = false;
 
-    private Map<String, Object> attributes = new HashMap<>();
+    private final Map<String, Object> attributes = new HashMap<>();
 
     public ChainContext(T data) {
         this.data = data;
